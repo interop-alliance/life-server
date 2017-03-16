@@ -8,7 +8,7 @@ const fs = require('fs-extra')
 const OidcManager = require('../../lib/models/oidc-manager')
 const SolidHost = require('../../lib/models/solid-host')
 
-const dbPath = path.join(__dirname, '../resources/.db')
+const dbPath = path.join(__dirname, '../resources/db')
 
 describe('OidcManager', () => {
   beforeEach(() => {
