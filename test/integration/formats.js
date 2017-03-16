@@ -5,7 +5,8 @@ const assert = require('chai').assert
 
 describe('formats', function () {
   var ldp = ldnode.createServer({
-    root: path.join(__dirname, '../resources')
+    root: path.join(__dirname, '../resources'),
+    webid: false
   })
 
   var server = supertest(ldp)
