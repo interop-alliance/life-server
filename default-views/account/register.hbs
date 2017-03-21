@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Login</title>
+  <title>Register</title>
   <link rel="stylesheet" href="/common/css/bootstrap.min.css">
 </head>
 <body>
 <div class="container">
-  <h4>Login</h4>
+  <h4>Register</h4>
 </div>
 <div class="container">
-  <form method="post" action="/login">
+  <form method="post" action="/api/accounts/new">
     <div class="form-group">
       {{#if error}}
         <div class="row">
@@ -32,18 +32,25 @@
           <input type="password" class="form-control" name="password" id="password" />
         </div>
       </div>
-      <input type="hidden" name="response_type" id="response_type" value="{{response_type}}" />
-      <input type="hidden" name="display" id="display" value="{{display}}" />
-      <input type="hidden" name="scope" id="scope" value="{{scope}}" />
-      <input type="hidden" name="client_id" id="client_id" value="{{client_id}}" />
-      <input type="hidden" name="redirect_uri" id="redirect_uri" value="{{redirect_uri}}" />
-      <input type="hidden" name="state" id="state" value="{{state}}" />
-      <input type="hidden" name="nonce" id="nonce" value="{{nonce}}" />
-    </div>
-    <button type="submit" class="btn btn-primary" id="login">Login</button>
+      <div class="row">
+        <div class="col-md-12">
+          <label for="name">Name:</label>
+          <input type="name" class="form-control" name="name" id="name" />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <label for="email">Email:</label>
+          <input type="email" class="form-control" name="email" id="email" />
+        </div>
+      </div>
+      <input type="hidden" name="returnToUrl" value="{{returnToUrl}}" />
 
-    <div>Don't have an account?
-      <a href="/register?returnToUrl={{{postRegisterUrl}}}">Register</a>
+    </div>
+    <button type="submit" class="btn btn-primary" id="register">Register</button>
+
+    <div>Already have an account?
+      <a href="/login?returnToUrl={{{returnToUrl}}}">Log In</a>
     </div>
   </form>
 </div>
