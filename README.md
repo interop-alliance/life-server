@@ -94,7 +94,7 @@ order for the tests to pass.
 Edit your `/etc/hosts` file, and append:
 
 ```
-# Used for unit testing solid-lite
+# Used for unit testing
 127.0.0.1 nic.localhost
 127.0.0.1 tim.localhost
 127.0.0.1 nicola.localhost
