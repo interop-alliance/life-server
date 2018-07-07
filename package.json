@@ -1,37 +1,14 @@
 {
   "name": "solid-server",
-  "description": "Solid server on top of the file-system",
+  "description": "A decentralized personal data server inspired by the Solid Project",
   "version": "4.0.14",
-  "author": {
-    "name": "Tim Berners-Lee",
-    "email": "timbl@w3.org"
-  },
-  "contributors": [
-    {
-      "name": "Martin Martinez Rivera",
-      "email": "martinmr@mit.edu"
-    },
-    {
-      "name": "Nicola Greco",
-      "email": "me@nicolagreco.com"
-    },
-    {
-      "name": "Dmitri Zagidulin",
-      "url": "https://github.com/dmitrizagidulin/"
-    },
-    {
-      "name": "Ruben Verborgh",
-      "email": "ruben@verborgh.org",
-      "url": "https://ruben.verborgh.org/"
-    }
-  ],
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/solid/node-solid-server"
+    "url": "https://github.com/dmitrizagidulin/solid-lite-server"
   },
-  "homepage": "http://github.com/solid/node-solid-server",
-  "bugs": "http://github.com/solid/node-solid-server/issues",
+  "homepage": "http://github.com/dmitrizagidulin/solid-lite-server",
+  "bugs": "http://github.com/dmitrizagidulin/solid-lite-server/issues",
   "dependencies": {
     "body-parser": "^1.18.3",
     "busboy": "^0.2.12",
@@ -124,6 +101,6 @@
     "solid": "./bin/solid"
   },
   "engines": {
-    "node": ">=8.0"
+    "node": ">=10.0"
   }
 }
