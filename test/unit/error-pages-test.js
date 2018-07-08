@@ -54,8 +54,6 @@ describe('handlers/error-pages', () => {
       let statusCode = 401
       let req = { accepts: sinon.stub().withArgs('text/html').returns(true) }
 
-      expect(errorPages.requiresSelectProvider('tls', statusCode, req))
-        .to.equal(false)
       expect(errorPages.requiresSelectProvider('oidc', statusCode, req))
         .to.equal(true)
     })

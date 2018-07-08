@@ -77,27 +77,3 @@ describe('OIDC Handler', () => {
     })
   })
 })
-
-describe('WebID-TLS Handler', () => {
-  describe('setAuthenticateHeader()', () => {
-    let res, req
-
-    beforeEach(() => {
-      req = {
-        app: {
-          locals: { host: { serverUri: 'https://example.com' } }
-        }
-      }
-      res = { set: sinon.stub() }
-    })
-
-    it('should set the WWW-Authenticate header', () => {
-      Auth.tls.setAuthenticateHeader(req, res)
-
-      expect(res.set).to.be.calledWith(
-        'WWW-Authenticate',
-        'WebID-TLS realm="https://example.com"'
-      )
-    })
-  })
-})

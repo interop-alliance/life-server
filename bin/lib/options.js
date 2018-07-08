@@ -66,7 +66,7 @@ module.exports = [
   },
   {
     name: 'auth',
-    help: 'Pick an authentication strategy for WebID: `tls` or `oidc`',
+    help: 'Pick an authentication strategy for WebID:',
     question: 'Select authentication strategy',
     type: 'list',
     choices: [

@@ -16,7 +16,6 @@ const SolidHost = require('../../lib/models/solid-host')
 const AccountManager = require('../../lib/models/account-manager')
 const UserAccount = require('../../lib/models/user-account')
 const TokenService = require('../../lib/models/token-service')
-const WebIdTlsCertificate = require('../../lib/models/webid-tls-certificate')
 
 const testAccountsDir = path.join(__dirname, '../resources/accounts')
 
@@ -185,61 +184,6 @@ describe('AccountManager', () => {
           accountManager.userAccountFrom({})
         }).to.not.throw(Error)
       })
-    })
-  })
-
-  describe('addCertKeyToProfile()', () => {
-    let accountManager, certificate, userAccount, profileGraph
-
-    beforeEach(() => {
-      let options = { host }
-      accountManager = AccountManager.from(options)
-      userAccount = accountManager.userAccountFrom({ username: 'alice' })
-      certificate = WebIdTlsCertificate.fromSpkacPost('1234', userAccount, host)
-      profileGraph = {}
-    })
-
-    it('should fetch the profile graph', () => {
-      accountManager.getProfileGraphFor = sinon.stub().returns(Promise.resolve())
-      accountManager.addCertKeyToGraph = sinon.stub()
-      accountManager.saveProfileGraph = sinon.stub()
-
-      return accountManager.addCertKeyToProfile(certificate, userAccount)
-        .then(() => {
-          expect(accountManager.getProfileGraphFor).to
-            .have.been.calledWith(userAccount)
-        })
-    })
-
-    it('should add the cert key to the account graph', () => {
-      accountManager.getProfileGraphFor = sinon.stub()
-        .returns(Promise.resolve(profileGraph))
-      accountManager.addCertKeyToGraph = sinon.stub()
-      accountManager.saveProfileGraph = sinon.stub()
-
-      return accountManager.addCertKeyToProfile(certificate, userAccount)
-        .then(() => {
-          expect(accountManager.addCertKeyToGraph).to
-            .have.been.calledWith(certificate, profileGraph)
-          expect(accountManager.addCertKeyToGraph).to
-            .have.been.calledAfter(accountManager.getProfileGraphFor)
-        })
-    })
-
-    it('should save the modified graph to the profile doc', () => {
-      accountManager.getProfileGraphFor = sinon.stub()
-        .returns(Promise.resolve(profileGraph))
-      accountManager.addCertKeyToGraph = sinon.stub()
-        .returns(Promise.resolve(profileGraph))
-      accountManager.saveProfileGraph = sinon.stub()
-
-      return accountManager.addCertKeyToProfile(certificate, userAccount)
-        .then(() => {
-          expect(accountManager.saveProfileGraph).to
-            .have.been.calledWith(profileGraph, userAccount)
-          expect(accountManager.saveProfileGraph).to
-            .have.been.calledAfter(accountManager.addCertKeyToGraph)
-        })
     })
   })
 

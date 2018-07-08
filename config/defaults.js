@@ -3,7 +3,6 @@
 module.exports = {
   'auth': 'oidc',
   'localAuth': {
-    'tls': true,
     'password': true
   },
   'configPath': './config',

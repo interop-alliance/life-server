@@ -33,7 +33,6 @@
     "li": "^1.0.1",
     "mime-types": "^2.1.11",
     "negotiator": "^0.6.0",
-    "node-forge": "^0.6.38",
     "nodemailer": "^3.1.4",
     "oidc-auth-manager": "^0.16.1",
     "oidc-op-express": "^0.0.3",
@@ -46,11 +45,7 @@
     "ulid": "^0.1.0",
     "uuid": "^3.0.0",
     "valid-url": "^1.0.9",
-    "vhost": "^3.0.2",
-    "webid": "^0.3.10"
-  },
-  "optionalDependencies": {
-    "x509": "^0.3.2"
+    "vhost": "^3.0.2"
   },
   "devDependencies": {
     "@trust/oidc-op": "^0.3.0",

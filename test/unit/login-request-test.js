@@ -22,7 +22,7 @@ const mockUserStore = {
 const authMethod = 'oidc'
 const host = SolidHost.from({ serverUri: 'https://localhost:8443' })
 const accountManager = AccountManager.from({ host, authMethod })
-const localAuth = { password: true, tls: true }
+const localAuth = { password: true }
 
 describe('LoginRequest', () => {
   describe('loginPassword()', () => {
@@ -56,35 +56,6 @@ describe('LoginRequest', () => {
         .then(() => {
           expect(login).to.have.been.called()
           login.reset()
-        })
-    })
-  })
-
-  describe('loginTls()', () => {
-    let res, req
-
-    beforeEach(() => {
-      req = {
-        connection: {},
-        app: { locals: { localAuth, accountManager } }
-      }
-      res = HttpMocks.createResponse()
-    })
-
-    it('should create a LoginRequest instance', () => {
-      return LoginRequest.loginTls(req, res)
-        .then(() => {
-          expect(LoginRequest.fromParams).to.have.been.calledWith(req, res)
-          LoginRequest.fromParams.reset()
-          LoginRequest.login.reset()
-        })
-    })
-
-    it('should invoke login()', () => {
-      return LoginRequest.loginTls(req, res)
-        .then(() => {
-          expect(LoginRequest.login).to.have.been.called()
-          LoginRequest.login.reset()
         })
     })
   })

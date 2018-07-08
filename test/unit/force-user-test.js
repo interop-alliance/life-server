@@ -39,32 +39,4 @@ describe('Force User', () => {
       })
     })
   })
-
-  describe('a forceUser handler for TLS', () => {
-    let handler
-    before(() => {
-      const app = { use: sinon.stub() }
-      const argv = { forceUser: USER, auth: 'tls' }
-      forceUser.initialize(app, argv)
-      handler = app.use.getCall(0).args[1]
-    })
-
-    describe('when called', () => {
-      let request, response
-      before(done => {
-        request = { session: {} }
-        response = { set: sinon.stub() }
-        handler(request, response, done)
-      })
-
-      it('sets session.userId to the user', () => {
-        expect(request.session).to.have.property('userId', USER)
-      })
-
-      it('sets the User header', () => {
-        expect(response.set).to.have.callCount(1)
-        expect(response.set).to.have.been.calledWith('User', USER)
-      })
-    })
-  })
 })
