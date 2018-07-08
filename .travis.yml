@@ -16,6 +16,9 @@ addons:
     - tim.localhost
     - nicola.localhost
 
+before_install:
+    - npm install -g npm@latest
+
 script:
   - npm run standard
   - npm run sonar
