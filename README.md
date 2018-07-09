@@ -30,7 +30,7 @@ Benefits for creating your web apps with this architecture:
 
 1. Reduces account fatigue / password fatigue for users.
 1. Data Ownership moves into the hands of your users, which eliminates
-   compliance risks for data storage (such as HIPAA / GDPR compliance)
+   compliance risks for data storage (such as HIPAA / GDPR compliance).
 1. Cross-app data sharing (with users' consent). Enables innovative horizontal
    use cases and apps.
 1. A flexible cross-domain authentication and access control system is great for
@@ -40,6 +40,8 @@ Benefits for creating your web apps with this architecture:
 1. Offline-first (with synchronization to the user's storage servers) means
    a better user experience (reduced perceived response latency) and the ability
    to function in low-connectivity environments.
+1. Integrates with your existing app Javascript development frameworks and tools
+   (React, Vue.js, Ember.js, Express, and so on).
 
 #### Difference from Classic Solid Project
 
