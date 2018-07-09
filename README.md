@@ -11,10 +11,6 @@
 - [Contribute](#contribute)
 - [License](#license)
 
-## Security
-
-TBD
-
 ## Background
 
 `personal-data-framework` is a personal data server, originally based on MIT's
@@ -132,6 +128,10 @@ or when using a self-signed certificate:
 
 After startup, the server is available at the configured server URL (by default,
 `https://localhost:8443`).
+
+## Security
+
+TBD
 
 ## Contribute
 
