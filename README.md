@@ -1,13 +1,13 @@
-# Solid Lite Server _(solid-lite-server)_
+# Personal Data Framework _(personal-data-framework)_
 
-> A decentralized personal data server inspired by [Solid](https://solid.mit.edu)
+> A decentralized personal data server inspired by Solid
 
 ## Table of Contents
 
-- [Security](#security)
 - [Background](#background)
 - [Install](#install)
 - [Usage](#usage)
+- [Security](#security)
 - [Contribute](#contribute)
 - [License](#license)
 
@@ -17,8 +17,31 @@ TBD
 
 ## Background
 
-`solid-lite-server` is a personal data server, originally based on MIT's
-[`solid-server`](https://github.com/solid/node-solid-server).
+`personal-data-framework` is a personal data server, originally based on MIT's
+Solid Project.
+
+Personal Data Framework is an integrated architecture (server, client, specs and tutorials)
+for writing offline-first self-sovereign decentralized web apps, which allow the
+user to BYOAS (Bring Your Own Authentication/Authorization + Storage).
+
+#### Value Proposition for Developers
+
+Benefits for creating your web apps with this architecture:
+
+1. Reduces account fatigue / password fatigue for users.
+1. Data Ownership moves into the hands of your users, which eliminates
+   compliance risks for data storage (such as HIPAA / GDPR compliance)
+1. Cross-app data sharing (with users' consent). Enables innovative horizontal
+   use cases and apps.
+1. A flexible cross-domain authentication and access control system is great for
+   social-enabled apps and group collaborations.
+1. "Warm Start" -- your app immediately has access to rich existing user data
+   and social graph (great for AI/Machine Learning applications).
+1. Offline-first (with synchronization to the user's storage servers) means
+   a better user experience (reduced perceived response latency) and the ability
+   to function in low-connectivity environments.
+
+#### Difference from Classic Solid Project
 
 The focus of this project is on simplifying the developer experience, providing
 more data access API options than just LDP, as well as on rapid feature
@@ -35,18 +58,18 @@ iteration ("move fast and break things").
 **Operating System:** Linux and Mac OS X. Windows is currently not supported
 for this project.
 
-To run the Solid Lite server, you will first need to install Node.js version
-10 or higher. (The developers recommend using
+To run the Personal Data Framework server, you will first need to install
+Node.js version 10 or higher. (The developers recommend using
 [`nvm`](https://github.com/creationix/nvm) to install Node.)
 
 (Optional) If you intend to create a self-signed certificate (for local testing),
 you will also need OpenSSL.
 
-### Install `solid-lite-server` from Github
+### Install `personal-data-framework` from Github
 
 ```bash
-git clone https://github.com/dmitrizagidulin/solid-lite-server.git
-cd solid-lite-server
+git clone https://github.com/ntropy-network/personal-data-framework.git
+cd personal-data-framework
 git checkout develop
 ```
 
@@ -58,14 +81,14 @@ yourself (see [Generating a self-signed SSL certificate](docs/ssl-certificates.m
 in `docs/`), but remember to launch the server using `./bin/solid-test` rather
 than `./bin/solid`.
 
-**Production:** Installing `solid-lite-server` in a production environment will
+**Production:** Installing `personal-data-framework` in a production environment will
 require a valid SSL certificate (self-signed certs will not work). In addition,
 if you're running the server in Multi User mode, you will need a
 [Wildcard Certificate](https://en.wikipedia.org/wiki/Wildcard_certificate).
 
 ### Edit `/etc/hosts` (development/testing only)
 
-To run the account creation on unit tests, `solid-lite-server`'s test suite
+To run the account creation on unit tests, `personal-data-framework`'s test suite
 uses the following localhost domains: `nic.localhost`, `tim.localhost`, and
 `nicola.localhost`. You will need to create host file entries for these, in
 order for the tests to pass.
@@ -81,7 +104,7 @@ Edit your `/etc/hosts` file, and append:
 
 ### Generate a config file
 
-The easiest way to setup `solid-lite-server` is by running the `init` wizard.
+The easiest way to setup `personal-data-framework` is by running the `init` wizard.
 This will create a `config.json` in your current folder:
 
 ```

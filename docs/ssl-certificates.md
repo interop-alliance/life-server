@@ -1,9 +1,9 @@
-# Solid Lite and SSL Certificates
+# SSL Certificates
 
 ## Generating a self-signed SSL certificate
 
-When deploying `solid-lite-server` in production, we recommend that you go the
-usual Certificate Authority route (or use
+When deploying `personal-data-framework` in production, we recommend that you go
+the usual Certificate Authority route (or use
 [Let's Encrypt!](https://letsencrypt.org/getting-started/)) to generate your SSL
 certificate (as you would with any website that supports HTTPS). However, for
 testing it locally, you can easily generate a self-signed certificate for whatever

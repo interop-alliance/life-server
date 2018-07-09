@@ -1,14 +1,14 @@
 {
-  "name": "solid-server",
+  "name": "personal-data-framework",
   "description": "A decentralized personal data server inspired by the Solid Project",
   "version": "4.0.14",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/dmitrizagidulin/solid-lite-server"
+    "url": "https://github.com/ntropy-network/personal-data-framework"
   },
-  "homepage": "http://github.com/dmitrizagidulin/solid-lite-server",
-  "bugs": "http://github.com/dmitrizagidulin/solid-lite-server/issues",
+  "homepage": "http://github.com/ntropy-network/personal-data-framework",
+  "bugs": "http://github.com/ntropy-network/personal-data-framework/issues",
   "dependencies": {
     "body-parser": "^1.18.3",
     "busboy": "^0.2.12",
