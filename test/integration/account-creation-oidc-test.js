@@ -123,13 +123,11 @@ describe('AccountManager (OIDC account creation tests)', function () {
            'profile/card.acl'))
           var prefs = read(path.join('accounts/nicola.' + domain,
            'settings/prefs.ttl'))
-          var inboxAcl = read(path.join('accounts/nicola.' + domain,
-           'inbox/.acl'))
           var rootMeta = read(path.join('accounts/nicola.' + domain, '.meta'))
           var rootMetaAcl = read(path.join('accounts/nicola.' + domain,
            '.meta.acl'))
 
-          if (domain && card && cardAcl && prefs && inboxAcl && rootMeta &&
+          if (domain && card && cardAcl && prefs && rootMeta &&
              rootMetaAcl) {
             done()
           } else {
