@@ -1,4 +1,4 @@
-# Personal Data Framework _(personal-data-framework)_
+# Life Server _(life-server)_
 
 > A decentralized personal data server inspired by Solid
 
@@ -13,12 +13,13 @@
 
 ## Background
 
-`personal-data-framework` is a personal data server, originally based on MIT's
+`life-server` is a personal data server, originally based on MIT's
 Solid Project.
 
-Personal Data Framework is an integrated architecture (server, client, specs and tutorials)
-for writing offline-first self-sovereign decentralized web apps, which allow the
-user to BYOAS (Bring Your Own Authentication/Authorization + Storage).
+Life Server is an integrated architecture (server, client, specs
+and tutorials) for writing offline-first self-sovereign decentralized web apps,
+which allow the user to BYOAS (Bring Your Own Authentication/Authorization +
+Storage).
 
 #### Value Proposition for Developers
 
@@ -56,18 +57,18 @@ iteration ("move fast and break things").
 **Operating System:** Linux and Mac OS X. Windows is currently not supported
 for this project.
 
-To run the Personal Data Framework server, you will first need to install
+To run the Life Server server, you will first need to install
 Node.js version 10 or higher. (The developers recommend using
 [`nvm`](https://github.com/creationix/nvm) to install Node.)
 
 (Optional) If you intend to create a self-signed certificate (for local testing),
 you will also need OpenSSL.
 
-### Install `personal-data-framework` from Github
+### Install `life-server` from Github
 
 ```bash
-git clone https://github.com/ntropy-network/personal-data-framework.git
-cd personal-data-framework
+git clone https://github.com/ntropy-network/life-server.git
+cd life-server
 git checkout develop
 ```
 
@@ -79,14 +80,14 @@ yourself (see [Generating a self-signed SSL certificate](docs/ssl-certificates.m
 in `docs/`), but remember to launch the server using `./bin/solid-test` rather
 than `./bin/solid`.
 
-**Production:** Installing `personal-data-framework` in a production environment will
+**Production:** Installing `life-server` in a production environment will
 require a valid SSL certificate (self-signed certs will not work). In addition,
 if you're running the server in Multi User mode, you will need a
 [Wildcard Certificate](https://en.wikipedia.org/wiki/Wildcard_certificate).
 
 ### Edit `/etc/hosts` (development/testing only)
 
-To run the account creation on unit tests, `personal-data-framework`'s test suite
+To run the account creation on unit tests, `life-server`'s test suite
 uses the following localhost domains: `nic.localhost`, `tim.localhost`, and
 `nicola.localhost`. You will need to create host file entries for these, in
 order for the tests to pass.
@@ -102,7 +103,7 @@ Edit your `/etc/hosts` file, and append:
 
 ### Generate a config file
 
-The easiest way to setup `personal-data-framework` is by running the `init` wizard.
+The easiest way to setup `life-server` is by running the `init` wizard.
 This will create a `config.json` in your current folder:
 
 ```

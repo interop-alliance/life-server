@@ -1,14 +1,14 @@
 {
-  "name": "personal-data-framework",
+  "name": "life-server",
   "description": "A decentralized personal data server inspired by the Solid Project",
   "version": "4.0.14",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ntropy-network/personal-data-framework"
+    "url": "https://github.com/ntropy-network/life-server"
   },
-  "homepage": "http://github.com/ntropy-network/personal-data-framework",
-  "bugs": "http://github.com/ntropy-network/personal-data-framework/issues",
+  "homepage": "http://github.com/ntropy-network/life-server",
+  "bugs": "http://github.com/ntropy-network/life-server/issues",
   "dependencies": {
     "body-parser": "^1.18.3",
     "busboy": "^0.2.12",
