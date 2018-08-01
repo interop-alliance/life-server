@@ -13,20 +13,39 @@
 
 ## Background
 
-`life-server` is a personal data server, originally based on MIT's
-Solid Project.
-
 Life Server is an integrated architecture (server, client, specs
 and tutorials) for writing offline-first self-sovereign decentralized web apps,
 which allow the user to BYOAS (Bring Your Own Authentication/Authorization +
 Storage).
 
-#### Value Proposition for Developers
+It consists of:
+
+* `life-server` (this repo), personal data server written in Node.js, originally
+  based on MIT's Solid Project.
+* [`ntropy-client`](https://github.com/ntropy-network/ntropy-client), a light
+  weight Javascript client library (bundling together authentication, permission,
+  data sync, and some helper util libraries) meant to integrate with front-end
+  dev frameworks.
+
+Features:
+
+* Self-service signup and account management
+* Single user mode (for personal use) and multi-user mode (for teams,
+  organizations and hosting providers)
+* Cross-domain authentication based on a decentralized version of WebID +
+  OAuth2/OpenID Connect
+* Cross-domain access control (great for collaboration or document sharing
+  between different companies or organizations)
+* Provides each user with read/write data storage (that is accessible from any
+  Javascript and server-side app). Think of it as an Amazon S3 service that is
+  simpler to use, has nested folders, and has the option of being self-hosted.
+
+### Value Proposition for Developers
 
 Benefits for creating your web apps with this architecture:
 
 1. Reduces account fatigue / password fatigue for users.
-1. Data Ownership moves into the hands of your users, which eliminates
+1. Data Ownership moves into the hands of your users, which reduces
    compliance risks for data storage (such as HIPAA / GDPR compliance).
 1. Cross-app data sharing (with users' consent). Enables innovative horizontal
    use cases and apps.
@@ -40,7 +59,7 @@ Benefits for creating your web apps with this architecture:
 1. Integrates with your existing app Javascript development frameworks and tools
    (React, Vue.js, Ember.js, Express, and so on).
 
-#### Difference from Classic Solid Project
+### Difference from Classic Solid Project
 
 The focus of this project is on simplifying the developer experience, providing
 more data access API options than just LDP, as well as on rapid feature
@@ -69,7 +88,6 @@ you will also need OpenSSL.
 ```bash
 git clone https://github.com/ntropy-network/life-server.git
 cd life-server
-git checkout develop
 ```
 
 ### Prepare the SSL certificate
