@@ -54,7 +54,7 @@ describe('AccountManager (OIDC account creation tests)', function () {
     })
     it('should get 404 if root does not exist', function (done) {
       var subdomain = supertest('https://nicola.' + host)
-      subdomain.get('/')
+      subdomain.head('/')
         .set('Accept', 'text/turtle')
         .set('Origin', 'http://example.com')
         .expect(404)
