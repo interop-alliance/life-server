@@ -91,7 +91,7 @@ describe('PasswordChangeRequest', () => {
           expect(accountManager.validateResetToken)
             .to.have.been.called()
           expect(res.render).to.have.been.calledWith('auth/change-password',
-            { returnToUrl, token, validToken: true })
+            { returnToUrl, token, validToken: true, title: 'Change Password' })
         })
     })
 
@@ -254,7 +254,7 @@ describe('PasswordChangeRequest', () => {
       request.renderForm(error)
 
       expect(response.render).to.have.been.calledWith('auth/change-password',
-        { validToken: false, token, returnToUrl, error: 'error message' })
+        { validToken: false, token, returnToUrl, error: 'error message', title: 'Change Password' })
     })
   })
 })

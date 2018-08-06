@@ -40,7 +40,6 @@ describe('Authentication API (OIDC)', () => {
     sslKey: path.join(__dirname, '../keys/key.pem'),
     sslCert: path.join(__dirname, '../keys/cert.pem'),
     auth: 'oidc',
-    dataBrowser: false,
     webid: true,
     multiuser: false,
     configPath

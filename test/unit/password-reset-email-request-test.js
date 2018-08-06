@@ -73,7 +73,7 @@ describe('PasswordResetEmailRequest', () => {
       PasswordResetEmailRequest.get(req, res)
 
       expect(res.render).to.have.been.calledWith('auth/reset-password',
-        { returnToUrl, multiuser: true })
+        { returnToUrl, multiuser: true, title: 'Reset Password' })
     })
   })
 
