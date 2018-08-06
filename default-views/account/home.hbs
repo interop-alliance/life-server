@@ -1,39 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dashboard</title>
-  <link rel="stylesheet" href="/common/css/bootstrap.min.css">
-</head>
-<body>
 <div class="container">
   <strong>Your WebID:</strong>
   <code>{{webId}}</code>
 </div>
-<div class="container">
-  <h4>Files</h4>
-</div>
-<div class="container">
-  <table class="table table-striped">
-    <tbody>
-    {{#each resources}}
-      <tr>
-        <td>
-          <a href="{{this.target.url}}">
-            {{#if this.isContainer}}
-              <img src="http://icons.iconarchive.com/icons/paomedia/small-n-flat/16/folder-icon.png"/>
-            {{/if}}
-            {{this.target.name}}{{#if this.isContainer}}/{{/if}}
-          </a>
-        </td>
-        <td>
-          {{this.fsStats.size}}
-        </td>
-      </tr>
-    {{/each}}
-    </tbody>
-  </table>
-</div>
-</body>
-</html>
+
+{{> viewers/container}}
