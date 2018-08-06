@@ -180,22 +180,6 @@ module.exports = [
     hide: true
   },
   {
-    name: 'suppress-data-browser',
-    help: 'Suppress provision of a data browser',
-    flag: true,
-    prompt: false,
-    default: false,
-    hide: false
-  },
-  {
-    name: 'data-browser-path',
-    help: 'An HTML file which is sent to allow users to browse the data (eg using mashlib.js)',
-    question: 'Path of data viewer page (defaults to using mashlib)',
-    validate: validPath,
-    default: 'default',
-    prompt: false
-  },
-  {
     name: 'suffix-acl',
     full: 'suffix-acl',
     help: "Suffix for acl files (default: '.acl')",

@@ -10,7 +10,6 @@ var suffixAcl = '.acl'
 var suffixMeta = '.meta'
 var ldpServer = ldnode.createServer({
   live: true,
-  dataBrowserPath: 'default',
   root: path.join(__dirname, '../resources'),
   auth: 'oidc',
   webid: false
@@ -245,25 +244,20 @@ describe('HTTP APIs', function () {
         .expect('Link', /<http:\/\/www.w3.org\/ns\/ldp#Container>; rel="type"/)
         .expect(200, done)
     })
-    it('should load skin (mashlib) if resource was requested as text/html', function (done) {
+    it('should load data viewer if resource was requested as text/html', function (done) {
       server.get('/sampleContainer/example1.ttl')
         .set('Accept', 'text/html')
         .expect('content-type', /text\/html/)
-        .expect(function (res) {
-          if (res.text.indexOf('TabulatorOutline') < 0) {
-            throw new Error('did not load the Tabulator skin by default')
-          }
-        })
         .expect(200, done) // Can't check for 303 because of internal redirects
     })
-    it('should NOT load data browser (mashlib) if resource is not RDF', function (done) {
+    it('should NOT load data viewer if resource is not RDF', function (done) {
       server.get('/sampleContainer/solid.png')
         .set('Accept', 'text/html')
         .expect('content-type', /image\/png/)
         .expect(200, done)
     })
 
-    it('should NOT load data browser (mashlib) if a resource has an .html extension', function (done) {
+    it('should NOT load data viewer if a resource has an .html extension', function (done) {
       server.get('/sampleContainer/index.html')
         .set('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
         .expect('content-type', /text\/html/)
