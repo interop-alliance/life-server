@@ -1,0 +1,24 @@
+<div class="container">
+  <h4>Files: <code>{{container.target.name}}</code></h4>
+</div>
+<div class="container">
+  <table class="table table-striped">
+    <tbody>
+    {{#each resources}}
+      <tr>
+        <td>
+          <a href="{{this.target.url}}">
+            {{#if this.isContainer}}
+              <img src="http://icons.iconarchive.com/icons/paomedia/small-n-flat/16/folder-icon.png"/>
+            {{/if}}
+            {{this.target.name}}{{#if this.isContainer}}/{{/if}}
+          </a>
+        </td>
+        <td>
+          {{this.fsStats.size}}
+        </td>
+      </tr>
+    {{/each}}
+    </tbody>
+  </table>
+</div>
