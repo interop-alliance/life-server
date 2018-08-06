@@ -4,6 +4,13 @@
 <div class="container">
   <table class="table table-striped">
     <tbody>
+    {{#if container.target.parent}}
+      <tr>
+        <td colspan="2">
+          <a href="{{container.target.parent}}">../</a>
+        </td>
+      </tr>
+    {{/if}}
     {{#each resources}}
       <tr>
         <td>
