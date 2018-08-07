@@ -6,7 +6,7 @@
     <tbody>
     {{#if container.target.parent}}
       <tr>
-        <td colspan="2">
+        <td colspan="3">
           <a href="{{container.target.parent}}">../</a>
         </td>
       </tr>
@@ -16,7 +16,7 @@
         <td>
           <a href="{{this.target.url}}">
             {{#if this.isContainer}}
-              <img src="http://icons.iconarchive.com/icons/paomedia/small-n-flat/16/folder-icon.png"/>
+              <img src="/common/img/folder_icon.png"/>
             {{/if}}
             {{this.target.name}}{{#if this.isContainer}}/{{/if}}
           </a>
