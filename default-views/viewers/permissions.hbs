@@ -1,4 +1,27 @@
 <div class="container">
   <h4>Permissions for:</h4>
-  <code>{{resourceUri}}</code>
+  <p><code>{{resourceUri}}</code></p>
 </div>
+<br />
+<div class="container">
+  {{#unless displayPermissions}}
+    <h4>No permissions found</h4>
+  {{/unless}}
+
+  <table class="table">
+    <tbody>
+    {{#each displayPermissions}}
+      <tr>
+        <td>
+          <img src="{{this.user.icon}}" />
+          {{this.user.id}}
+        </td>
+        <td>
+          {{this.access}}
+        </td>
+      </tr>
+    {{/each}}
+    </tbody>
+  </table>
+</div>
+
