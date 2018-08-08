@@ -1,6 +1,5 @@
 var assert = require('chai').assert
 var supertest = require('supertest')
-var path = require('path')
 // Helper functions for the FS
 var rm = require('../utils').rm
 var write = require('../utils').write
@@ -59,22 +58,6 @@ describe('LDNODE params', function () {
             done(err)
           })
       })
-    })
-  })
-
-  describe('ui-path', function () {
-    let rootPath = './test/resources/'
-    var ldp = ldnode({
-      root: rootPath,
-      apiApps: path.join(__dirname, '../resources/sampleContainer'),
-      webid: false
-    })
-    var server = supertest(ldp)
-
-    it('should serve static files on /api/ui', (done) => {
-      server.get('/api/apps/solid.png')
-        .expect(200)
-        .end(done)
     })
   })
 })

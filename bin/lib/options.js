@@ -276,22 +276,6 @@ module.exports = [
       return answers.useEmail
     }
   },
-  {
-    name: 'useApiApps',
-    help: 'Do you want to load your default apps on /api/apps?',
-    flag: true,
-    prompt: false,
-    default: true
-  },
-  {
-    name: 'api-apps',
-    help: 'Path to the folder to mount on /api/apps',
-    prompt: true,
-    validate: validPath,
-    when: (answers) => {
-      return answers.useApiApps
-    }
-  },
   { // copied from name: 'owner'
     name: 'redirect-http-from',
     help: 'HTTP port or \',\'-separated ports to redirect to the solid server port (e.g. "80,8080").',
