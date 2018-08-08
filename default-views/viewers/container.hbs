@@ -24,8 +24,31 @@
         <td>
           {{this.fsStats.size}}
         </td>
+        <td>
+          <button class="btn btn-default btn-xs btn-default share" id="share-{{this.target.url}}">
+            <img src="/common/img/share_icon.png" />
+            Share
+          </button>
+        </td>
       </tr>
     {{/each}}
     </tbody>
   </table>
 </div>
+<script>
+  window.addEventListener('load', () => { init() })
+
+  function init () {
+    const buttons = document.getElementsByClassName('share')
+
+    for (let button of buttons) {
+      button.addEventListener('click', (event) => {
+        const resourceUrl = event.target.id.split('-')[1]
+
+        const popupUrl = '/api/share?url=' + resourceUrl
+
+        window.open(popupUrl, 'Share', 'menubar=no,resizable=yes,width=400,height=400');
+      })
+    }
+  }
+</script>
