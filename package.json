@@ -72,7 +72,8 @@
     "nyc": "NODE_TLS_REJECT_UNAUTHORIZED=0 nyc --reporter=text-summary mocha",
     "mocha": "NODE_TLS_REJECT_UNAUTHORIZED=0 mocha",
     "sonar": "sonarjs -e 'coverage/**'",
-    "test": "npm run standard && npm run nyc"
+    "test": "npm run standard && npm run nyc",
+    "clean-tests": "rm -rf test/resources/ && git checkout -- test/resources/"
   },
   "nyc": {
     "reporter": [

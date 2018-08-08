@@ -6,7 +6,7 @@
     <tbody>
     {{#if container.target.parent}}
       <tr>
-        <td colspan="2">
+        <td colspan="3">
           <a href="{{container.target.parent}}">../</a>
         </td>
       </tr>
@@ -16,7 +16,7 @@
         <td>
           <a href="{{this.target.url}}">
             {{#if this.isContainer}}
-              <img src="http://icons.iconarchive.com/icons/paomedia/small-n-flat/16/folder-icon.png"/>
+              <img src="/common/img/folder_icon.png"/>
             {{/if}}
             {{this.target.name}}{{#if this.isContainer}}/{{/if}}
           </a>
@@ -24,8 +24,31 @@
         <td>
           {{this.fsStats.size}}
         </td>
+        <td>
+          <button class="btn btn-default btn-xs btn-default share" id="share-{{this.target.url}}">
+            <img src="/common/img/share_icon.png" />
+            Share
+          </button>
+        </td>
       </tr>
     {{/each}}
     </tbody>
   </table>
 </div>
+<script>
+  window.addEventListener('load', () => { init() })
+
+  function init () {
+    const buttons = document.getElementsByClassName('share')
+
+    for (let button of buttons) {
+      button.addEventListener('click', (event) => {
+        const resourceUrl = event.target.id.split('-')[1]
+
+        const popupUrl = '/api/share?url=' + resourceUrl
+
+        window.open(popupUrl, 'Share', 'menubar=no,resizable=yes,width=400,height=400');
+      })
+    }
+  }
+</script>
