@@ -18,17 +18,19 @@
             {{#if this.isContainer}}
               <img src="/common/img/folder_icon.png"/>
             {{/if}}
-            {{this.target.name}}{{#if this.isContainer}}/{{/if}}
+            {{this.target.name}}
           </a>
         </td>
         <td>
           {{this.fsStats.size}}
         </td>
         <td>
-          <button class="btn btn-default btn-xs btn-default share" id="share-{{this.target.url}}">
-            <img src="/common/img/share_icon.png" />
-            Share
-          </button>
+          {{#unless this.target.isAcl}}
+            <button class="btn btn-default btn-xs btn-default share" id="share-{{this.target.url}}">
+              <img src="/common/img/share_icon.png" />
+              Share
+            </button>
+          {{/unless}}
         </td>
       </tr>
     {{/each}}
@@ -47,7 +49,7 @@
 
         const popupUrl = '/api/share?url=' + resourceUrl
 
-        window.open(popupUrl, 'Share', 'menubar=no,resizable=yes,width=400,height=400');
+        window.open(popupUrl, 'Share', 'menubar=yes,resizable=yes,width=600,height=400');
       })
     }
   }

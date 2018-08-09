@@ -1,4 +1,100 @@
 <div class="container">
-  <h4>Permissions for:</h4>
-  <code>{{resourceUri}}</code>
+  <h4>Sharing settings</h4>
+  <p><code>{{resourceUrl}}</code></p>
 </div>
+<br />
+<div class="container">
+  {{#unless displayPermissions}}
+    <h4>No permissions found</h4>
+  {{/unless}}
+
+  <p>Who has access</p>
+
+  <table class="table">
+    <tbody>
+    {{#each displayPermissions}}
+    {{#if this.user}}
+      <tr>
+        <td>
+          <img src="{{this.user.icon}}" />
+          {{this.user.id}}
+          {{#if this.user.isCurrentUser}}
+            (you)
+          {{/if}}
+        </td>
+        <td>
+          {{this.access}}
+        </td>
+        <td>
+          {{#unless this.user.isCurrentUser}}
+            <button class="btn btn-default btn-xs buttonRemove" id="button-{{this.user.webId}}">
+              <img src="/common/img/trash_20x20.png" id="icon-{{this.user.webId}}" />
+            </button>
+          {{/unless}}
+        </td>
+      </tr>
+    {{/if}}
+    {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<div class="container">
+  <form method="post" action="/api/share" id="editForm">
+    <div class="container" id="divAddButton">
+      <div class="form-group">
+        <button type="button" class="btn btn-primary" id="buttonAdd">+</button>
+      </div>
+    </div>
+    <div class="container hidden" id="divAdd">
+      <div class="form-group">
+        <label for="webId">Web ID:</label>
+        <input type="text" name="webId" id="webId" />
+        <label for="category">Permission:</label>
+        <select name="category" id="category">
+          <option value="view">View</option>
+          <option value="edit">Edit</option>
+          <option value="manage">Manage</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary">Add Permission</button>
+      </div>
+    </div>
+    <input type="hidden" name="url" value="{{resourceUrl}}" />
+    <input type="hidden" name="operation" id="operation" value="add" />
+    <input type="hidden" name="permissionId" id="permissionId" value="" />
+  </form>
+</div>
+
+<script>
+  window.addEventListener('load', () => { init() })
+
+  function init () {
+    initButton('buttonAdd', event => {
+      hide('buttonAdd')
+      show('divAdd')
+    })
+    const removeButtons = document.getElementsByClassName('buttonRemove')
+    for (let button of removeButtons) {
+      button.addEventListener('click', (event) => {
+        const webId = event.target.id.split('-')[1]
+        document.getElementById('operation').value = 'remove'
+        document.getElementById('permissionId').value = webId
+        document.getElementById('editForm').submit()
+      })
+    }
+  }
+
+  function initButton(id, action) {
+    document.getElementById(id).addEventListener('click', action)
+  }
+
+  function hide (id) {
+    document.getElementById(id).classList.add('hidden')
+  }
+
+  function show (id) {
+    document.getElementById(id).classList.remove('hidden')
+  }
+</script>
