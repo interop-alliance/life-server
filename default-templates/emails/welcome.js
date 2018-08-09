@@ -14,12 +14,12 @@
  */
 function render (data) {
   return {
-    subject: 'Welcome to Solid',
+    subject: 'Welcome to Ntropy Life Server',
 
     /**
      * Text version of the Welcome email
      */
-    text: `Welcome to Solid!
+    text: `Welcome to your Life Server data hosting space!
 
 Your account has been created.
 
@@ -28,7 +28,7 @@ Your Web Id: ${data.webid}`,
     /**
      * HTML version of the Welcome email
      */
-    html: `<p>Welcome to Solid!</p>
+    html: `<p>Welcome to your Life Server data hosting space!</p>
 
 <p>Your account has been created.</p>
 
