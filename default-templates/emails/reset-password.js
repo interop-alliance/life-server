@@ -22,7 +22,7 @@ function render (data) {
      */
     text: `Hi,
 
-We received a request to reset your password for your Solid account, ${data.webId}
+We received a request to reset your password for your Ntropy account, ${data.webId}
 
 To reset your password, click on the following link:
 
@@ -35,7 +35,7 @@ If you did not mean to reset your password, ignore this email, your password wil
      */
     html: `<p>Hi,</p>
 
-<p>We received a request to reset your password for your Solid account, ${data.webId}</p>
+<p>We received a request to reset your password for your Ntropy account, ${data.webId}</p>
 
 <p>To reset your password, click on the following link:</p>
 
