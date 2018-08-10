@@ -22,7 +22,7 @@ It consists of:
 
 * `life-server` (this repo), personal data server written in Node.js, originally
   based on MIT's Solid Project.
-* [`ntropy-client`](https://github.com/ntropy-network/ntropy-client), a light
+* A revamped client library (coming soon), a light
   weight Javascript client library (bundling together authentication, permission,
   data sync, and some helper util libraries) meant to integrate with front-end
   dev frameworks.
@@ -86,7 +86,7 @@ you will also need OpenSSL.
 ### Install `life-server` from Github
 
 ```bash
-git clone https://github.com/ntropy-network/life-server.git
+git clone https://github.com/interop-alliance/life-server.git
 cd life-server
 ```
 

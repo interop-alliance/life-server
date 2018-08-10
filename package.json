@@ -5,10 +5,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ntropy-network/life-server"
+    "url": "https://github.com/interop-alliance/life-server"
   },
-  "homepage": "http://github.com/ntropy-network/life-server",
-  "bugs": "http://github.com/ntropy-network/life-server/issues",
+  "homepage": "http://github.com/interop-alliance/life-server",
+  "bugs": "http://github.com/interop-alliance/life-server/issues",
   "dependencies": {
     "body-parser": "^1.18.3",
     "busboy": "^0.2.12",

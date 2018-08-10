@@ -14,7 +14,7 @@
  */
 function render (data) {
   return {
-    subject: 'Welcome to Ntropy Life Server',
+    subject: 'Welcome to Life Server',
 
     /**
      * Text version of the Welcome email
