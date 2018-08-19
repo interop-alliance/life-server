@@ -11,4 +11,19 @@ module.exports = {
   'serverUri': 'https://localhost:8443',
   'root': './data',
   'webid': true
+
+  // "email": {
+  //   "host": "smtp.mailtrap.io",
+  //   "port": "2525",
+  //   "auth": {
+  //     "user": "***",
+  //     "pass": "***"
+  //   }
+  // }
+
+  // 'couchdb': {
+  //   username: 'admin',
+  //   password: '***',
+  //   url: 'http://localhost:5984'
+  // }
 }
