@@ -7,10 +7,10 @@
 :owner
     acl:accessTo tes:;
     acl:agent c:me;
-    acl:defaultForNew tes:;
+    acl:default tes:;
     acl:mode acl:Control, acl:Read, acl:Write.
 :public
     acl:accessTo tes:;
     acl:agentGroup <group-listing.ttl#folks>;
-    acl:defaultForNew tes:;
+    acl:default tes:;
     acl:mode acl:Read, acl:Write.
