@@ -1,7 +1,7 @@
 {
   "name": "life-server",
   "description": "A decentralized personal data server inspired by the Solid Project",
-  "version": "4.0.14",
+  "version": "5.0.0",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -10,6 +10,7 @@
   "homepage": "http://github.com/interop-alliance/life-server",
   "bugs": "http://github.com/interop-alliance/life-server/issues",
   "dependencies": {
+    "@solid/oidc-auth-manager": "^0.16.2",
     "body-parser": "^1.18.3",
     "busboy": "^0.2.12",
     "camelize": "^1.0.0",
@@ -34,7 +35,6 @@
     "negotiator": "^0.6.0",
     "node-fetch": "^2.2.0",
     "nodemailer": "^3.1.4",
-    "oidc-auth-manager": "^0.16.1",
     "oidc-op-express": "^0.0.3",
     "rdflib": "^0.17.0",
     "recursive-readdir": "^2.1.0",
@@ -48,7 +48,7 @@
     "vhost": "^3.0.2"
   },
   "devDependencies": {
-    "@trust/oidc-op": "solid/oidc-op#rc-0.3.2",
+    "@solid/oidc-op": "0.3.2",
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
     "dirty-chai": "^1.2.2",
@@ -59,7 +59,7 @@
     "nyc": "^10.1.2",
     "sinon": "^2.1.0",
     "sinon-chai": "^2.8.0",
-    "solid-auth-oidc": "^0.2.0",
+    "@solid/solid-auth-oidc": "^0.2.1",
     "sonarjs": "^1.0.0",
     "standard": "^8.6.0",
     "supertest": "^3.0.0",
