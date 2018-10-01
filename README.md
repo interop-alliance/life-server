@@ -40,17 +40,30 @@ Features:
   Javascript and server-side app). Think of it as an Amazon S3 service that is
   simpler to use, has nested folders, and has the option of being self-hosted.
 
+#### Audience
+
+This server is intended for the following audiences:
+
+1. (primarily) Developers of user centric offline-first decentralized applications.
+1. (to a much smaller extent) End-users interested in running their own file
+   sharing server (a minimal Dropbox/Google Drive sort of setup).
+1. (almost not at all) For system administrators / potential service providers
+   interested in running their own multi-user data server.
+
+To put it another way, due to a shortage of engineering resources, the
+priorities will be: Developer QoL (Quality of Life) over User QoL over DevOps QoL.
+
 ### Value Proposition for Developers
 
 Benefits for creating your web apps with this architecture:
 
-1. Reduces account fatigue / password fatigue for users.
+1. A flexible cross-domain authentication and access control system is great for
+   social-enabled apps and group collaborations. Also reduces account fatigue /
+   password fatigue for users.
 1. Data Ownership moves into the hands of your users, which reduces
-   compliance risks for data storage (such as HIPAA / GDPR compliance).
+   compliance risks for data storage.
 1. Cross-app data sharing (with users' consent). Enables innovative horizontal
    use cases and apps.
-1. A flexible cross-domain authentication and access control system is great for
-   social-enabled apps and group collaborations.
 1. "Warm Start" -- your app immediately has access to rich existing user data
    and social graph (great for AI/Machine Learning applications).
 1. Offline-first (with synchronization to the user's storage servers) means
@@ -59,11 +72,27 @@ Benefits for creating your web apps with this architecture:
 1. Integrates with your existing app Javascript development frameworks and tools
    (React, Vue.js, Ember.js, Express, and so on).
 
-### Difference from Classic Solid Project
+### Differences from Solid Server
 
-The focus of this project is on simplifying the developer experience, providing
-more data access API options than just LDP, as well as on rapid feature
-iteration ("move fast and break things").
+The focus of this project is on simplifying the developer experience, exploring
+data access APIs beyond LDP, as well as on rapid feature iteration ("move fast
+and break things").
+
+Life Server aims to be the Ubuntu nightly to Solid Server's Debian, an
+experimental project that nevertheless is committed to share
+a common base of standards and components, and to contribute fixes and features
+upstream back to Solid Server, whenever practical.
+
+#### Technical Differences
+
+* Not published to `npm`, intended to be installed and run from git.
+* Ongoing refactoring of the LDP backend to support pluggable storage (such as
+  a NoSQL document store, a graph store and others).
+* Experimental integration with [CouchDB](http://docs.couchdb.org/en/latest/intro/)
+  (for synchronizing of graphs and documents to mobile and offline-first clients).
+* The various built-in apps (account homepage, data viewing and file management,
+  sharing and permission management, etc) are done on the server side.
+* General cleanup and feature streamlining.
 
 ## Install
 
