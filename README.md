@@ -21,7 +21,7 @@ Storage).
 It consists of:
 
 * `life-server` (this repo), personal data server written in Node.js, originally
-  based on MIT's Solid Project.
+  based on MIT's [Solid Server](https://github.com/solid/node-solid-server).
 * A revamped client library (coming soon), a light
   weight Javascript client library (bundling together authentication, permission,
   data sync, and some helper util libraries) meant to integrate with front-end
@@ -88,6 +88,7 @@ you will also need OpenSSL.
 ```bash
 git clone https://github.com/interop-alliance/life-server.git
 cd life-server
+npm install
 ```
 
 ### Prepare the SSL certificate

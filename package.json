@@ -7,10 +7,10 @@
     "type": "git",
     "url": "https://github.com/interop-alliance/life-server"
   },
-  "homepage": "http://github.com/interop-alliance/life-server",
-  "bugs": "http://github.com/interop-alliance/life-server/issues",
+  "homepage": "https://github.com/interop-alliance/life-server",
+  "bugs": "https://github.com/interop-alliance/life-server/issues",
   "dependencies": {
-    "@solid/oidc-auth-manager": "^0.16.2",
+    "@solid/oidc-auth-manager": "^0.16.4",
     "body-parser": "^1.18.3",
     "busboy": "^0.2.12",
     "camelize": "^1.0.0",
@@ -22,11 +22,11 @@
     "express-handlebars": "^3.0.0",
     "express-session": "^1.15.6",
     "from2": "^2.1.0",
-    "fs-extra": "^6.0.1",
+    "fs-extra": "^7.0.0",
     "glob": "^7.1.1",
     "global-tunnel-ng": "^2.5.3",
     "handlebars": "^4.0.6",
-    "http-proxy-middleware": "^0.17.4",
+    "http-proxy-middleware": "^0.19.0",
     "inquirer": "^1.0.2",
     "ip-range-check": "0.0.2",
     "is-ip": "^2.0.0",
@@ -36,7 +36,7 @@
     "node-fetch": "^2.2.0",
     "nodemailer": "^3.1.4",
     "oidc-op-express": "^0.0.3",
-    "rdflib": "^0.17.0",
+    "rdflib": "^0.19.0",
     "recursive-readdir": "^2.1.0",
     "rimraf": "^2.5.0",
     "solid-namespace": "^0.1.0",
@@ -48,8 +48,8 @@
     "vhost": "^3.0.2"
   },
   "devDependencies": {
-    "@solid/oidc-op": "0.3.2",
-    "chai": "^3.5.0",
+    "@solid/oidc-op": "0.4.0",
+    "chai": "^4.2.0",
     "chai-as-promised": "^6.0.0",
     "dirty-chai": "^1.2.2",
     "localstorage-memory": "^1.0.2",
@@ -59,11 +59,11 @@
     "nyc": "^10.1.2",
     "sinon": "^2.1.0",
     "sinon-chai": "^2.8.0",
-    "@solid/solid-auth-oidc": "^0.2.1",
+    "@solid/solid-auth-oidc": "^0.3.0",
     "sonarjs": "^1.0.0",
     "standard": "^8.6.0",
     "supertest": "^3.0.0",
-    "whatwg-url": "^6.1.0"
+    "whatwg-url": "^7.0.0"
   },
   "main": "index.js",
   "scripts": {
