@@ -88,7 +88,8 @@ describe('CreateAccountRequest', () => {
         'a-',
         '9-',
         'alice--bob',
-        'alice bob'
+        'alice bob',
+        'alice.bob'
       ]
 
       let invalidUsernamesCount = 0
