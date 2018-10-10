@@ -2,6 +2,34 @@
   "name": "life-server",
   "description": "A decentralized personal data server inspired by the Solid Project",
   "version": "5.0.0",
+  "author": {
+    "name": "Tim Berners-Lee",
+    "email": "timbl@w3.org"
+  },
+  "contributors": [
+    {
+      "name": "Martin Martinez Rivera",
+      "email": "martinmr@mit.edu"
+    },
+    {
+      "name": "Nicola Greco",
+      "email": "me@nicolagreco.com"
+    },
+    {
+      "name": "Dmitri Zagidulin",
+      "url": "https://github.com/dmitrizagidulin/"
+    },
+    {
+      "name": "Ruben Verborgh",
+      "email": "ruben@verborgh.org",
+      "url": "https://ruben.verborgh.org/"
+    },
+    {
+      "name": "Kjetil Kjernsmo",
+      "email": "kjetil@inrupt.com",
+      "url": "http://kjetil.kjernsmo.net/"
+    }
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
