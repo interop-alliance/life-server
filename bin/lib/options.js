@@ -308,6 +308,11 @@ module.exports = [
     name: 'server-logo',
     help: 'A logo that represents you, your brand, or your server (not required)',
     prompt: true
+  },
+  {
+    name: 'support-email',
+    help: 'The support email you provide for your users (not required)',
+    prompt: false
   }
 ]
 
