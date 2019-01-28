@@ -1,9 +1,7 @@
 var assert = require('chai').assert
 var supertest = require('supertest')
 // Helper functions for the FS
-var rm = require('../utils').rm
-var write = require('../utils').write
-var read = require('../utils').read
+const { rm, write, read } = require('../utils')
 
 var ldnode = require('../../index')
 

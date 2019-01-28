@@ -11,6 +11,7 @@ const url = require('url')
 const URL = require('whatwg-url').URL
 global.URL = URL
 global.URLSearchParams = require('whatwg-url').URLSearchParams
+const { cleanDir } = require('../utils')
 
 const supertest = require('supertest')
 const nock = require('nock')
@@ -82,10 +83,8 @@ describe('Authentication API (OIDC)', () => {
     alicePod.close()
     bobPod.close()
     fs.removeSync(path.join(aliceDbPath, 'oidc/users'))
-    fs.removeSync(path.join(aliceRootPath, 'index.html'))
-    fs.removeSync(path.join(aliceRootPath, 'index.html.acl'))
-    fs.removeSync(path.join(bobRootPath, 'index.html'))
-    fs.removeSync(path.join(bobRootPath, 'index.html.acl'))
+    cleanDir(aliceRootPath)
+    cleanDir(bobRootPath)
   })
 
   describe('Provider Discovery (POST /api/auth/select-provider)', () => {
