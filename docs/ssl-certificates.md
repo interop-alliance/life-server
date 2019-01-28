@@ -10,10 +10,12 @@ testing it locally, you can easily generate a self-signed certificate for whatev
 domain you're working with.
 
 ```
-$ openssl genrsa 2048 > ../localhost.key
-$ openssl req -new -x509 -nodes -sha256 -days 3650 -key ../localhost.key -subj '/CN=*.localhost' > ../localhost.cert
+$ openssl req -outform PEM -keyform PEM -new -x509 -sha256 -newkey rsa:2048 -nodes -keyout ../privkey.pem -days 365 -out ../fullchain.pem
 ```
 
-Note that this example creates the `localhost.cert` and `localhost.key` files
+Note that this example creates the `fullchain.pem` and `privkey.pem` files
 in a directory one level higher from the current, so that you don't
 accidentally commit your certificates to Git while you're developing.
+
+If you would like to get rid of the browser warnings, import your 
+`fullchain.pem` certificate into your 'Trusted Root Certificate' store. 
