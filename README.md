@@ -184,8 +184,9 @@ TBD
 
 ## Contribute
 
-TBD
+Life Server is only possible because of a large community of [Solid contributors](https://github.com/solid/node-solid-server/blob/master/CONTRIBUTORS.md).
+A heartfelt thank you to everyone for all of your efforts!
 
 ## License
 
-[MIT](LICENSE)
+[The MIT License](LICENSE.md)
