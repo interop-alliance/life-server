@@ -2,7 +2,7 @@
 
 const options = require('./options')
 const fs = require('fs')
-const { loadConfig } = require('./common')
+const { loadConfig } = require('./cli-utils')
 const { red, bold } = require('colorette')
 
 module.exports = function (program, server) {
@@ -32,7 +32,7 @@ module.exports = function (program, server) {
       }
     })
 
-  start.option('-v, --verbose', 'Print the logs to console')
+  start.option('-q, --quiet', 'Do not print the logs to console')
 
   start.action(async (options) => {
     const config = loadConfig(program, options)
@@ -61,8 +61,8 @@ function bin (argv, server) {
   argv.live = !argv.noLive
 
   // Set up debug environment
-  if (argv.verbose) {
-    process.env.DEBUG = 'solid:*'
+  if (!argv.quiet) {
+    require('debug').enable('solid:*')
   }
 
   // Set up port
