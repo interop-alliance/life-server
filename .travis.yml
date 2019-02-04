@@ -21,6 +21,7 @@ before_install:
 
 script:
   - npm run standard
+  - npm run validate
   - npm run nyc
 
 cache:
