@@ -5,6 +5,7 @@
 ## Table of Contents
 
 - [Background](#background)
+- [Differences from Solid Server](#differences-from-solid-server)
 - [Install](#install)
 - [Usage](#usage)
 - [Security](#security)
@@ -13,32 +14,38 @@
 
 ## Background
 
-Life Server is an integrated architecture (server, client, specs
-and tutorials) for writing offline-first self-sovereign decentralized web apps,
-which allow the user to BYOAS (Bring Your Own Authentication/Authorization +
-Storage).
+Life Server is personal data server written in Node.js, originally
+based on MIT's [Solid Server](https://github.com/solid/node-solid-server).
 
-It consists of:
+### Differences from `node-solid-server` (NSS)
 
-* `life-server` (this repo), personal data server written in Node.js, originally
-  based on MIT's [Solid Server](https://github.com/solid/node-solid-server).
-* A revamped client library (coming soon), a light
-  weight Javascript client library (bundling together authentication, permission,
-  data sync, and some helper util libraries) meant to integrate with front-end
-  dev frameworks.
+This is an experimental server focusing on interop exploration and rapid 
+feature iteration ("move fast and break things").
 
-Features:
+Since [`node-solid-server`](https://github.com/solid/node-solid-server) is being
+deprecated in favor of [`inrupt/pod-server`](https://github.com/inrupt/pod-server),
+this repo intends to be another compatible implementation (the more the merrier!).
 
-* Self-service signup and account management
-* Single user mode (for personal use) and multi-user mode (for teams,
-  organizations and hosting providers)
-* Cross-domain authentication based on a decentralized version of WebID +
-  OAuth2/OpenID Connect
-* Cross-domain access control (great for collaboration or document sharing
-  between different companies or organizations)
-* Provides each user with read/write data storage (that is accessible from any
-  Javascript and server-side app). Think of it as an Amazon S3 service that is
-  simpler to use, has nested folders, and has the option of being self-hosted.
+#### Technical Differences from NSS
+
+* The various built-in apps (account homepage, data viewing and file management,
+  sharing and permission management, etc) are done on the server side.
+* Experimental integration with [CouchDB](http://docs.couchdb.org/en/latest/intro/)
+  (for synchronizing of graphs and documents to mobile and offline-first clients).
+* Ongoing refactoring of the LDP backend to support pluggable storage (such as
+  a NoSQL document store, a graph store and others).
+* General cleanup and feature streamlining.
+* Not published to `npm`, intended to be installed and run from git.
+
+**Does not support:**
+
+* `acl:origin` checking or Trusted Apps (uses [`solid-permissions`](https://github.com/interop-alliance/solid-permissions)  
+    instead of [`acl-check.js`](https://github.com/solid/acl-check) for access control)
+* Password strength checking on account signup.
+* Enforcement of storage space quotas
+* WebID-TLS local authentication
+* WebSockets
+* Globbing
 
 #### Audience
 
@@ -54,6 +61,19 @@ To put it another way, due to a shortage of engineering resources, the
 priorities will be: Developer QoL (Quality of Life) over User QoL over DevOps QoL.
 
 ### Value Proposition for Developers
+
+Features:
+
+* Self-service signup and account management
+* Single user mode (for personal use) and multi-user mode (for teams,
+  organizations and hosting providers)
+* Cross-domain authentication based on a decentralized version of WebID +
+  OAuth2/OpenID Connect
+* Cross-domain access control (great for collaboration or document sharing
+  between different companies or organizations)
+* Provides each user with read/write data storage (that is accessible from any
+  Javascript and server-side app). Think of it as an Amazon S3 service that is
+  simpler to use, has nested folders, and has the option of being self-hosted.
 
 Benefits for creating your web apps with this architecture:
 
@@ -71,28 +91,6 @@ Benefits for creating your web apps with this architecture:
    to function in low-connectivity environments.
 1. Integrates with your existing app Javascript development frameworks and tools
    (React, Vue.js, Ember.js, Express, and so on).
-
-### Differences from Solid Server
-
-The focus of this project is on simplifying the developer experience, exploring
-data access APIs beyond LDP, as well as on rapid feature iteration ("move fast
-and break things").
-
-Life Server aims to be the Ubuntu nightly to Solid Server's Debian, an
-experimental project that nevertheless is committed to share
-a common base of standards and components, and to contribute fixes and features
-upstream back to Solid Server, whenever practical.
-
-#### Technical Differences
-
-* Not published to `npm`, intended to be installed and run from git.
-* Ongoing refactoring of the LDP backend to support pluggable storage (such as
-  a NoSQL document store, a graph store and others).
-* Experimental integration with [CouchDB](http://docs.couchdb.org/en/latest/intro/)
-  (for synchronizing of graphs and documents to mobile and offline-first clients).
-* The various built-in apps (account homepage, data viewing and file management,
-  sharing and permission management, etc) are done on the server side.
-* General cleanup and feature streamlining.
 
 ## Install
 
