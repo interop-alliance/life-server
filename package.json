@@ -115,7 +115,8 @@
     "test": "npm run standard && npm run validate && npm run nyc",
     "nyc": "NODE_TLS_REJECT_UNAUTHORIZED=0 nyc --reporter=text-summary mocha",
     "mocha": "NODE_TLS_REJECT_UNAUTHORIZED=0 mocha",
-    "clean": "rimraf config/templates config/views"
+    "clean": "rimraf config/templates config/views",
+    "reset": "rimraf .db data && npm run clean"
   },
   "nyc": {
     "reporter": [
