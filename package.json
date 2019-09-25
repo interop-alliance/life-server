@@ -73,7 +73,7 @@
     "is-ip": "^2.0.0",
     "li": "^1.0.1",
     "mime-types": "^2.1.11",
-    "negotiator": "^0.6.0",
+    "negotiator": "^0.6.2",
     "node-fetch": "^2.2.0",
     "nodemailer": "^3.1.4",
     "oidc-op-express": "^0.0.3",
