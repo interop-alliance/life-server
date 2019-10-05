@@ -14,7 +14,8 @@ var fs = require('fs')
 
 const suffixMeta = '.meta'
 
-describe('LDP', function () {
+// TODO - change over to testing ldp-file-store
+describe.skip('LDP', function () {
   var ldp = new LDP({
     suffixMeta,
     root: path.join(__dirname, '..'),

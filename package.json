@@ -113,7 +113,7 @@
     "standard": "standard '{bin,examples,lib,test}/**/*.js'",
     "validate": "node ./test/validate-turtle.js",
     "test": "npm run standard && npm run validate && npm run nyc",
-    "nyc": "NODE_TLS_REJECT_UNAUTHORIZED=0 nyc --reporter=text-summary mocha",
+    "nyc": "NODE_TLS_REJECT_UNAUTHORIZED=0 nyc --reporter=html mocha",
     "mocha": "NODE_TLS_REJECT_UNAUTHORIZED=0 mocha",
     "clean": "rimraf config/templates config/views",
     "reset": "rimraf .db data && npm run clean"

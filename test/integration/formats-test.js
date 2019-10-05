@@ -41,6 +41,7 @@ describe('formats', function () {
         .expect(isCorrectSubject('/patch-5-initial.ttl#Iss1408851516666'))
         .end(done)
     })
+    // TODO: Implement this
     it('should return the container listing in JSON-LD if Accept is set to only application/ld+json', function (done) {
       server.get('/')
         .set('accept', 'application/ld+json')
@@ -88,8 +89,8 @@ describe('formats', function () {
         .expect(200, done)
     })
 
-    // FIXME: This is connection dependent?
-    it.skip('should return turtle document if Accept is set to turtle', function (done) {
+    // Note: This test requires internet connection
+    it('should return turtle document if Accept is set to turtle', function (done) {
       server.get('/lennon.jsonld')
         .set('accept', 'text/turtle')
         .expect('content-type', /text\/turtle/)

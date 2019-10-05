@@ -20,7 +20,8 @@ describe('Header handler', () => {
     request = supertest(server)
   })
 
-  describe('WAC-Allow', () => {
+  // TODO: Implement WAC-Allow support
+  describe.skip('WAC-Allow', () => {
     describeHeaderTest('read/append for the public', {
       resource: '/public-ra',
       headers: {

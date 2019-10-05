@@ -175,7 +175,7 @@ describe('ACL with WebID+OIDC over HTTP', function () {
         options.body = ''
         request.put(options, function (error, response, body) {
           assert.equal(error, null)
-          assert.equal(response.statusCode, 403) // TODO - why should this be a 409?
+          assert.equal(response.statusCode, 403)
           done()
         })
       })
@@ -215,15 +215,15 @@ describe('ACL with WebID+OIDC over HTTP', function () {
           done()
         })
       })
-      // FIXME: Sort out accessTo: issue here
-      // it('should fail as acl:default it used to try to authorize', function (done) {
-      //   var options = createOptions('/write-acl/bad-acl-access/.acl', 'user1')
-      //   request.get(options, function (error, response, body) {
-      //     assert.equal(error, null)
-      //     assert.equal(response.statusCode, 403)
-      //     done()
-      //   })
-      // })
+      // TODO/FIXME: Sort out accessTo: issue here
+      it.skip('should fail as acl:default it used to try to authorize', function (done) {
+        var options = createOptions('/write-acl/bad-acl-access/.acl', 'user1')
+        request.get(options, function (error, response, body) {
+          assert.equal(error, null)
+          assert.equal(response.statusCode, 403)
+          done()
+        })
+      })
       it('should create test file', function (done) {
         var options = createOptions('/write-acl/test-file', 'user1')
         options.body = '<a> <b> <c> .'
@@ -234,8 +234,7 @@ describe('ACL with WebID+OIDC over HTTP', function () {
           done()
         })
       })
-      // FIXME: Why is this test failing?
-      it.skip("should create test file's acl file", function (done) {
+      it("should create test file's acl file", function (done) {
         var options = createOptions('/write-acl/test-file.acl', 'user1')
         options.body = ''
         request.put(options, function (error, response, body) {
@@ -244,7 +243,7 @@ describe('ACL with WebID+OIDC over HTTP', function () {
           done()
         })
       })
-      it.skip("should not access test file's new empty acl file", function (done) {
+      it("should not access test file's new empty acl file", function (done) {
         var options = createOptions('/write-acl/test-file.acl', 'user1')
         request.get(options, function (error, response, body) {
           assert.equal(error, null)
@@ -521,22 +520,22 @@ describe('ACL with WebID+OIDC over HTTP', function () {
     //   rm('/accounts-acl/tim.localhost/group/test-folder/.acl')
     // })
 
-    // it('should PUT new ACL file', function (done) {
-    //   var options = createOptions('/group/test-folder/.acl', 'user1')
-    //   options.body = '<#Owner> a <http://www.w3.org/ns/auth/acl#Authorization>;\n' +
-    //     ' <http://www.w3.org/ns/auth/acl#accessTo> <./.acl>;\n' +
-    //     ' <http://www.w3.org/ns/auth/acl#agent> <' + user1 + '>;\n' +
-    //     ' <http://www.w3.org/ns/auth/acl#mode> <http://www.w3.org/ns/auth/acl#Read>, <http://www.w3.org/ns/auth/acl#Write>, <http://www.w3.org/ns/auth/acl#Control> .\n' +
-    //     '<#Public> a <http://www.w3.org/ns/auth/acl#Authorization>;\n' +
-    //     ' <http://www.w3.org/ns/auth/acl#accessTo> <./>;\n' +
-    //     ' <http://www.w3.org/ns/auth/acl#agentGroup> <group-listing#folks>;\n' +
-    //     ' <http://www.w3.org/ns/auth/acl#mode> <http://www.w3.org/ns/auth/acl#Read> .\n'
-    //   request.put(options, function (error, response, body) {
-    //     assert.equal(error, null)
-    //     assert.equal(response.statusCode, 201)
-    //     done()
-    //   })
-    // })
+    it.skip('should PUT new ACL file', function (done) {
+      var options = createOptions('/group/test-folder/.acl', 'user1')
+      options.body = '<#Owner> a <http://www.w3.org/ns/auth/acl#Authorization>;\n' +
+        ' <http://www.w3.org/ns/auth/acl#accessTo> <./.acl>;\n' +
+        ' <http://www.w3.org/ns/auth/acl#agent> <' + user1 + '>;\n' +
+        ' <http://www.w3.org/ns/auth/acl#mode> <http://www.w3.org/ns/auth/acl#Read>, <http://www.w3.org/ns/auth/acl#Write>, <http://www.w3.org/ns/auth/acl#Control> .\n' +
+        '<#Public> a <http://www.w3.org/ns/auth/acl#Authorization>;\n' +
+        ' <http://www.w3.org/ns/auth/acl#accessTo> <./>;\n' +
+        ' <http://www.w3.org/ns/auth/acl#agentGroup> <group-listing#folks>;\n' +
+        ' <http://www.w3.org/ns/auth/acl#mode> <http://www.w3.org/ns/auth/acl#Read> .\n'
+      request.put(options, function (error, response, body) {
+        assert.equal(error, null)
+        assert.equal(response.statusCode, 201)
+        done()
+      })
+    })
     it('user1 should be able to access test directory', function (done) {
       var options = createOptions('/group/test-folder/', 'user1')
 
