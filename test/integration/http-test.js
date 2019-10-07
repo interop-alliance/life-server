@@ -31,8 +31,7 @@ function createTestContainer (containerName) {
     server.post('/')
       .set('content-type', 'text/turtle')
       .set('slug', containerName)
-      .set('link', '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"')
-      .set('content-type', 'text/turtle')
+      .set('link', '<http://www.w3.org/ns/ldp#Container>; rel="type"')
       .end(function (error, res) {
         error ? reject(error) : resolve(res)
       })
@@ -632,7 +631,7 @@ describe('HTTP APIs', function () {
         .end((err, res) => {
           if (err) return done(err)
           try {
-            assert.equal(res.headers.location, expectedDirName,
+            assert(res.headers.location.endsWith(expectedDirName),
               'Uri container names should be encoded')
             let createdDir = fs.statSync(path.join(__dirname, '../resources', expectedDirName))
             assert(createdDir.isDirectory(), 'Container should have been created')
@@ -661,7 +660,7 @@ describe('HTTP APIs', function () {
 
         it('is assigned an URL with the .ttl extension', () => {
           expect(response.headers).to.have.property('location')
-          expect(response.headers.location).to.match(/^\/post-tests\/[^./]+\.ttl$/)
+          expect(response.headers.location).to.match(/\/post-tests\/[^./]+\.ttl$/)
         })
       })
 
@@ -675,7 +674,7 @@ describe('HTTP APIs', function () {
         )
 
         it('is assigned an URL with the .ttl extension', () => {
-          expect(response.headers).to.have.property('location', '/post-tests/slug1.ttl')
+          expect(response.headers['location'].endsWith('/post-tests/slug1.ttl')).to.be.true
         })
       })
 
@@ -689,7 +688,7 @@ describe('HTTP APIs', function () {
 
         it('is assigned an URL with the .html extension', () => {
           expect(response.headers).to.have.property('location')
-          expect(response.headers.location).to.match(/^\/post-tests\/[^./]+\.html$/)
+          expect(response.headers.location).to.match(/\/post-tests\/[^./]+\.html$/)
         })
       })
 
@@ -703,7 +702,8 @@ describe('HTTP APIs', function () {
         )
 
         it('is assigned an URL with the .html extension', () => {
-          expect(response.headers).to.have.property('location', '/post-tests/slug2.html')
+          expect(response.headers['location'].endsWith('/post-tests/slug2.html'))
+            .to.be.true
         })
       })
     })
@@ -753,7 +753,7 @@ describe('HTTP APIs', function () {
         server.post('/sampleContainer/')
           .attach('timbl', path.join(__dirname, '../resources/timbl.jpg'))
           .attach('nicola', path.join(__dirname, '../resources/nicola.jpg'))
-          .expect(200)
+          .expect(201)
           .end(function (err) {
             if (err) return done(err)
 
