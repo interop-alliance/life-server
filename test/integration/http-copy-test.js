@@ -15,7 +15,8 @@ describe('HTTP COPY API', function () {
     root: path.join(__dirname, '../resources/accounts/localhost/'),
     sslKey: path.join(__dirname, '../keys/key.pem'),
     sslCert: path.join(__dirname, '../keys/cert.pem'),
-    webid: false
+    webid: false,
+    serverUri: address
   })
 
   before(function (done) {
@@ -62,7 +63,7 @@ describe('HTTP COPY API', function () {
     request(uri, options, function (error, response) {
       assert.equal(error, null)
       assert.equal(response.statusCode, 201)
-      assert.equal(response.headers[ 'location' ], copyTo)
+      assert.ok(copyTo.endsWith(response.headers['location']))
       let destinationPath = path.join(__dirname, '../resources/accounts/localhost', copyTo)
       assert.ok(fs.existsSync(destinationPath),
         'Resource created via COPY should exist')

@@ -6,7 +6,8 @@ var { checkDnsSettings } = require('../utils')
 
 var ldnode = require('../../index')
 
-describe('CORS Proxy', () => {
+// FIXME: Do we even need CORS proxy these days?
+describe.skip('CORS Proxy', () => {
   var ldp = ldnode({
     root: path.join(__dirname, '../resources'),
     corsProxy: '/proxy',

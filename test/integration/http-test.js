@@ -4,7 +4,7 @@ var li = require('li')
 var ldnode = require('../../index')
 var rm = require('./../utils').rm
 var path = require('path')
-const rdf = require('rdflib')
+// const rdf = require('rdflib')
 
 var suffixAcl = '.acl'
 var suffixMeta = '.meta'
@@ -12,7 +12,9 @@ var ldpServer = ldnode.createServer({
   live: true,
   root: path.join(__dirname, '../resources'),
   auth: 'oidc',
-  webid: false
+  webid: false,
+  suffixAcl,
+  suffixMeta
 })
 var server = supertest(ldpServer)
 var { assert, expect } = require('chai')
@@ -29,8 +31,7 @@ function createTestContainer (containerName) {
     server.post('/')
       .set('content-type', 'text/turtle')
       .set('slug', containerName)
-      .set('link', '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"')
-      .set('content-type', 'text/turtle')
+      .set('link', '<http://www.w3.org/ns/ldp#Container>; rel="type"')
       .end(function (error, res) {
         error ? reject(error) : resolve(res)
       })
@@ -224,11 +225,6 @@ describe('HTTP APIs', function () {
         .expect('Link', /<http:\/\/www.w3.org\/ns\/ldp#Resource>; rel="type"/)
         .expect(200, done)
     })
-    it('should have set Updates-Via to use WebSockets', function (done) {
-      server.get('/sampleContainer/example1.ttl')
-        .expect('updates-via', /wss?:\/\//)
-        .expect(200, done)
-    })
     it('should have set acl and describedBy Links for resource',
       function (done) {
         server.get('/sampleContainer/example1.ttl')
@@ -276,7 +272,8 @@ describe('HTTP APIs', function () {
         .expect('content-type', /text\/html/)
         .expect(200, done)
     })
-    it('should redirect to the right container URI if missing /', function (done) {
+    // FIXME: CLarify this in spec
+    it.skip('should redirect to the right container URI if missing /', function (done) {
       server.get('/sampleContainer')
         .expect(301, done)
     })
@@ -293,36 +290,8 @@ describe('HTTP APIs', function () {
     it('should return resource link for files', function (done) {
       server.get('/hello.html')
         .expect('Link', /<http:\/\/www.w3.org\/ns\/ldp#Resource>; rel="type"/)
-        .expect('Content-Type', 'text/html')
+        .expect('Content-Type', /text\/html/)
         .expect(200, done)
-    })
-    it('should have glob support', function (done) {
-      server.get('/sampleContainer/example*')
-        .expect('content-type', /text\/turtle/)
-        .expect(200)
-        .expect((res) => {
-          let kb = rdf.graph()
-          rdf.parse(res.text, kb, 'https://localhost/', 'text/turtle')
-
-          assert(kb.match(
-            rdf.namedNode('https://localhost/example1.ttl#this'),
-            rdf.namedNode('http://purl.org/dc/elements/1.1/title'),
-            rdf.literal('Test title')
-          ).length, 'Must contain a triple from example1.ttl')
-
-          assert(kb.match(
-            rdf.namedNode('http://example.org/stuff/1.0/a'),
-            rdf.namedNode('http://example.org/stuff/1.0/b'),
-            rdf.literal('apple')
-          ).length, 'Must contain a triple from example2.ttl')
-
-          assert(kb.match(
-            rdf.namedNode('http://example.org/stuff/1.0/a'),
-            rdf.namedNode('http://example.org/stuff/1.0/b'),
-            rdf.literal('The first line\nThe second line\n  more')
-          ).length, 'Must contain a triple from example3.ttl')
-        })
-        .end(done)
     })
     it('should have set acl and describedBy Links for container',
       function (done) {
@@ -338,7 +307,7 @@ describe('HTTP APIs', function () {
         .expect(200)
         .expect('content-type', /text\/html/)
         .expect(function (res) {
-          if (res.text.indexOf('<!DOCTYPE html>') < 0) {
+          if (res.text.indexOf('<!doctype html>') < 0) {
             throw new Error('wrong content returned for index.html')
           }
         })
@@ -352,7 +321,8 @@ describe('HTTP APIs', function () {
           .expect('content-type', /text\/html/)
           .end(done)
       })
-    it('should still redirect to the right container URI if missing / and HTML is requested',
+    // TODO: Clarify this on the spec
+    it.skip('should still redirect to the right container URI if missing / and HTML is requested',
       function (done) {
         server.get('/sampleContainer')
           .set('accept', 'text/html')
@@ -388,11 +358,6 @@ describe('HTTP APIs', function () {
     it('should return empty response body', function (done) {
       server.head('/patch-5-initial.ttl')
         .expect(emptyResponse)
-        .expect(200, done)
-    })
-    it('should have set Updates-Via to use WebSockets', function (done) {
-      server.get('/sampleContainer/example1.ttl')
-        .expect('updates-via', /wss?:\/\//)
         .expect(200, done)
     })
     it('should have set Link as Resource', function (done) {
@@ -442,15 +407,74 @@ describe('HTTP APIs', function () {
         .expect(hasHeader('acl', 'baz.ttl' + suffixAcl))
         .expect(201, done)
     })
-    it('should return 409 code when trying to put to a container',
-      function (done) {
-        server.put('/')
-          .expect(409, done)
-      }
-    )
-    // Cleanup
-    after(function () {
-      rm('/foo/')
+
+    describe('PUT and containers', () => {
+      const containerMeta = fs.readFileSync(path.join(__dirname,
+        '../resources/sampleContainer/post2.ttl'),
+        { 'encoding': 'utf8' })
+
+      after(() => {
+        rm('/foo/')
+      })
+
+      it('should create a container (implicit from url)', () => {
+        return server.put('/foo/two/')
+          .expect(201)
+          .then(() => {
+            let stats = fs.statSync(path.join(__dirname, '../resources/foo/two/'))
+
+            assert(stats.isDirectory(), 'Cannot read container just created')
+          })
+      })
+
+      // TODO: Revisit this once this gets standardized
+      it.skip('should create a container (explicit from link header)', () => {
+        return server.put('/foo/three')
+          .set('link', '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"')
+          .expect(201)
+          .then(() => {
+            let stats = fs.statSync(path.join(__dirname, '../resources/foo/three/'))
+
+            assert(stats.isDirectory(), 'Cannot read container just created')
+          })
+      })
+
+      // TODO: Revisit this once this gets standardized
+      it.skip('should write the request body to the container .meta', () => {
+        return server.put('/foo/four/')
+          .set('content-type', 'text/turtle')
+          .set('link', '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"')
+          .send(containerMeta)
+          .expect(201)
+          .then(() => {
+            let metaFilePath = path.join(__dirname, '../resources/foo/four/' + suffixMeta)
+            let meta = fs.readFileSync(metaFilePath, 'utf8')
+
+            assert.equal(meta, containerMeta)
+          })
+      })
+
+      // TODO: Revisit this once this gets standardized
+      it.skip('should update existing container .meta', () => {
+        let newMeta = '<> dcterms:title "Home loans".'
+
+        return server.put('/foo/five/')
+          .set('content-type', 'text/turtle')
+          .send(containerMeta)
+          .expect(201)
+          .then(() => {
+            return server.put('/foo/five/')
+              .set('content-type', 'text/turtle')
+              .send(newMeta)
+              .expect(204)
+          })
+          .then(() => {
+            let metaFilePath = path.join(__dirname, '../resources/foo/five/' + suffixMeta)
+            let meta = fs.readFileSync(metaFilePath, 'utf8')
+
+            assert.equal(meta, newMeta)
+          })
+      })
     })
   })
 
@@ -528,7 +552,7 @@ describe('HTTP APIs', function () {
     })
     it('should create new resource even if no trailing / is in the target',
       function (done) {
-        server.post('')
+        server.post('/')
           .send(postRequest1Body)
           .set('content-type', 'text/turtle')
           .set('slug', 'post-test-target')
@@ -607,7 +631,7 @@ describe('HTTP APIs', function () {
         .end((err, res) => {
           if (err) return done(err)
           try {
-            assert.equal(res.headers.location, expectedDirName,
+            assert(res.headers.location.endsWith(expectedDirName),
               'Uri container names should be encoded')
             let createdDir = fs.statSync(path.join(__dirname, '../resources', expectedDirName))
             assert(createdDir.isDirectory(), 'Container should have been created')
@@ -636,7 +660,7 @@ describe('HTTP APIs', function () {
 
         it('is assigned an URL with the .ttl extension', () => {
           expect(response.headers).to.have.property('location')
-          expect(response.headers.location).to.match(/^\/post-tests\/[^./]+\.ttl$/)
+          expect(response.headers.location).to.match(/\/post-tests\/[^./]+\.ttl$/)
         })
       })
 
@@ -650,7 +674,7 @@ describe('HTTP APIs', function () {
         )
 
         it('is assigned an URL with the .ttl extension', () => {
-          expect(response.headers).to.have.property('location', '/post-tests/slug1.ttl')
+          expect(response.headers['location'].endsWith('/post-tests/slug1.ttl')).to.be.true
         })
       })
 
@@ -664,7 +688,7 @@ describe('HTTP APIs', function () {
 
         it('is assigned an URL with the .html extension', () => {
           expect(response.headers).to.have.property('location')
-          expect(response.headers.location).to.match(/^\/post-tests\/[^./]+\.html$/)
+          expect(response.headers.location).to.match(/\/post-tests\/[^./]+\.html$/)
         })
       })
 
@@ -678,13 +702,14 @@ describe('HTTP APIs', function () {
         )
 
         it('is assigned an URL with the .html extension', () => {
-          expect(response.headers).to.have.property('location', '/post-tests/slug2.html')
+          expect(response.headers['location'].endsWith('/post-tests/slug2.html'))
+            .to.be.true
         })
       })
     })
 
-    /* No, URLs are NOT ex-encoded to make filenames -- the other way around.
-    it('should create a container with a url name', (done) => {
+    // No, URLs are NOT ex-encoded to make filenames -- the other way around.
+    it.skip('should create a container with a url name', (done) => {
       let containerName = 'https://example.com/page'
       let expectedDirName = '/post-tests/https%3A%2F%2Fexample.com%2Fpage/'
       server.post('/post-tests/')
@@ -706,13 +731,12 @@ describe('HTTP APIs', function () {
         })
     })
 
-    it('should be able to access new url-named container', (done) => {
+    it.skip('should be able to access new url-named container', (done) => {
       let containerUrl = '/post-tests/https%3A%2F%2Fexample.com%2Fpage/'
       server.get(containerUrl)
         .expect('content-type', /text\/turtle/)
         .expect(200, done)
     })
-    */
 
     after(function () {
       // Clean up after POST API tests
@@ -729,7 +753,7 @@ describe('HTTP APIs', function () {
         server.post('/sampleContainer/')
           .attach('timbl', path.join(__dirname, '../resources/timbl.jpg'))
           .attach('nicola', path.join(__dirname, '../resources/nicola.jpg'))
-          .expect(200)
+          .expect(201)
           .end(function (err) {
             if (err) return done(err)
 

@@ -8,7 +8,7 @@ var path = require('path')
 // Helper functions for the FS
 var { rm, write, read } = require('../utils')
 
-describe('PATCH through application/sparql-update', function () {
+describe.skip('PATCH through application/sparql-update', function () {
   // Starting LDP
   var ldp = ldnode({
     root: path.join(__dirname, '../resources/sampleContainer'),
