@@ -142,38 +142,6 @@ module.exports = [
     flag: true,
     default: false
   },
-  // {
-  //   full: 'default-app',
-  //   help: 'URI to use as a default app for resources (default: https://linkeddata.github.io/warp/#/list/)'
-  // },
-  {
-    name: 'useCorsProxy',
-    help: 'Do you want to have a CORS proxy endpoint?',
-    flag: true,
-    default: false,
-    hide: true
-  },
-  {
-    name: 'proxy',
-    help: 'Obsolete; use --corsProxy',
-    prompt: false
-  },
-  {
-    name: 'corsProxy',
-    help: 'Serve the CORS proxy on this path',
-    when: function (answers) {
-      return answers.useCorsProxy
-    },
-    default: '/proxy',
-    prompt: true
-  },
-  {
-    name: 'authProxy',
-    help: 'Object with path/server pairs to reverse proxy',
-    default: {},
-    prompt: false,
-    hide: true
-  },
   {
     name: 'suffix-acl',
     full: 'suffix-acl',

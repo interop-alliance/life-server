@@ -51,41 +51,6 @@ describe('API', () => {
   })
 
   describe('Capability Discovery', () => {
-    describe('GET Service Capability document', () => {
-      it('should exist', (done) => {
-        alice.get('/.well-known/solid')
-          .expect(200, done)
-      })
-      it('should be a json file by default', (done) => {
-        alice.get('/.well-known/solid')
-          .expect('content-type', /application\/json/)
-          .expect(200, done)
-      })
-      it('includes a root element', (done) => {
-        alice.get('/.well-known/solid')
-          .end(function (err, req) {
-            expect(req.body.root).to.exist
-            return done(err)
-          })
-      })
-      it('includes an apps config section', (done) => {
-        const config = {
-          apps: {
-            'signin': '/signin/',
-            'signup': '/signup/'
-          },
-          webid: false
-        }
-        const solid = Solid(config)
-        let server = supertest(solid)
-        server.get('/.well-known/solid')
-          .end(function (err, req) {
-            expect(req.body.apps).to.exist
-            return done(err)
-          })
-      })
-    })
-
     describe('OPTIONS API', () => {
       it('should return the service Link header', (done) => {
         alice.options('/')
