@@ -6,7 +6,7 @@ chai.use(require('sinon-chai'))
 chai.use(require('dirty-chai'))
 chai.should()
 
-const errorPages = require('../../lib/handlers/error-pages')
+const errorPages = require('../../lib/error-pages')
 
 describe('handlers/error-pages', () => {
   describe('handler()', () => {

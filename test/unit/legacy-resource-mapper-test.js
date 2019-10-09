@@ -1,4 +1,4 @@
-const LegacyResourceMapper = require('../../lib/legacy-resource-mapper')
+const LegacyResourceMapper = require('../../lib/storage/legacy-resource-mapper')
 const chai = require('chai')
 const { expect } = chai
 chai.use(require('chai-as-promised'))

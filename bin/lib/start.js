@@ -58,9 +58,6 @@ function bin (argv, server) {
     delete argv['emailAuthPass']
   }
 
-  // Set up --no-*
-  argv.live = !argv.noLive
-
   // Set up debug environment
   if (!argv.quiet) {
     require('debug').enable('solid:*')

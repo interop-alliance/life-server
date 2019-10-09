@@ -2,7 +2,6 @@ const Solid = require('../../index')
 const path = require('path')
 const { cleanDir } = require('../utils')
 const supertest = require('supertest')
-const expect = require('chai').expect
 // In this test we always assume that we are Alice
 
 describe('API', () => {
