@@ -14,6 +14,7 @@ const HttpMocks = require('node-mocks-http')
 const DeleteAccountRequest = require('../../lib/requests/delete-account-request')
 const AccountManager = require('../../lib/models/account-manager')
 const SolidHost = require('../../lib/models/solid-host')
+const { testAccountManagerOptions } = require('../_utils')
 
 describe('DeleteAccountRequest', () => {
   describe('constructor()', () => {
@@ -75,11 +76,13 @@ describe('DeleteAccountRequest', () => {
       sinon.spy(DeleteAccountRequest, 'handlePost')
 
       const username = 'alice'
-      const host = SolidHost.from({ serverUri: 'https://example.com' })
-      const store = {
-        suffixAcl: '.acl'
-      }
-      const accountManager = AccountManager.from({ host, multiuser: true, store })
+      const host = SolidHost.from({
+        serverUri: 'https://example.com',
+        multiuser: true,
+        root: './'
+      })
+      const options = testAccountManagerOptions(host)
+      const accountManager = AccountManager.from(options)
       accountManager.accountExists = sinon.stub().resolves(true)
       accountManager.loadAccountRecoveryEmail = sinon.stub().resolves('alice@example.com')
       accountManager.sendDeleteLink = sinon.stub().resolves()
@@ -99,8 +102,13 @@ describe('DeleteAccountRequest', () => {
 
   describe('validate()', () => {
     it('should throw an error if username is missing in multi-user mode', () => {
-      const host = SolidHost.from({ serverUri: 'https://example.com' })
-      const accountManager = AccountManager.from({ host, multiuser: true })
+      const host = SolidHost.from({
+        serverUri: 'https://example.com',
+        multiuser: true,
+        root: './'
+      })
+      const options = testAccountManagerOptions(host)
+      const accountManager = AccountManager.from(options)
 
       const request = new DeleteAccountRequest({ accountManager })
 
@@ -108,8 +116,13 @@ describe('DeleteAccountRequest', () => {
     })
 
     it('should not throw an error if username is missing in single user mode', () => {
-      const host = SolidHost.from({ serverUri: 'https://example.com' })
-      const accountManager = AccountManager.from({ host, multiuser: false })
+      const host = SolidHost.from({
+        serverUri: 'https://example.com',
+        multiuser: false,
+        root: './'
+      })
+      const options = testAccountManagerOptions(host)
+      const accountManager = AccountManager.from(options)
 
       const request = new DeleteAccountRequest({ accountManager })
 
@@ -119,9 +132,13 @@ describe('DeleteAccountRequest', () => {
 
   describe('handlePost()', () => {
     it('should handle the post request', () => {
-      const host = SolidHost.from({ serverUri: 'https://example.com' })
-      const store = { suffixAcl: '.acl' }
-      const accountManager = AccountManager.from({ host, multiuser: true, store })
+      const host = SolidHost.from({
+        serverUri: 'https://example.com',
+        multiuser: true,
+        root: './'
+      })
+      const accountManager = AccountManager.from(testAccountManagerOptions(host))
+
       accountManager.loadAccountRecoveryEmail = sinon.stub().resolves('alice@example.com')
       accountManager.sendDeleteAccountEmail = sinon.stub().resolves()
       accountManager.accountExists = sinon.stub().resolves(true)
@@ -146,9 +163,12 @@ describe('DeleteAccountRequest', () => {
 
   describe('loadUser()', () => {
     it('should return a UserAccount instance based on username', () => {
-      const host = SolidHost.from({ serverUri: 'https://example.com' })
-      const store = { suffixAcl: '.acl' }
-      const accountManager = AccountManager.from({ host, multiuser: true, store })
+      const host = SolidHost.from({
+        serverUri: 'https://example.com',
+        multiuser: true,
+        root: './'
+      })
+      const accountManager = AccountManager.from(testAccountManagerOptions(host))
       accountManager.accountExists = sinon.stub().resolves(true)
       const username = 'alice'
 
@@ -162,9 +182,12 @@ describe('DeleteAccountRequest', () => {
     })
 
     it('should throw an error if the user does not exist', done => {
-      const host = SolidHost.from({ serverUri: 'https://example.com' })
-      const store = { suffixAcl: '.acl' }
-      const accountManager = AccountManager.from({ host, multiuser: true, store })
+      const host = SolidHost.from({
+        serverUri: 'https://example.com',
+        multiuser: true,
+        root: './'
+      })
+      const accountManager = AccountManager.from(testAccountManagerOptions(host))
       accountManager.accountExists = sinon.stub().resolves(false)
       const username = 'alice'
 

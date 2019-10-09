@@ -11,14 +11,19 @@ const { PasswordAuthenticator } = require('../../lib/models/authenticator')
 
 const SolidHost = require('../../lib/models/solid-host')
 const AccountManager = require('../../lib/models/account-manager')
+const { testAccountManagerOptions } = require('../_utils')
 
 const mockUserStore = {
   findUser: () => { return Promise.resolve(true) },
   matchPassword: (user, password) => { return Promise.resolve(user) }
 }
 
-const host = SolidHost.from({ serverUri: 'https://localhost:8443' })
-const accountManager = AccountManager.from({ host })
+const host = SolidHost.from({
+  serverUri: 'https://localhost:8443',
+  root: './'
+})
+const options = testAccountManagerOptions(host)
+const accountManager = AccountManager.from(options)
 
 describe('PasswordAuthenticator', () => {
   describe('fromParams()', () => {
@@ -138,11 +143,12 @@ describe('PasswordAuthenticator', () => {
     })
 
     describe('in Multi User mode', () => {
-      let multiuser = true
-      let serverUri = 'https://example.com'
-      let host = SolidHost.from({ serverUri })
-
-      let accountManager = AccountManager.from({ multiuser, host })
+      const host = SolidHost.from({
+        serverUri: 'https://example.com',
+        root: './',
+        multiuser: true
+      })
+      const accountManager = AccountManager.from(testAccountManagerOptions(host))
 
       let aliceRecord = { webId: 'https://alice.example.com/profile/card#me' }
       let mockUserStore = {
@@ -187,11 +193,12 @@ describe('PasswordAuthenticator', () => {
     })
 
     describe('in Single User mode', () => {
-      let multiuser = false
-      let serverUri = 'https://localhost:8443'
-      let host = SolidHost.from({ serverUri })
-
-      let accountManager = AccountManager.from({ multiuser, host })
+      const host = SolidHost.from({
+        serverUri: 'https://localhost:8443',
+        root: './',
+        multiuser: false
+      })
+      const accountManager = AccountManager.from(testAccountManagerOptions(host))
 
       let aliceRecord = { webId: 'https://localhost:8443/profile/card#me' }
       let mockUserStore = {

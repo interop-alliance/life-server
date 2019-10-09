@@ -14,6 +14,7 @@ const HttpMocks = require('node-mocks-http')
 const PasswordResetEmailRequest = require('../../lib/requests/password-reset-email-request')
 const AccountManager = require('../../lib/models/account-manager')
 const SolidHost = require('../../lib/models/solid-host')
+const { testAccountManagerOptions } = require('../_utils')
 
 describe('PasswordResetEmailRequest', () => {
   describe('constructor()', () => {
@@ -83,11 +84,15 @@ describe('PasswordResetEmailRequest', () => {
 
       let returnToUrl = 'https://example.com/resource'
       let username = 'alice'
-      let host = SolidHost.from({ serverUri: 'https://example.com' })
-      let store = {
-        suffixAcl: '.acl'
-      }
-      let accountManager = AccountManager.from({ host, multiuser: true, store })
+
+      const host = SolidHost.from({
+        serverUri: 'https://example.com',
+        root: './',
+        multiuser: true
+      })
+      const options = testAccountManagerOptions(host)
+      const accountManager = AccountManager.from(options)
+
       accountManager.accountExists = sinon.stub().resolves(true)
       accountManager.loadAccountRecoveryEmail = sinon.stub().resolves('alice@example.com')
       accountManager.sendPasswordResetEmail = sinon.stub().resolves()
@@ -108,8 +113,12 @@ describe('PasswordResetEmailRequest', () => {
 
   describe('validate()', () => {
     it('should throw an error if username is missing in multi-user mode', () => {
-      let host = SolidHost.from({ serverUri: 'https://example.com' })
-      let accountManager = AccountManager.from({ host, multiuser: true })
+      const host = SolidHost.from({
+        serverUri: 'https://example.com',
+        root: './',
+        multiuser: true
+      })
+      const accountManager = AccountManager.from(testAccountManagerOptions(host))
 
       let request = new PasswordResetEmailRequest({ accountManager })
 
@@ -117,8 +126,12 @@ describe('PasswordResetEmailRequest', () => {
     })
 
     it('should not throw an error if username is missing in single user mode', () => {
-      let host = SolidHost.from({ serverUri: 'https://example.com' })
-      let accountManager = AccountManager.from({ host, multiuser: false })
+      const host = SolidHost.from({
+        serverUri: 'https://example.com',
+        root: './',
+        multiuser: false
+      })
+      const accountManager = AccountManager.from(testAccountManagerOptions(host))
 
       let request = new PasswordResetEmailRequest({ accountManager })
 
@@ -128,9 +141,13 @@ describe('PasswordResetEmailRequest', () => {
 
   describe('handlePost()', () => {
     it('should handle the post request', () => {
-      let host = SolidHost.from({ serverUri: 'https://example.com' })
-      let store = { suffixAcl: '.acl' }
-      let accountManager = AccountManager.from({ host, multiuser: true, store })
+      const host = SolidHost.from({
+        serverUri: 'https://example.com',
+        root: './',
+        multiuser: true
+      })
+      const accountManager = AccountManager.from(testAccountManagerOptions(host))
+
       accountManager.loadAccountRecoveryEmail = sinon.stub().resolves('alice@example.com')
       accountManager.sendPasswordResetEmail = sinon.stub().resolves()
       accountManager.accountExists = sinon.stub().resolves(true)
@@ -157,9 +174,12 @@ describe('PasswordResetEmailRequest', () => {
 
   describe('loadUser()', () => {
     it('should return a UserAccount instance based on username', () => {
-      let host = SolidHost.from({ serverUri: 'https://example.com' })
-      let store = { suffixAcl: '.acl' }
-      let accountManager = AccountManager.from({ host, multiuser: true, store })
+      const host = SolidHost.from({
+        serverUri: 'https://example.com',
+        root: './',
+        multiuser: true
+      })
+      const accountManager = AccountManager.from(testAccountManagerOptions(host))
       accountManager.accountExists = sinon.stub().resolves(true)
       let username = 'alice'
 
@@ -173,9 +193,12 @@ describe('PasswordResetEmailRequest', () => {
     })
 
     it('should throw an error if the user does not exist', done => {
-      let host = SolidHost.from({ serverUri: 'https://example.com' })
-      let store = { suffixAcl: '.acl' }
-      let accountManager = AccountManager.from({ host, multiuser: true, store })
+      const host = SolidHost.from({
+        serverUri: 'https://example.com',
+        root: './',
+        multiuser: true
+      })
+      const accountManager = AccountManager.from(testAccountManagerOptions(host))
       accountManager.accountExists = sinon.stub().resolves(false)
       let username = 'alice'
 

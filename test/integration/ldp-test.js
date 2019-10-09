@@ -1,7 +1,6 @@
 var assert = require('chai').assert
 var $rdf = require('rdflib')
 var ns = require('solid-namespace')($rdf)
-var LDP = require('../../lib/ldp')
 var path = require('path')
 var stringToStream = require('../../lib/utils').stringToStream
 
@@ -16,11 +15,12 @@ const suffixMeta = '.meta'
 
 // TODO - change over to testing ldp-file-store
 describe.skip('LDP', function () {
-  var ldp = new LDP({
-    suffixMeta,
-    root: path.join(__dirname, '..'),
-    webid: false
-  })
+  var ldp
+  //   = new LDP({
+  //   suffixMeta,
+  //   root: path.join(__dirname, '..'),
+  //   webid: false
+  // })
 
   describe('readFile', function () {
     it('return 404 if file does not exist', function (done) {

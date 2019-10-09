@@ -11,24 +11,28 @@ chai.should()
 const SolidHost = require('../../lib/models/solid-host')
 const AccountManager = require('../../lib/models/account-manager')
 const EmailService = require('../../lib/services/email-service')
+const { testAccountManagerOptions } = require('../_utils')
 
 const templatePath = path.join(__dirname, '../../default-templates/emails')
 
-var host, accountManager, emailService
+let host, accountManager, emailService
 
 beforeEach(() => {
-  host = SolidHost.from({ serverUri: 'https://example.com' })
-
-  let emailConfig = { auth: {}, sender: 'solid@example.com' }
+  const emailConfig = { auth: {}, sender: 'solid@example.com' }
   emailService = new EmailService(templatePath, emailConfig)
 
-  let mgrConfig = {
-    host,
+  const mgrConfig = {
     emailService,
-    authMethod: 'oidc',
-    multiuser: true
+    authMethod: 'oidc'
   }
-  accountManager = AccountManager.from(mgrConfig)
+
+  host = SolidHost.from({
+    serverUri: 'https://example.com',
+    multiuser: true,
+    root: './'
+  })
+  const options = testAccountManagerOptions(host, mgrConfig)
+  accountManager = AccountManager.from(options)
 })
 
 describe('Account Creation Welcome Email', () => {

@@ -6,17 +6,18 @@ const chai = require('chai')
 const expect = chai.expect
 chai.should()
 
-const LDP = require('../../lib/ldp')
 const SolidHost = require('../../lib/models/solid-host')
 const AccountManager = require('../../lib/models/account-manager')
+const { testAccountManagerOptions } = require('../_utils')
 
 const testAccountsDir = path.join(__dirname, '../resources/accounts')
 const accountTemplatePath = path.join(__dirname, '../../default-templates/new-account')
 
-var host
+let host
 
 beforeEach(() => {
   host = SolidHost.from({ serverUri: 'https://example.com' })
+  fs.removeSync(path.join(__dirname, '../resources/accounts/alice.localhost'))
 })
 
 afterEach(() => {
@@ -25,13 +26,14 @@ afterEach(() => {
 
 describe('AccountManager', () => {
   describe('accountExists()', () => {
-    let host = SolidHost.from({ serverUri: 'https://localhost' })
-
     describe('in multi user mode', () => {
-      let multiuser = true
-      let store = new LDP({ root: testAccountsDir, multiuser })
-      let options = { multiuser, store, host }
-      let accountManager = AccountManager.from(options)
+      const host = SolidHost.from({
+        root: testAccountsDir,
+        serverUri: 'https://localhost',
+        multiuser: true
+      })
+      const options = testAccountManagerOptions(host)
+      const accountManager = AccountManager.from(options)
 
       it('resolves to true if a directory for the account exists in root', () => {
         // Note: test/resources/accounts/tim.localhost/ exists in this repo
@@ -41,25 +43,20 @@ describe('AccountManager', () => {
           })
       })
 
-      it('resolves to false if a directory for the account does not exist', () => {
+      it('resolves to false if a directory for the account does not exist', async () => {
         // Note: test/resources/accounts/alice.localhost/ does NOT exist
-        return accountManager.accountExists('alice')
-          .then(exists => {
-            expect(exists).to.be.false
-          })
+        const exists = await accountManager.accountExists('alice')
+        expect(exists).to.be.false
       })
     })
 
     describe('in single user mode', () => {
-      let multiuser = false
-
       it('resolves to true if root .acl exists in root storage', () => {
-        let store = new LDP({
-          root: path.join(testAccountsDir, 'tim.localhost'),
-          multiuser
-        })
-        let options = { multiuser, store, host }
-        let accountManager = AccountManager.from(options)
+        host.root = path.join(testAccountsDir, 'tim.localhost')
+        host.multiuser = false
+
+        const options = testAccountManagerOptions(host)
+        const accountManager = AccountManager.from(options)
 
         return accountManager.accountExists()
           .then(exists => {
@@ -68,11 +65,10 @@ describe('AccountManager', () => {
       })
 
       it('resolves to false if root .acl does not exist in root storage', () => {
-        let store = new LDP({
-          root: testAccountsDir,
-          multiuser
-        })
-        let options = { multiuser, store, host }
+        host.root = testAccountsDir
+        host.multiuser = false
+
+        const options = testAccountManagerOptions(host)
         let accountManager = AccountManager.from(options)
 
         return accountManager.accountExists()
@@ -85,10 +81,13 @@ describe('AccountManager', () => {
 
   describe('createAccountFor()', () => {
     it('should create an account directory', () => {
-      let multiuser = true
-      let store = new LDP({ root: testAccountsDir, multiuser })
-      let options = { host, multiuser, store, accountTemplatePath }
-      let accountManager = AccountManager.from(options)
+      host.root = testAccountsDir
+      host.multiuser = true
+
+      const options = testAccountManagerOptions(host)
+      let accountManager = AccountManager.from({
+        accountTemplatePath, ...options
+      })
 
       let userData = {
         username: 'alice',

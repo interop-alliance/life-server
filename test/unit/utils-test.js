@@ -33,42 +33,6 @@ describe('Utility functions', function () {
     })
   })
 
-  describe('stripLineEndings()', () => {
-    it('should pass through falsy string arguments', () => {
-      assert.equal(utils.stripLineEndings(''), '')
-      assert.equal(utils.stripLineEndings(null), null)
-      assert.equal(utils.stripLineEndings(undefined), undefined)
-    })
-
-    it('should remove line-endings characters', () => {
-      let str = '123\n456'
-      assert.equal(utils.stripLineEndings(str), '123456')
-
-      str = `123
-456`
-      assert.equal(utils.stripLineEndings(str), '123456')
-    })
-  })
-
-  describe('debrack()', () => {
-    it('should return null if no string is passed', () => {
-      assert.equal(utils.debrack(), null)
-    })
-
-    it('should return the string if no brackets are present', () => {
-      assert.equal(utils.debrack('test string'), 'test string')
-    })
-
-    it('should return the string if less than 2 chars long', () => {
-      assert.equal(utils.debrack(''), '')
-      assert.equal(utils.debrack('<'), '<')
-    })
-
-    it('should remove brackets if wrapping the string', () => {
-      assert.equal(utils.debrack('<test string>'), 'test string')
-    })
-  })
-
   describe('fullUrlForReq()', () => {
     it('should extract a fully-qualified url from an Express request', () => {
       let req = {

@@ -11,11 +11,11 @@ chai.should()
 
 const rdf = require('rdflib')
 const ns = require('solid-namespace')(rdf)
-const LDP = require('../../lib/ldp')
 const SolidHost = require('../../lib/models/solid-host')
 const AccountManager = require('../../lib/models/account-manager')
 const UserAccount = require('../../lib/models/user-account')
 const TokenService = require('../../lib/services/token-service')
+const { testAccountManagerOptions } = require('../_utils')
 
 const testAccountsDir = path.join(__dirname, '../resources/accounts')
 
@@ -28,20 +28,18 @@ beforeEach(() => {
 describe('AccountManager', () => {
   describe('from()', () => {
     it('should init with passed in options', () => {
-      let config = {
+      host.multiuser = true
+      const config = {
         host,
         authMethod: 'oidc',
-        multiuser: true,
-        store: {},
         emailService: {},
         tokenService: {}
       }
 
-      let mgr = AccountManager.from(config)
+      const mgr = AccountManager.from(config)
       expect(mgr.host).to.equal(config.host)
       expect(mgr.authMethod).to.equal(config.authMethod)
-      expect(mgr.multiuser).to.equal(config.multiuser)
-      expect(mgr.store).to.equal(config.store)
+      expect(mgr.multiuser).to.equal(host.multiuser)
       expect(mgr.emailService).to.equal(config.emailService)
       expect(mgr.tokenService).to.equal(config.tokenService)
     })
@@ -54,45 +52,53 @@ describe('AccountManager', () => {
 
   describe('accountUriFor', () => {
     it('should compose account uri for an account in multi user mode', () => {
-      let options = {
+      const host = SolidHost.from({
+        serverUri: 'https://localhost',
         multiuser: true,
-        host: SolidHost.from({ serverUri: 'https://localhost' })
-      }
-      let mgr = AccountManager.from(options)
+        root: './'
+      })
+      const options = testAccountManagerOptions(host)
+      const mgr = AccountManager.from(options)
 
-      let webId = mgr.accountUriFor('alice')
+      const webId = mgr.accountUriFor('alice')
       expect(webId).to.equal('https://alice.localhost')
     })
 
     it('should compose account uri for an account in single user mode', () => {
-      let options = {
+      const host = SolidHost.from({
+        serverUri: 'https://localhost',
         multiuser: false,
-        host: SolidHost.from({ serverUri: 'https://localhost' })
-      }
-      let mgr = AccountManager.from(options)
+        root: './'
+      })
+      const options = testAccountManagerOptions(host)
+      const mgr = AccountManager.from(options)
 
-      let webId = mgr.accountUriFor('alice')
+      const webId = mgr.accountUriFor('alice')
       expect(webId).to.equal('https://localhost')
     })
   })
 
   describe('accountWebIdFor()', () => {
     it('should compose a web id uri for an account in multi user mode', () => {
-      let options = {
+      const host = SolidHost.from({
+        serverUri: 'https://localhost',
         multiuser: true,
-        host: SolidHost.from({ serverUri: 'https://localhost' })
-      }
-      let mgr = AccountManager.from(options)
-      let webId = mgr.accountWebIdFor('alice')
+        root: './'
+      })
+      const options = testAccountManagerOptions(host)
+      const mgr = AccountManager.from(options)
+      const webId = mgr.accountWebIdFor('alice')
       expect(webId).to.equal('https://alice.localhost/profile/card#me')
     })
 
     it('should compose a web id uri for an account in single user mode', () => {
-      let options = {
+      const host = SolidHost.from({
+        serverUri: 'https://localhost',
         multiuser: false,
-        host: SolidHost.from({ serverUri: 'https://localhost' })
-      }
-      let mgr = AccountManager.from(options)
+        root: './'
+      })
+      const options = testAccountManagerOptions(host)
+      const mgr = AccountManager.from(options)
       let webId = mgr.accountWebIdFor('alice')
       expect(webId).to.equal('https://localhost/profile/card#me')
     })
@@ -100,21 +106,26 @@ describe('AccountManager', () => {
 
   describe('accountDirFor()', () => {
     it('should match the solid root dir config, in single user mode', () => {
-      let multiuser = false
-      let store = new LDP({ root: testAccountsDir, multiuser })
-      let options = { multiuser, store, host }
-      let accountManager = AccountManager.from(options)
+      const host = SolidHost.from({
+        serverUri: 'https://example.com',
+        multiuser: false,
+        root: testAccountsDir
+      })
+      const options = testAccountManagerOptions(host)
+      const accountManager = AccountManager.from(options)
 
       let accountDir = accountManager.accountDirFor('alice')
-      expect(accountDir).to.equal(store.root)
+      expect(accountDir).to.equal(host.root)
     })
 
     it('should compose the account dir in multi user mode', () => {
-      let multiuser = true
-      let store = new LDP({ root: testAccountsDir, multiuser })
-      let host = SolidHost.from({ serverUri: 'https://localhost' })
-      let options = { multiuser, store, host }
-      let accountManager = AccountManager.from(options)
+      const host = SolidHost.from({
+        serverUri: 'https://localhost',
+        multiuser: true,
+        root: testAccountsDir
+      })
+      const options = testAccountManagerOptions(host)
+      const accountManager = AccountManager.from(options)
 
       let accountDir = accountManager.accountDirFor('alice')
       expect(accountDir).to.equal(path.join(testAccountsDir, 'alice.localhost'))
@@ -123,11 +134,15 @@ describe('AccountManager', () => {
 
   describe('userAccountFrom()', () => {
     describe('in multi user mode', () => {
-      let multiuser = true
-      let options, accountManager
+      let options, accountManager, host
 
       beforeEach(() => {
-        options = { host, multiuser }
+        host = SolidHost.from({
+          serverUri: 'https://example.com',
+          multiuser: true,
+          root: './'
+        })
+        options = testAccountManagerOptions(host)
         accountManager = AccountManager.from(options)
       })
 
@@ -171,11 +186,15 @@ describe('AccountManager', () => {
     })
 
     describe('in single user mode', () => {
-      let multiuser = false
-      let options, accountManager
+      let options, accountManager, host
 
       beforeEach(() => {
-        options = { host, multiuser }
+        host = SolidHost.from({
+          serverUri: 'https://example.com',
+          multiuser: false,
+          root: './'
+        })
+        options = testAccountManagerOptions(host)
         accountManager = AccountManager.from(options)
       })
 
@@ -187,80 +206,31 @@ describe('AccountManager', () => {
     })
   })
 
-  describe('getProfileGraphFor()', () => {
-    it('should throw an error if webId is missing', (done) => {
-      let emptyUserData = {}
-      let userAccount = UserAccount.from(emptyUserData)
-      let options = { host, multiuser: true }
-      let accountManager = AccountManager.from(options)
-
-      accountManager.getProfileGraphFor(userAccount)
-        .catch(error => {
-          expect(error.message).to
-            .equal('Cannot fetch profile graph, missing WebId URI')
-          done()
-        })
-    })
-
-    it('should fetch the profile graph via LDP store', () => {
-      let store = {
-        getGraph: sinon.stub().returns(Promise.resolve())
-      }
-      let webId = 'https://alice.example.com/#me'
-      let profileHostUri = 'https://alice.example.com/'
-
-      let userData = { webId }
-      let userAccount = UserAccount.from(userData)
-      let options = { host, multiuser: true, store }
-      let accountManager = AccountManager.from(options)
-
-      expect(userAccount.webId).to.equal(webId)
-
-      return accountManager.getProfileGraphFor(userAccount)
-        .then(() => {
-          expect(store.getGraph).to.have.been.calledWith(profileHostUri)
-        })
-    })
-  })
-
-  describe('saveProfileGraph()', () => {
-    it('should save the profile graph via the LDP store', () => {
-      let store = {
-        putGraph: sinon.stub().returns(Promise.resolve())
-      }
-      let webId = 'https://alice.example.com/#me'
-      let profileHostUri = 'https://alice.example.com/'
-
-      let userData = { webId }
-      let userAccount = UserAccount.from(userData)
-      let options = { host, multiuser: true, store }
-      let accountManager = AccountManager.from(options)
-      let profileGraph = rdf.graph()
-
-      return accountManager.saveProfileGraph(profileGraph, userAccount)
-        .then(() => {
-          expect(store.putGraph).to.have.been.calledWith(profileGraph, profileHostUri)
-        })
-    })
-  })
-
   describe('rootAclFor()', () => {
     it('should return the server root .acl in single user mode', () => {
-      let store = new LDP({ suffixAcl: '.acl', multiuser: false })
-      let options = { host, multiuser: false, store }
-      let accountManager = AccountManager.from(options)
+      const host = SolidHost.from({
+        serverUri: 'https://example.com',
+        multiuser: false,
+        root: './'
+      })
+      const options = testAccountManagerOptions(host)
+      const accountManager = AccountManager.from(options)
 
-      let userAccount = UserAccount.from({ username: 'alice' })
+      const userAccount = UserAccount.from({ username: 'alice' })
 
-      let rootAclUri = accountManager.rootAclFor(userAccount)
+      const rootAclUri = accountManager.rootAclFor(userAccount)
 
       expect(rootAclUri).to.equal('https://example.com/.acl')
     })
 
     it('should return the profile root .acl in multi user mode', () => {
-      let store = new LDP({ suffixAcl: '.acl', multiuser: true })
-      let options = { host, multiuser: true, store }
-      let accountManager = AccountManager.from(options)
+      const host = SolidHost.from({
+        serverUri: 'https://example.com',
+        multiuser: true,
+        root: './'
+      })
+      const options = testAccountManagerOptions(host)
+      const accountManager = AccountManager.from(options)
 
       let userAccount = UserAccount.from({ username: 'alice' })
 
@@ -271,63 +241,64 @@ describe('AccountManager', () => {
   })
 
   describe('loadAccountRecoveryEmail()', () => {
-    it('parses and returns the agent mailto from the root acl', () => {
-      let userAccount = UserAccount.from({ username: 'alice' })
+    it('parses and returns the agent mailto from the root acl', async () => {
+      const userAccount = UserAccount.from({ username: 'alice' })
 
-      let rootAclGraph = rdf.graph()
+      const rootAclGraph = rdf.graph()
       rootAclGraph.add(
         rdf.namedNode('https://alice.example.com/.acl#owner'),
         ns.acl('agent'),
         rdf.namedNode('mailto:alice@example.com')
       )
+      const host = SolidHost.from({
+        serverUri: 'https://example.com',
+        multiuser: true,
+        root: './'
+      })
+      const options = testAccountManagerOptions(host)
+      options.ldpStore.loadParsedGraph = sinon.stub().resolves(rootAclGraph)
+      const accountManager = AccountManager.from(options)
 
-      let store = {
-        suffixAcl: '.acl',
-        getGraph: sinon.stub().resolves(rootAclGraph)
-      }
-
-      let options = { host, multiuser: true, store }
-      let accountManager = AccountManager.from(options)
-
-      return accountManager.loadAccountRecoveryEmail(userAccount)
-        .then(recoveryEmail => {
-          expect(recoveryEmail).to.equal('alice@example.com')
-        })
+      const recoveryEmail = await accountManager.loadAccountRecoveryEmail(userAccount)
+      expect(recoveryEmail).to.equal('alice@example.com')
     })
 
-    it('should return undefined when agent mailto is missing', () => {
-      let userAccount = UserAccount.from({ username: 'alice' })
+    it('should return undefined when agent mailto is missing', async () => {
+      const userAccount = UserAccount.from({ username: 'alice' })
 
-      let emptyGraph = rdf.graph()
+      const emptyGraph = rdf.graph()
 
-      let store = {
-        suffixAcl: '.acl',
-        getGraph: sinon.stub().resolves(emptyGraph)
-      }
+      const host = SolidHost.from({
+        serverUri: 'https://example.com',
+        multiuser: true,
+        root: './'
+      })
+      const options = testAccountManagerOptions(host)
+      options.ldpStore.loadParsedGraph = sinon.stub().resolves(emptyGraph)
+      const accountManager = AccountManager.from(options)
 
-      let options = { host, multiuser: true, store }
-      let accountManager = AccountManager.from(options)
-
-      return accountManager.loadAccountRecoveryEmail(userAccount)
-        .then(recoveryEmail => {
-          expect(recoveryEmail).to.be.undefined()
-        })
+      const recoveryEmail = await accountManager.loadAccountRecoveryEmail(userAccount)
+      expect(recoveryEmail).to.be.undefined()
     })
   })
 
   describe('passwordResetUrl()', () => {
     it('should return a token reset validation url', () => {
-      let tokenService = new TokenService()
-      let options = { host, multiuser: true, tokenService }
+      const tokenService = new TokenService()
+      const host = SolidHost.from({
+        serverUri: 'https://example.com',
+        multiuser: true,
+        root: './'
+      })
+      const options = testAccountManagerOptions(host, { tokenService })
+      const accountManager = AccountManager.from(options)
 
-      let accountManager = AccountManager.from(options)
+      const returnToUrl = 'https://example.com/resource'
+      const token = '123'
 
-      let returnToUrl = 'https://example.com/resource'
-      let token = '123'
+      const resetUrl = accountManager.passwordResetUrl(token, returnToUrl)
 
-      let resetUrl = accountManager.passwordResetUrl(token, returnToUrl)
-
-      let expectedUri = 'https://example.com/account/password/change?' +
+      const expectedUri = 'https://example.com/account/password/change?' +
         'token=123&returnToUrl=' + returnToUrl
 
       expect(resetUrl).to.equal(expectedUri)
@@ -336,19 +307,23 @@ describe('AccountManager', () => {
 
   describe('generateDeleteToken()', () => {
     it('should generate and store an expiring delete token', () => {
-      let tokenService = new TokenService()
-      let options = { host, tokenService }
-
-      let accountManager = AccountManager.from(options)
+      const tokenService = new TokenService()
+      const host = SolidHost.from({
+        serverUri: 'https://example.com',
+        multiuser: true,
+        root: './'
+      })
+      const options = testAccountManagerOptions(host, { tokenService })
+      const accountManager = AccountManager.from(options)
 
       let aliceWebId = 'https://alice.example.com/#me'
       let userAccount = {
         webId: aliceWebId
       }
 
-      let token = accountManager.generateDeleteToken(userAccount)
+      const token = accountManager.generateDeleteToken(userAccount)
 
-      let tokenValue = accountManager.tokenService.verify('delete-account', token)
+      const tokenValue = accountManager.tokenService.verify('delete-account', token)
 
       expect(tokenValue.webId).to.equal(aliceWebId)
       expect(tokenValue).to.have.property('exp')
@@ -357,19 +332,22 @@ describe('AccountManager', () => {
 
   describe('generateResetToken()', () => {
     it('should generate and store an expiring reset token', () => {
-      let tokenService = new TokenService()
-      let options = { host, tokenService }
+      const tokenService = new TokenService()
+      const host = SolidHost.from({
+        serverUri: 'https://example.com',
+        root: './'
+      })
+      const options = testAccountManagerOptions(host, { tokenService })
+      const accountManager = AccountManager.from(options)
 
-      let accountManager = AccountManager.from(options)
-
-      let aliceWebId = 'https://alice.example.com/#me'
-      let userAccount = {
+      const aliceWebId = 'https://alice.example.com/#me'
+      const userAccount = {
         webId: aliceWebId
       }
 
-      let token = accountManager.generateResetToken(userAccount)
+      const token = accountManager.generateResetToken(userAccount)
 
-      let tokenValue = accountManager.tokenService.verify('reset-password', token)
+      const tokenValue = accountManager.tokenService.verify('reset-password', token)
 
       expect(tokenValue.webId).to.equal(aliceWebId)
       expect(tokenValue).to.have.property('exp')
@@ -377,52 +355,58 @@ describe('AccountManager', () => {
   })
 
   describe('sendPasswordResetEmail()', () => {
-    it('should compose and send a password reset email', () => {
-      let resetToken = '1234'
-      let tokenService = {
+    it('should compose and send a password reset email', async () => {
+      const resetToken = '1234'
+      const tokenService = {
         generate: sinon.stub().returns(resetToken)
       }
 
-      let emailService = {
+      const emailService = {
         sendWithTemplate: sinon.stub().resolves()
       }
 
-      let aliceWebId = 'https://alice.example.com/#me'
-      let userAccount = {
+      const aliceWebId = 'https://alice.example.com/#me'
+      const userAccount = {
         webId: aliceWebId,
         email: 'alice@example.com'
       }
-      let returnToUrl = 'https://example.com/resource'
+      const returnToUrl = 'https://example.com/resource'
 
-      let options = { host, tokenService, emailService }
-      let accountManager = AccountManager.from(options)
+      const host = SolidHost.from({
+        serverUri: 'https://example.com',
+        root: './'
+      })
+      const options = testAccountManagerOptions(host, { tokenService, emailService })
+      const accountManager = AccountManager.from(options)
 
       accountManager.passwordResetUrl = sinon.stub().returns('reset url')
 
-      let expectedEmailData = {
+      const expectedEmailData = {
         to: 'alice@example.com',
         webId: aliceWebId,
         resetUrl: 'reset url'
       }
 
-      return accountManager.sendPasswordResetEmail(userAccount, returnToUrl)
-        .then(() => {
-          expect(accountManager.passwordResetUrl)
-            .to.have.been.calledWith(resetToken, returnToUrl)
-          expect(emailService.sendWithTemplate)
-            .to.have.been.calledWith('reset-password', expectedEmailData)
-        })
+      await accountManager.sendPasswordResetEmail(userAccount, returnToUrl)
+      expect(accountManager.passwordResetUrl)
+        .to.have.been.calledWith(resetToken, returnToUrl)
+      expect(emailService.sendWithTemplate)
+        .to.have.been.calledWith('reset-password', expectedEmailData)
     })
 
     it('should reject if no email service is set up', done => {
-      let aliceWebId = 'https://alice.example.com/#me'
-      let userAccount = {
+      const aliceWebId = 'https://alice.example.com/#me'
+      const userAccount = {
         webId: aliceWebId,
         email: 'alice@example.com'
       }
-      let returnToUrl = 'https://example.com/resource'
-      let options = { host }
-      let accountManager = AccountManager.from(options)
+      const returnToUrl = 'https://example.com/resource'
+      const host = SolidHost.from({
+        serverUri: 'https://example.com',
+        root: './'
+      })
+      const options = testAccountManagerOptions(host)
+      const accountManager = AccountManager.from(options)
 
       accountManager.sendPasswordResetEmail(userAccount, returnToUrl)
         .catch(error => {
@@ -432,15 +416,18 @@ describe('AccountManager', () => {
     })
 
     it('should reject if no user email is provided', done => {
-      let aliceWebId = 'https://alice.example.com/#me'
-      let userAccount = {
+      const aliceWebId = 'https://alice.example.com/#me'
+      const userAccount = {
         webId: aliceWebId
       }
-      let returnToUrl = 'https://example.com/resource'
-      let emailService = {}
-      let options = { host, emailService }
-
-      let accountManager = AccountManager.from(options)
+      const returnToUrl = 'https://example.com/resource'
+      const emailService = {}
+      const host = SolidHost.from({
+        serverUri: 'https://example.com',
+        root: './'
+      })
+      const options = testAccountManagerOptions(host, { emailService })
+      const accountManager = AccountManager.from(options)
 
       accountManager.sendPasswordResetEmail(userAccount, returnToUrl)
         .catch(error => {
@@ -451,50 +438,56 @@ describe('AccountManager', () => {
   })
 
   describe('sendDeleteAccountEmail()', () => {
-    it('should compose and send a delete account email', () => {
-      let deleteToken = '1234'
-      let tokenService = {
+    it('should compose and send a delete account email', async () => {
+      const deleteToken = '1234'
+      const tokenService = {
         generate: sinon.stub().returns(deleteToken)
       }
 
-      let emailService = {
+      const emailService = {
         sendWithTemplate: sinon.stub().resolves()
       }
 
-      let aliceWebId = 'https://alice.example.com/#me'
-      let userAccount = {
+      const aliceWebId = 'https://alice.example.com/#me'
+      const userAccount = {
         webId: aliceWebId,
         email: 'alice@example.com'
       }
 
-      let options = { host, tokenService, emailService }
-      let accountManager = AccountManager.from(options)
+      const host = SolidHost.from({
+        serverUri: 'https://example.com',
+        root: './'
+      })
+      const options = testAccountManagerOptions(host, { tokenService, emailService })
+      const accountManager = AccountManager.from(options)
 
       accountManager.getAccountDeleteUrl = sinon.stub().returns('delete account url')
 
-      let expectedEmailData = {
+      const expectedEmailData = {
         to: 'alice@example.com',
         webId: aliceWebId,
         deleteUrl: 'delete account url'
       }
 
-      return accountManager.sendDeleteAccountEmail(userAccount)
-        .then(() => {
-          expect(accountManager.getAccountDeleteUrl)
-            .to.have.been.calledWith(deleteToken)
-          expect(emailService.sendWithTemplate)
-            .to.have.been.calledWith('delete-account', expectedEmailData)
-        })
+      await accountManager.sendDeleteAccountEmail(userAccount)
+      expect(accountManager.getAccountDeleteUrl)
+        .to.have.been.calledWith(deleteToken)
+      expect(emailService.sendWithTemplate)
+        .to.have.been.calledWith('delete-account', expectedEmailData)
     })
 
     it('should reject if no email service is set up', done => {
-      let aliceWebId = 'https://alice.example.com/#me'
-      let userAccount = {
+      const aliceWebId = 'https://alice.example.com/#me'
+      const userAccount = {
         webId: aliceWebId,
         email: 'alice@example.com'
       }
-      let options = { host }
-      let accountManager = AccountManager.from(options)
+      const host = SolidHost.from({
+        serverUri: 'https://example.com',
+        root: './'
+      })
+      const options = testAccountManagerOptions(host)
+      const accountManager = AccountManager.from(options)
 
       accountManager.sendDeleteAccountEmail(userAccount)
         .catch(error => {
@@ -504,14 +497,17 @@ describe('AccountManager', () => {
     })
 
     it('should reject if no user email is provided', done => {
-      let aliceWebId = 'https://alice.example.com/#me'
-      let userAccount = {
+      const aliceWebId = 'https://alice.example.com/#me'
+      const userAccount = {
         webId: aliceWebId
       }
-      let emailService = {}
-      let options = { host, emailService }
-
-      let accountManager = AccountManager.from(options)
+      const emailService = {}
+      const host = SolidHost.from({
+        serverUri: 'https://example.com',
+        root: './'
+      })
+      const options = testAccountManagerOptions(host, { emailService })
+      const accountManager = AccountManager.from(options)
 
       accountManager.sendDeleteAccountEmail(userAccount)
         .catch(error => {

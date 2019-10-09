@@ -8,20 +8,23 @@ chai.use(sinonChai)
 chai.should()
 const HttpMocks = require('node-mocks-http')
 
-const LDP = require('../../lib/ldp')
 const AccountManager = require('../../lib/models/account-manager')
 const SolidHost = require('../../lib/models/solid-host')
 const defaults = require('../../config/defaults')
 const { CreateAccountRequest } = require('../../lib/requests/create-account-request')
+const { testAccountManagerOptions } = require('../_utils')
 
 describe('CreateAccountRequest', () => {
-  let host, store, accountManager
+  let host, options, accountManager
   let session, res
 
   beforeEach(() => {
-    host = SolidHost.from({ serverUri: 'https://example.com' })
-    store = new LDP()
-    accountManager = AccountManager.from({ host, store })
+    host = SolidHost.from({
+      serverUri: 'https://example.com',
+      root: './'
+    })
+    options = testAccountManagerOptions(host)
+    accountManager = AccountManager.from(options)
 
     session = {}
     res = HttpMocks.createResponse()
@@ -58,14 +61,13 @@ describe('CreateAccountRequest', () => {
 
   describe('createAccount()', () => {
     it('should return a 400 error if account already exists', done => {
-      let accountManager = AccountManager.from({ host })
-      let locals = { authMethod: defaults.auth, accountManager, oidc: { users: {} } }
-      let aliceData = {
+      const locals = { authMethod: defaults.auth, accountManager, oidc: { users: {} } }
+      const aliceData = {
         username: 'alice', password: '1234'
       }
-      let req = HttpMocks.createRequest({ app: { locals }, body: aliceData })
+      const req = HttpMocks.createRequest({ app: { locals }, body: aliceData })
 
-      let request = CreateAccountRequest.fromParams(req, res)
+      const request = CreateAccountRequest.fromParams(req, res)
 
       accountManager.accountExists = sinon.stub().returns(Promise.resolve(true))
 
@@ -77,8 +79,7 @@ describe('CreateAccountRequest', () => {
     })
 
     it('should return a 400 error if a username is invalid', () => {
-      let accountManager = AccountManager.from({ host })
-      let locals = { authMethod: defaults.auth, accountManager, oidc: { users: {} } }
+      const locals = { authMethod: defaults.auth, accountManager, oidc: { users: {} } }
 
       accountManager.accountExists = sinon.stub().returns(Promise.resolve(false))
 
@@ -123,23 +124,27 @@ describe('CreateAccountRequest', () => {
 
 describe('CreateOidcAccountRequest', () => {
   let authMethod = 'oidc'
-  let host, store
+  let host, options
   let session, res
 
   beforeEach(() => {
-    host = SolidHost.from({ serverUri: 'https://example.com' })
-    store = new LDP()
+    host = SolidHost.from({
+      serverUri: 'https://example.com',
+      root: './'
+    })
+    options = testAccountManagerOptions(host)
+
     session = {}
     res = HttpMocks.createResponse()
   })
 
   describe('fromParams()', () => {
     it('should create an instance with the given config', () => {
-      let accountManager = AccountManager.from({ host, store })
-      let aliceData = { username: 'alice', password: '123' }
+      const accountManager = AccountManager.from(options)
+      const aliceData = { username: 'alice', password: '123' }
 
-      let userStore = {}
-      let req = HttpMocks.createRequest({
+      const userStore = {}
+      const req = HttpMocks.createRequest({
         app: {
           locals: { authMethod, oidc: { users: userStore }, accountManager }
         },
@@ -147,7 +152,7 @@ describe('CreateOidcAccountRequest', () => {
         session
       })
 
-      let request = CreateAccountRequest.fromParams(req, res)
+      const request = CreateAccountRequest.fromParams(req, res)
 
       expect(request.accountManager).to.equal(accountManager)
       expect(request.userAccount.username).to.equal('alice')
@@ -159,44 +164,42 @@ describe('CreateOidcAccountRequest', () => {
   })
 
   describe('saveCredentialsFor()', () => {
-    it('should create a new user in the user store', () => {
-      let accountManager = AccountManager.from({ host, store })
-      let password = '12345'
-      let aliceData = { username: 'alice', password }
-      let userStore = {
+    it('should create a new user in the user store', async () => {
+      const accountManager = AccountManager.from(options)
+      const password = '12345'
+      const aliceData = { username: 'alice', password }
+      const userStore = {
         createUser: (userAccount, password) => { return Promise.resolve() }
       }
-      let createUserSpy = sinon.spy(userStore, 'createUser')
-      let req = HttpMocks.createRequest({
+      const createUserSpy = sinon.spy(userStore, 'createUser')
+      const req = HttpMocks.createRequest({
         app: { locals: { authMethod, oidc: { users: userStore }, accountManager } },
         body: aliceData,
         session
       })
 
-      let request = CreateAccountRequest.fromParams(req, res)
-      let userAccount = request.userAccount
+      const request = CreateAccountRequest.fromParams(req, res)
+      const userAccount = request.userAccount
 
-      return request.saveCredentialsFor(userAccount)
-        .then(() => {
-          expect(createUserSpy).to.have.been.calledWith(userAccount, password)
-        })
+      await request.saveCredentialsFor(userAccount)
+      expect(createUserSpy).to.have.been.calledWith(userAccount, password)
     })
   })
 
   describe('sendResponse()', () => {
     it('should respond with a 302 Redirect', () => {
-      let accountManager = AccountManager.from({ host, store })
-      let aliceData = { username: 'alice', password: '12345' }
-      let req = HttpMocks.createRequest({
+      const accountManager = AccountManager.from(options)
+      const aliceData = { username: 'alice', password: '12345' }
+      const req = HttpMocks.createRequest({
         app: { locals: { authMethod, oidc: {}, accountManager } },
         body: aliceData,
         session
       })
-      let alice = accountManager.userAccountFrom(aliceData)
+      const alice = accountManager.userAccountFrom(aliceData)
 
-      let request = CreateAccountRequest.fromParams(req, res)
+      const request = CreateAccountRequest.fromParams(req, res)
 
-      let result = request.sendResponse(alice)
+      const result = request.sendResponse(alice)
       expect(request.response.statusCode).to.equal(302)
       expect(result.username).to.equal('alice')
     })

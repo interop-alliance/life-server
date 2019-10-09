@@ -1,31 +1,10 @@
 const fs = require('fs-extra')
 const { red, cyan, bold } = require('colorette')
 const { URL } = require('url')
-const LDP = require('../../lib/ldp')
-const AccountManager = require('../../lib/models/account-manager')
-const SolidHost = require('../../lib/models/solid-host')
 
-module.exports.getAccountManager = getAccountManager
 module.exports.loadAccounts = loadAccounts
 module.exports.loadConfig = loadConfig
 module.exports.loadUsernames = loadUsernames
-
-/**
- * Returns an instance of AccountManager
- *
- * @param {Object} config
- * @param {Object} [options]
- * @returns {AccountManager}
- */
-function getAccountManager (config, options = {}) {
-  const ldp = options.ldp || new LDP(config)
-  const host = options.host || SolidHost.from({ port: config.port, serverUri: config.serverUri })
-  return AccountManager.from({
-    host,
-    store: ldp,
-    multiuser: config.multiuser
-  })
-}
 
 function loadConfig (program, options) {
   let argv = {
