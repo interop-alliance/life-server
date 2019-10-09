@@ -4,7 +4,7 @@ const userUtils = require('../../lib/common/user-utils')
 
 describe('user-utils', () => {
   describe('isValidUsername', () => {
-    it('should accect valid usernames', () => {
+    it('should accept valid usernames', () => {
       const usernames = [
         'foo',
         'bar'
@@ -13,7 +13,7 @@ describe('user-utils', () => {
       expect(validUsernames.length).to.equal(usernames.length)
     })
 
-    it('should not accect invalid usernames', () => {
+    it('should not accept invalid usernames', () => {
       const usernames = [
         '-',
         '-a',
