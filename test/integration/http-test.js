@@ -552,7 +552,7 @@ describe('HTTP APIs', function () {
     })
     it('should create new resource even if no trailing / is in the target',
       function (done) {
-        server.post('')
+        server.post('/')
           .send(postRequest1Body)
           .set('content-type', 'text/turtle')
           .set('slug', 'post-test-target')
