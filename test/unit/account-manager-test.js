@@ -15,7 +15,7 @@ const SolidHost = require('../../lib/models/solid-host')
 const AccountManager = require('../../lib/models/account-manager')
 const UserAccount = require('../../lib/models/user-account')
 const TokenService = require('../../lib/services/token-service')
-const { testAccountManagerOptions } = require('../_utils')
+const { testAccountManagerOptions } = require('../utils')
 
 const testAccountsDir = path.join(__dirname, '../resources/accounts')
 
@@ -54,8 +54,7 @@ describe('AccountManager', () => {
     it('should compose account uri for an account in multi user mode', () => {
       const host = SolidHost.from({
         serverUri: 'https://localhost',
-        multiuser: true,
-        root: './'
+        multiuser: true
       })
       const options = testAccountManagerOptions(host)
       const mgr = AccountManager.from(options)
@@ -67,8 +66,7 @@ describe('AccountManager', () => {
     it('should compose account uri for an account in single user mode', () => {
       const host = SolidHost.from({
         serverUri: 'https://localhost',
-        multiuser: false,
-        root: './'
+        multiuser: false
       })
       const options = testAccountManagerOptions(host)
       const mgr = AccountManager.from(options)
@@ -82,8 +80,7 @@ describe('AccountManager', () => {
     it('should compose a web id uri for an account in multi user mode', () => {
       const host = SolidHost.from({
         serverUri: 'https://localhost',
-        multiuser: true,
-        root: './'
+        multiuser: true
       })
       const options = testAccountManagerOptions(host)
       const mgr = AccountManager.from(options)
@@ -94,8 +91,7 @@ describe('AccountManager', () => {
     it('should compose a web id uri for an account in single user mode', () => {
       const host = SolidHost.from({
         serverUri: 'https://localhost',
-        multiuser: false,
-        root: './'
+        multiuser: false
       })
       const options = testAccountManagerOptions(host)
       const mgr = AccountManager.from(options)
@@ -139,8 +135,7 @@ describe('AccountManager', () => {
       beforeEach(() => {
         host = SolidHost.from({
           serverUri: 'https://example.com',
-          multiuser: true,
-          root: './'
+          multiuser: true
         })
         options = testAccountManagerOptions(host)
         accountManager = AccountManager.from(options)
@@ -191,8 +186,7 @@ describe('AccountManager', () => {
       beforeEach(() => {
         host = SolidHost.from({
           serverUri: 'https://example.com',
-          multiuser: false,
-          root: './'
+          multiuser: false
         })
         options = testAccountManagerOptions(host)
         accountManager = AccountManager.from(options)
@@ -210,8 +204,7 @@ describe('AccountManager', () => {
     it('should return the server root .acl in single user mode', () => {
       const host = SolidHost.from({
         serverUri: 'https://example.com',
-        multiuser: false,
-        root: './'
+        multiuser: false
       })
       const options = testAccountManagerOptions(host)
       const accountManager = AccountManager.from(options)
@@ -226,8 +219,7 @@ describe('AccountManager', () => {
     it('should return the profile root .acl in multi user mode', () => {
       const host = SolidHost.from({
         serverUri: 'https://example.com',
-        multiuser: true,
-        root: './'
+        multiuser: true
       })
       const options = testAccountManagerOptions(host)
       const accountManager = AccountManager.from(options)
@@ -252,8 +244,7 @@ describe('AccountManager', () => {
       )
       const host = SolidHost.from({
         serverUri: 'https://example.com',
-        multiuser: true,
-        root: './'
+        multiuser: true
       })
       const options = testAccountManagerOptions(host)
       options.ldpStore.loadParsedGraph = sinon.stub().resolves(rootAclGraph)
@@ -270,8 +261,7 @@ describe('AccountManager', () => {
 
       const host = SolidHost.from({
         serverUri: 'https://example.com',
-        multiuser: true,
-        root: './'
+        multiuser: true
       })
       const options = testAccountManagerOptions(host)
       options.ldpStore.loadParsedGraph = sinon.stub().resolves(emptyGraph)
@@ -287,8 +277,7 @@ describe('AccountManager', () => {
       const tokenService = new TokenService()
       const host = SolidHost.from({
         serverUri: 'https://example.com',
-        multiuser: true,
-        root: './'
+        multiuser: true
       })
       const options = testAccountManagerOptions(host, { tokenService })
       const accountManager = AccountManager.from(options)
@@ -310,8 +299,7 @@ describe('AccountManager', () => {
       const tokenService = new TokenService()
       const host = SolidHost.from({
         serverUri: 'https://example.com',
-        multiuser: true,
-        root: './'
+        multiuser: true
       })
       const options = testAccountManagerOptions(host, { tokenService })
       const accountManager = AccountManager.from(options)
@@ -334,8 +322,7 @@ describe('AccountManager', () => {
     it('should generate and store an expiring reset token', () => {
       const tokenService = new TokenService()
       const host = SolidHost.from({
-        serverUri: 'https://example.com',
-        root: './'
+        serverUri: 'https://example.com'
       })
       const options = testAccountManagerOptions(host, { tokenService })
       const accountManager = AccountManager.from(options)
@@ -373,8 +360,7 @@ describe('AccountManager', () => {
       const returnToUrl = 'https://example.com/resource'
 
       const host = SolidHost.from({
-        serverUri: 'https://example.com',
-        root: './'
+        serverUri: 'https://example.com'
       })
       const options = testAccountManagerOptions(host, { tokenService, emailService })
       const accountManager = AccountManager.from(options)
@@ -402,8 +388,7 @@ describe('AccountManager', () => {
       }
       const returnToUrl = 'https://example.com/resource'
       const host = SolidHost.from({
-        serverUri: 'https://example.com',
-        root: './'
+        serverUri: 'https://example.com'
       })
       const options = testAccountManagerOptions(host)
       const accountManager = AccountManager.from(options)
@@ -423,8 +408,7 @@ describe('AccountManager', () => {
       const returnToUrl = 'https://example.com/resource'
       const emailService = {}
       const host = SolidHost.from({
-        serverUri: 'https://example.com',
-        root: './'
+        serverUri: 'https://example.com'
       })
       const options = testAccountManagerOptions(host, { emailService })
       const accountManager = AccountManager.from(options)
@@ -455,8 +439,7 @@ describe('AccountManager', () => {
       }
 
       const host = SolidHost.from({
-        serverUri: 'https://example.com',
-        root: './'
+        serverUri: 'https://example.com'
       })
       const options = testAccountManagerOptions(host, { tokenService, emailService })
       const accountManager = AccountManager.from(options)
@@ -483,8 +466,7 @@ describe('AccountManager', () => {
         email: 'alice@example.com'
       }
       const host = SolidHost.from({
-        serverUri: 'https://example.com',
-        root: './'
+        serverUri: 'https://example.com'
       })
       const options = testAccountManagerOptions(host)
       const accountManager = AccountManager.from(options)
@@ -503,8 +485,7 @@ describe('AccountManager', () => {
       }
       const emailService = {}
       const host = SolidHost.from({
-        serverUri: 'https://example.com',
-        root: './'
+        serverUri: 'https://example.com'
       })
       const options = testAccountManagerOptions(host, { emailService })
       const accountManager = AccountManager.from(options)

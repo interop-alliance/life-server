@@ -10,7 +10,5 @@ module.exports = {
   'port': 8443,
   'serverUri': 'https://localhost:8443',
   'root': './data',
-  'webid': true,
-  'suffixAcl': '.acl',
-  'suffixMeta': '.meta'
+  'webid': true
 }

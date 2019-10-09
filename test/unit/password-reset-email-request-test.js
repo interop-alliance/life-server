@@ -14,7 +14,7 @@ const HttpMocks = require('node-mocks-http')
 const PasswordResetEmailRequest = require('../../lib/requests/password-reset-email-request')
 const AccountManager = require('../../lib/models/account-manager')
 const SolidHost = require('../../lib/models/solid-host')
-const { testAccountManagerOptions } = require('../_utils')
+const { testAccountManagerOptions } = require('../utils')
 
 describe('PasswordResetEmailRequest', () => {
   describe('constructor()', () => {
@@ -87,7 +87,6 @@ describe('PasswordResetEmailRequest', () => {
 
       const host = SolidHost.from({
         serverUri: 'https://example.com',
-        root: './',
         multiuser: true
       })
       const options = testAccountManagerOptions(host)
@@ -115,7 +114,6 @@ describe('PasswordResetEmailRequest', () => {
     it('should throw an error if username is missing in multi-user mode', () => {
       const host = SolidHost.from({
         serverUri: 'https://example.com',
-        root: './',
         multiuser: true
       })
       const accountManager = AccountManager.from(testAccountManagerOptions(host))
@@ -128,7 +126,6 @@ describe('PasswordResetEmailRequest', () => {
     it('should not throw an error if username is missing in single user mode', () => {
       const host = SolidHost.from({
         serverUri: 'https://example.com',
-        root: './',
         multiuser: false
       })
       const accountManager = AccountManager.from(testAccountManagerOptions(host))
@@ -143,7 +140,6 @@ describe('PasswordResetEmailRequest', () => {
     it('should handle the post request', () => {
       const host = SolidHost.from({
         serverUri: 'https://example.com',
-        root: './',
         multiuser: true
       })
       const accountManager = AccountManager.from(testAccountManagerOptions(host))
@@ -176,7 +172,6 @@ describe('PasswordResetEmailRequest', () => {
     it('should return a UserAccount instance based on username', () => {
       const host = SolidHost.from({
         serverUri: 'https://example.com',
-        root: './',
         multiuser: true
       })
       const accountManager = AccountManager.from(testAccountManagerOptions(host))
@@ -195,7 +190,6 @@ describe('PasswordResetEmailRequest', () => {
     it('should throw an error if the user does not exist', done => {
       const host = SolidHost.from({
         serverUri: 'https://example.com',
-        root: './',
         multiuser: true
       })
       const accountManager = AccountManager.from(testAccountManagerOptions(host))

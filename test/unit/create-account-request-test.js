@@ -12,7 +12,7 @@ const AccountManager = require('../../lib/models/account-manager')
 const SolidHost = require('../../lib/models/solid-host')
 const defaults = require('../../config/defaults')
 const { CreateAccountRequest } = require('../../lib/requests/create-account-request')
-const { testAccountManagerOptions } = require('../_utils')
+const { testAccountManagerOptions } = require('../utils')
 
 describe('CreateAccountRequest', () => {
   let host, options, accountManager
@@ -20,8 +20,7 @@ describe('CreateAccountRequest', () => {
 
   beforeEach(() => {
     host = SolidHost.from({
-      serverUri: 'https://example.com',
-      root: './'
+      serverUri: 'https://example.com'
     })
     options = testAccountManagerOptions(host)
     accountManager = AccountManager.from(options)
@@ -129,8 +128,7 @@ describe('CreateOidcAccountRequest', () => {
 
   beforeEach(() => {
     host = SolidHost.from({
-      serverUri: 'https://example.com',
-      root: './'
+      serverUri: 'https://example.com'
     })
     options = testAccountManagerOptions(host)
 

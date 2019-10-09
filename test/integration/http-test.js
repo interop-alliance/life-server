@@ -6,15 +6,13 @@ var rm = require('./../utils').rm
 var path = require('path')
 // const rdf = require('rdflib')
 
-var suffixAcl = '.acl'
-var suffixMeta = '.meta'
+const { ACL_SUFFIX, META_SUFFIX } = require('../../lib/constants')
+
 var ldpServer = ldnode.createServer({
   live: true,
   root: path.join(__dirname, '../resources'),
   auth: 'oidc',
-  webid: false,
-  suffixAcl,
-  suffixMeta
+  webid: false
 })
 var server = supertest(ldpServer)
 var { assert, expect } = require('chai')
@@ -152,8 +150,8 @@ describe('HTTP APIs', function () {
     it('should have set acl and describedBy Links for resource',
       function (done) {
         server.options('/sampleContainer/example1.ttl')
-          .expect(hasHeader('acl', 'example1.ttl' + suffixAcl))
-          .expect(hasHeader('describedBy', 'example1.ttl' + suffixMeta))
+          .expect(hasHeader('acl', 'example1.ttl' + ACL_SUFFIX))
+          .expect(hasHeader('describedBy', 'example1.ttl' + META_SUFFIX))
           .end(done)
       })
 
@@ -180,8 +178,8 @@ describe('HTTP APIs', function () {
 
     it('should have set acl and describedBy Links for container', function (done) {
       server.options('/sampleContainer/')
-        .expect(hasHeader('acl', suffixAcl))
-        .expect(hasHeader('describedBy', suffixMeta))
+        .expect(hasHeader('acl', ACL_SUFFIX))
+        .expect(hasHeader('describedBy', META_SUFFIX))
         .end(done)
     })
   })
@@ -229,8 +227,8 @@ describe('HTTP APIs', function () {
       function (done) {
         server.get('/sampleContainer/example1.ttl')
           .expect('content-type', /text\/turtle/)
-          .expect(hasHeader('acl', 'example1.ttl' + suffixAcl))
-          .expect(hasHeader('describedBy', 'example1.ttl' + suffixMeta))
+          .expect(hasHeader('acl', 'example1.ttl' + ACL_SUFFIX))
+          .expect(hasHeader('describedBy', 'example1.ttl' + META_SUFFIX))
           .end(done)
       })
     it('should have set Link as Container/BasicContainer', function (done) {
@@ -296,8 +294,8 @@ describe('HTTP APIs', function () {
     it('should have set acl and describedBy Links for container',
       function (done) {
         server.get('/sampleContainer/')
-          .expect(hasHeader('acl', suffixAcl))
-          .expect(hasHeader('describedBy', suffixMeta))
+          .expect(hasHeader('acl', ACL_SUFFIX))
+          .expect(hasHeader('describedBy', META_SUFFIX))
           .expect('content-type', /text\/turtle/)
           .end(done)
       })
@@ -368,8 +366,8 @@ describe('HTTP APIs', function () {
     it('should have set acl and describedBy Links for resource',
       function (done) {
         server.get('/sampleContainer/example1.ttl')
-          .expect(hasHeader('acl', 'example1.ttl' + suffixAcl))
-          .expect(hasHeader('describedBy', 'example1.ttl' + suffixMeta))
+          .expect(hasHeader('acl', 'example1.ttl' + ACL_SUFFIX))
+          .expect(hasHeader('describedBy', 'example1.ttl' + META_SUFFIX))
           .end(done)
       })
     it('should have set Link as Container/BasicContainer',
@@ -382,8 +380,8 @@ describe('HTTP APIs', function () {
     it('should have set acl and describedBy Links for container',
       function (done) {
         server.get('/sampleContainer/')
-          .expect(hasHeader('acl', suffixAcl))
-          .expect(hasHeader('describedBy', suffixMeta))
+          .expect(hasHeader('acl', ACL_SUFFIX))
+          .expect(hasHeader('describedBy', META_SUFFIX))
           .end(done)
       })
   })
@@ -403,8 +401,8 @@ describe('HTTP APIs', function () {
       server.put('/foo/bar/baz.ttl')
         .send(putRequestBody)
         .set('content-type', 'text/turtle')
-        .expect(hasHeader('describedBy', 'baz.ttl' + suffixMeta))
-        .expect(hasHeader('acl', 'baz.ttl' + suffixAcl))
+        .expect(hasHeader('describedBy', 'baz.ttl' + META_SUFFIX))
+        .expect(hasHeader('acl', 'baz.ttl' + ACL_SUFFIX))
         .expect(201, done)
     })
 
@@ -447,7 +445,7 @@ describe('HTTP APIs', function () {
           .send(containerMeta)
           .expect(201)
           .then(() => {
-            let metaFilePath = path.join(__dirname, '../resources/foo/four/' + suffixMeta)
+            let metaFilePath = path.join(__dirname, '../resources/foo/four/' + META_SUFFIX)
             let meta = fs.readFileSync(metaFilePath, 'utf8')
 
             assert.equal(meta, containerMeta)
@@ -469,7 +467,7 @@ describe('HTTP APIs', function () {
               .expect(204)
           })
           .then(() => {
-            let metaFilePath = path.join(__dirname, '../resources/foo/five/' + suffixMeta)
+            let metaFilePath = path.join(__dirname, '../resources/foo/five/' + META_SUFFIX)
             let meta = fs.readFileSync(metaFilePath, 'utf8')
 
             assert.equal(meta, newMeta)
@@ -546,8 +544,8 @@ describe('HTTP APIs', function () {
         .set('content-type', 'text/turtle')
         .set('slug', 'post-resource-1')
         .expect('location', /\/post-resource-1/)
-        .expect(hasHeader('describedBy', suffixMeta))
-        .expect(hasHeader('acl', suffixAcl))
+        .expect(hasHeader('describedBy', META_SUFFIX))
+        .expect(hasHeader('acl', ACL_SUFFIX))
         .expect(201, done)
     })
     it('should create new resource even if no trailing / is in the target',
@@ -557,8 +555,8 @@ describe('HTTP APIs', function () {
           .set('content-type', 'text/turtle')
           .set('slug', 'post-test-target')
           .expect('location', /\/post-test-target\.ttl/)
-          .expect(hasHeader('describedBy', suffixMeta))
-          .expect(hasHeader('acl', suffixAcl))
+          .expect(hasHeader('describedBy', META_SUFFIX))
+          .expect(hasHeader('acl', ACL_SUFFIX))
           .expect(201, done)
       })
     it('should fail return 404 if no parent container found', function (done) {

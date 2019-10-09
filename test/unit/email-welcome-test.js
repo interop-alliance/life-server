@@ -11,7 +11,7 @@ chai.should()
 const SolidHost = require('../../lib/models/solid-host')
 const AccountManager = require('../../lib/models/account-manager')
 const EmailService = require('../../lib/services/email-service')
-const { testAccountManagerOptions } = require('../_utils')
+const { testAccountManagerOptions } = require('../utils')
 
 const templatePath = path.join(__dirname, '../../default-templates/emails')
 
@@ -28,8 +28,7 @@ beforeEach(() => {
 
   host = SolidHost.from({
     serverUri: 'https://example.com',
-    multiuser: true,
-    root: './'
+    multiuser: true
   })
   const options = testAccountManagerOptions(host, mgrConfig)
   accountManager = AccountManager.from(options)

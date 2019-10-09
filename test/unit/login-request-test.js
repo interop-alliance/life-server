@@ -13,7 +13,7 @@ const { LoginRequest } = require('../../lib/requests/login-request')
 
 const SolidHost = require('../../lib/models/solid-host')
 const AccountManager = require('../../lib/models/account-manager')
-const { testAccountManagerOptions } = require('../_utils')
+const { testAccountManagerOptions } = require('../utils')
 
 const mockUserStore = {
   findUser: () => { return Promise.resolve(true) },
@@ -22,8 +22,7 @@ const mockUserStore = {
 
 const authMethod = 'oidc'
 const host = SolidHost.from({
-  serverUri: 'https://localhost:8443',
-  root: './'
+  serverUri: 'https://localhost:8443'
 })
 const options = testAccountManagerOptions(host, { authMethod })
 const accountManager = AccountManager.from(options)

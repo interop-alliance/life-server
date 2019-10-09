@@ -11,7 +11,7 @@ const { PasswordAuthenticator } = require('../../lib/models/authenticator')
 
 const SolidHost = require('../../lib/models/solid-host')
 const AccountManager = require('../../lib/models/account-manager')
-const { testAccountManagerOptions } = require('../_utils')
+const { testAccountManagerOptions } = require('../utils')
 
 const mockUserStore = {
   findUser: () => { return Promise.resolve(true) },
@@ -19,8 +19,7 @@ const mockUserStore = {
 }
 
 const host = SolidHost.from({
-  serverUri: 'https://localhost:8443',
-  root: './'
+  serverUri: 'https://localhost:8443'
 })
 const options = testAccountManagerOptions(host)
 const accountManager = AccountManager.from(options)
@@ -145,7 +144,6 @@ describe('PasswordAuthenticator', () => {
     describe('in Multi User mode', () => {
       const host = SolidHost.from({
         serverUri: 'https://example.com',
-        root: './',
         multiuser: true
       })
       const accountManager = AccountManager.from(testAccountManagerOptions(host))
@@ -195,7 +193,6 @@ describe('PasswordAuthenticator', () => {
     describe('in Single User mode', () => {
       const host = SolidHost.from({
         serverUri: 'https://localhost:8443',
-        root: './',
         multiuser: false
       })
       const accountManager = AccountManager.from(testAccountManagerOptions(host))

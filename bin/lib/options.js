@@ -4,11 +4,6 @@ const validUrl = require('valid-url')
 const { URL } = require('url')
 
 module.exports = [
-  // {
-  //   abbr: 'v',
-  //   flag: true,
-  //   help: 'Print the logs to console\n'
-  // },
   {
     name: 'root',
     help: "Root folder to serve (default: './data')",
@@ -132,31 +127,6 @@ module.exports = [
     prompt: true
   },
   {
-    name: 'idp',
-    help: 'Obsolete; use --multiuser',
-    prompt: false
-  },
-  {
-    name: 'no-live',
-    help: 'Disable live support through WebSockets',
-    flag: true,
-    default: false
-  },
-  {
-    name: 'suffix-acl',
-    full: 'suffix-acl',
-    help: "Suffix for acl files (default: '.acl')",
-    default: '.acl',
-    prompt: false
-  },
-  {
-    name: 'suffix-meta',
-    full: 'suffix-meta',
-    help: "Suffix for metadata files (default: '.meta')",
-    default: '.meta',
-    prompt: false
-  },
-  {
     name: 'secret',
     help: 'Secret used to sign the session ID cookie (e.g. "your secret phrase")',
     question: 'Session secret for cookie',
@@ -226,22 +196,6 @@ module.exports = [
     prompt: true,
     when: (answers) => {
       return answers.useEmail
-    }
-  },
-  { // copied from name: 'owner'
-    name: 'redirect-http-from',
-    help: 'HTTP port or \',\'-separated ports to redirect to the solid server port (e.g. "80,8080").',
-    prompt: false,
-    validate: function (value) {
-      if (!value.match(/^[0-9]+(,[0-9]+)*$/)) {
-        return 'direct-port(s) must be a comma-separated list of integers.'
-      }
-      let list = value.split(/,/).map(v => parseInt(v))
-      let bad = list.find(v => { return v < 1 || v > 65535 })
-      if (bad.length) {
-        return 'redirect-http-from port(s) ' + bad + ' out of range'
-      }
-      return true
     }
   },
   {

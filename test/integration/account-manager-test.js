@@ -8,7 +8,7 @@ chai.should()
 
 const SolidHost = require('../../lib/models/solid-host')
 const AccountManager = require('../../lib/models/account-manager')
-const { testAccountManagerOptions } = require('../_utils')
+const { testAccountManagerOptions } = require('../utils')
 
 const testAccountsDir = path.join(__dirname, '../resources/accounts')
 const accountTemplatePath = path.join(__dirname, '../../default-templates/new-account')

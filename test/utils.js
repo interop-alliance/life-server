@@ -6,6 +6,18 @@ const dns = require('dns')
 
 const TEST_HOSTS = ['nic.localhost', 'tim.localhost', 'nicola.localhost']
 
+const { initStorage } = require('../lib/server-config')
+const LegacyResourceMapper = require('../lib/storage/legacy-resource-mapper')
+
+function testAccountManagerOptions (host, options = {}) {
+  const mapper = LegacyResourceMapper.from({ host })
+  const storage = initStorage({ host, mapper })
+  const ldpStore = storage.accountStore()
+  return { host, ldpStore, ...options }
+}
+
+module.exports.testAccountManagerOptions = testAccountManagerOptions
+
 exports.rm = function (file) {
   return rimraf.sync(path.join(__dirname, '/resources/' + file))
 }
