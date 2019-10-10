@@ -4,7 +4,7 @@ const chai = require('chai')
 const expect = chai.expect
 const path = require('path')
 
-const OidcManager = require('../../lib/models/oidc-manager')
+const OidcManager = require('../../lib/authentication/oidc-manager')
 const SolidHost = require('../../lib/models/solid-host')
 
 describe('OidcManager', () => {

@@ -69,8 +69,8 @@ describe('Authentication API (OIDC)', () => {
     })
   }
 
-  before(() => {
-    return Promise.all([
+  before(async () => {
+    await Promise.all([
       startServer(alicePod, 7000),
       startServer(bobPod, 7001)
     ]).then(() => {

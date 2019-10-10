@@ -84,6 +84,7 @@
   },
   "devDependencies": {
     "@solid/oidc-op": "0.4.0",
+    "@solid/solid-auth-oidc": "^0.3.0",
     "chai": "^4.2.0",
     "chai-as-promised": "^6.0.0",
     "dirty-chai": "^1.2.2",
@@ -94,7 +95,6 @@
     "nyc": "^13.0.1",
     "sinon": "^2.1.0",
     "sinon-chai": "^2.8.0",
-    "@solid/solid-auth-oidc": "^0.3.0",
     "sonarjs": "^1.0.0",
     "standard": "^8.6.0",
     "supertest": "^3.0.0",
