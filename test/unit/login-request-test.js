@@ -49,7 +49,7 @@ describe('LoginRequest', () => {
       return LoginRequest.loginPassword(req, res)
         .then(() => {
           expect(fromParams).to.have.been.calledWith(req, res)
-          fromParams.reset()
+          fromParams.resetHistory()
           loginStub.restore()
         })
     })
@@ -60,7 +60,7 @@ describe('LoginRequest', () => {
       return LoginRequest.loginPassword(req, res)
         .then(() => {
           expect(login).to.have.been.called()
-          login.reset()
+          login.resetHistory()
         })
     })
   })
