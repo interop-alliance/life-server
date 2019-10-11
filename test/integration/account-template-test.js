@@ -4,8 +4,6 @@ const path = require('path')
 const fs = require('fs-extra')
 const chai = require('chai')
 const expect = chai.expect
-const sinonChai = require('sinon-chai')
-chai.use(sinonChai)
 chai.should()
 
 const AccountTemplate = require('../../lib/models/account-template')

@@ -191,34 +191,29 @@ describe('SelectProviderRequest', () => {
   })
 
   describe('handlePost()', () => {
-    it('should validate the request and select the provider', () => {
-      let request = new SelectProviderRequest({})
+    it('should validate the request and select the provider', async () => {
+      const request = new SelectProviderRequest({})
 
       request.validate = sinon.stub().resolves()
       request.selectProvider = sinon.stub().resolves()
       request.saveReturnToUrl = sinon.stub()
 
-      return SelectProviderRequest.handlePost(request)
-        .then(() => {
-          expect(request.validate).to.have.been.called()
-          expect(request.selectProvider).to.have.been.called()
-          expect(request.saveReturnToUrl).to.have.been.called()
-        })
+      await SelectProviderRequest.handlePost(request)
+      expect(request.validate).to.have.been.called()
+      expect(request.selectProvider).to.have.been.called()
+      expect(request.saveReturnToUrl).to.have.been.called()
     })
 
-    it('should route any errors to the request.error() handler', done => {
-      let request = new SelectProviderRequest({})
+    it('should route any errors to the request.error() handler', async () => {
+      const request = new SelectProviderRequest({})
+      request.saveReturnToUrl = sinon.stub()
 
-      let thrownError = new Error('validation error')
-      request.validate = sinon.stub().rejects(thrownError)
-
+      const thrownError = new Error('validation error')
+      request.validate = sinon.stub().throws(thrownError)
       request.error = sinon.stub()
 
-      SelectProviderRequest.handlePost(request)
-        .then(() => {
-          expect(request.error).to.have.been.calledWith(thrownError)
-          done()
-        })
+      await SelectProviderRequest.handlePost(request)
+      expect(request.error).to.have.been.calledWith(thrownError)
     })
   })
 
