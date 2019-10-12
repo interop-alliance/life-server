@@ -5,7 +5,9 @@
 ## Table of Contents
 
 - [Background](#background)
-- [Differences from Solid Server](#differences-from-solid-server)
+    - [Audience](#audience)
+    - [Roadmap](#roadmap)
+    - [Differences from Solid Server](#differences-from-solid-server)
 - [Install](#install)
 - [Usage](#usage)
 - [Security](#security)
@@ -17,28 +19,84 @@
 Life Server is personal data server written in Node.js, originally
 based on MIT's [Solid Server](https://github.com/solid/node-solid-server).
 
-### Differences from `node-solid-server` (NSS)
+### Audience
 
-This is an experimental server focusing on interop exploration and rapid 
-feature iteration ("move fast and break things").
+This server is intended for the following audiences:
 
-Since [`node-solid-server`](https://github.com/solid/node-solid-server) is being
-deprecated in favor of [`inrupt/pod-server`](https://github.com/inrupt/pod-server),
+1. (primarily) Myself. I'm using this as an experimental platform for incubating
+    and implementing various [Solid-related](https://github.com/solid/specification)
+    and Solid-adjacent specifications and standards.
+1. (hopefully) Other developers of user centric offline-first decentralized 
+    applications.
+1. (to a much smaller extent) End-users interested in running their own file
+    sharing server (a minimal Dropbox/Google Drive sort of setup). This server
+    is not really ready for mainstream (or even early adopter) usage. 
+1. (almost not at all) For system administrators / potential service providers
+   interested in running their own multi-user data server.
+
+To put it another way, due to a shortage of engineering resources, the
+priorities will be: Developer QoL (Quality of Life) over User QoL over DevOps QoL.
+
+### Roadmap
+
+This is an experimental server focusing on interop exploration and rapid feature 
+iteration ("move fast and break things", to use a tired cliché).
+
+#### Roadmap Phase One
+
+This phase focuses on general cleanup and refactoring from the source 
+`node-solid-server` v4 baseline.
+
+* [x] Remove external dependency on Mashlib and the Data Browser. (The various 
+    built-in apps (account homepage, data viewing and file management, sharing 
+    and permission management, etc) will be performed on the server side.)
+* [x] Simplify architecture, remove a number of non-core components (globbing,
+    realtime updates via WebSockets, WebID-TLS local authentication, CORS proxy
+    and authentication proxy, storage quotas).
+* [x] Refactor the LDP interface to more closely match the [proposed Solid 
+    architecture](https://github.com/solid/solid-architecture/blob/master/server/request-flow.md), 
+    and to support modular/pluggable storage backends
+    beyond the existing File System based one (such as an in-memory store, graph 
+    stores and others).
+* [x] Bring some external authn-related dependencies (such as the 
+    [`oidc-auth-manager`](https://github.com/solid/oidc-auth-manager) and the 
+    [`solid-multi-rp-client`](https://github.com/solid/solid-multi-rp-client))
+    libs into this repository (to make for a faster release and refactoring
+    process).
+* [ ] Simplify the new account templating system
+
+#### Roadmap Phase Two
+
+This phase focuses on exploring some advanced features that may make it into
+Solid spec proposals, as well as integration with external Solid-adjacent
+projects and specs.
+
+* [ ] Implement a server-side metadata mechanism, to support being able to
+    [record who created a resource](https://github.com/solid/specification/issues/66)
+* [ ] _(in progress)_ Experimental integration with 
+    [CouchDB](http://docs.couchdb.org/en/latest/intro/)
+    (for synchronizing of graphs and documents to mobile and offline-first 
+    clients).
+* [ ] Explore interop with DIDs and Verifiable Credentials
+    * Support the [`did:web`](https://github.com/w3c-ccg/did-method-web), 
+        [`did:key`](https://github.com/digitalbazaar/did-method-key-js) and 
+        [Veres One](https://github.com/w3c-ccg/didm-veres-one) DID methods.
+* [ ] Explore using an [Encrypted Data Vault](https://github.com/WebOfTrustInfo/rwot9-prague/blob/master/draft-documents/encrypted-data-vaults.md)
+    as a storage backend. This would require some basic Key Management capability,
+    possible based on the [Web KMS spec](https://github.com/msporny/webkms).
+* [ ] Interop with the Fediverse by implementing [ActivityPub](https://activitypub.rocks/)
+    protocol.
+
+### Differences from Solid Server
+
+Since [`node-solid-server`](https://github.com/solid/node-solid-server) (NSS) is 
+being deprecated in favor of [`inrupt/pod-server`](https://github.com/inrupt/pod-server),
 this repo intends to be another compatible implementation (the more the merrier!).
-
-#### Technical Differences from NSS
-
-* The various built-in apps (account homepage, data viewing and file management,
-  sharing and permission management, etc) are done on the server side.
-* Experimental integration with [CouchDB](http://docs.couchdb.org/en/latest/intro/)
-  (for synchronizing of graphs and documents to mobile and offline-first clients).
-* Ongoing refactoring of the LDP backend to support pluggable storage (such as
-  a NoSQL document store, a graph store and others).
-* General cleanup and feature streamlining.
-* Not published to `npm`, intended to be installed and run from git.
 
 **Does not support:**
 
+* Not published to `npm`, intended to be installed and run from git.
+* Using an external WebID on signup 
 * `acl:origin` checking or Trusted Apps (uses [`solid-permissions`](https://github.com/interop-alliance/solid-permissions)  
     instead of [`acl-check.js`](https://github.com/solid/acl-check) for access control)
 * Password strength checking on account signup.
@@ -47,50 +105,10 @@ this repo intends to be another compatible implementation (the more the merrier!
 * WebSockets
 * Globbing
 
-#### Audience
-
-This server is intended for the following audiences:
-
-1. (primarily) Developers of user centric offline-first decentralized applications.
-1. (to a much smaller extent) End-users interested in running their own file
-   sharing server (a minimal Dropbox/Google Drive sort of setup).
-1. (almost not at all) For system administrators / potential service providers
-   interested in running their own multi-user data server.
-
-To put it another way, due to a shortage of engineering resources, the
-priorities will be: Developer QoL (Quality of Life) over User QoL over DevOps QoL.
-
 ### Value Proposition for Developers
 
-Features:
-
-* Self-service signup and account management
-* Single user mode (for personal use) and multi-user mode (for teams,
-  organizations and hosting providers)
-* Cross-domain authentication based on a decentralized version of WebID +
-  OAuth2/OpenID Connect
-* Cross-domain access control (great for collaboration or document sharing
-  between different companies or organizations)
-* Provides each user with read/write data storage (that is accessible from any
-  Javascript and server-side app). Think of it as an Amazon S3 service that is
-  simpler to use, has nested folders, and has the option of being self-hosted.
-
-Benefits for creating your web apps with this architecture:
-
-1. A flexible cross-domain authentication and access control system is great for
-   social-enabled apps and group collaborations. Also reduces account fatigue /
-   password fatigue for users.
-1. Data Ownership moves into the hands of your users, which reduces
-   compliance risks for data storage.
-1. Cross-app data sharing (with users' consent). Enables innovative horizontal
-   use cases and apps.
-1. "Warm Start" -- your app immediately has access to rich existing user data
-   and social graph (great for AI/Machine Learning applications).
-1. Offline-first (with synchronization to the user's storage servers) means
-   a better user experience (reduced perceived response latency) and the ability
-   to function in low-connectivity environments.
-1. Integrates with your existing app Javascript development frameworks and tools
-   (React, Vue.js, Ember.js, Express, and so on).
+See [Solid and Life Server Value Proposition for Developers](docs/value-proposition.md) 
+doc.
 
 ## Install
 
@@ -179,6 +197,8 @@ After startup, the server is available at the configured server URL (by default,
 ## Security
 
 TBD
+
+Note: This is an experimental research server, not for production use.
 
 ## Contribute
 
