@@ -6,8 +6,8 @@ const sinonChai = require('sinon-chai')
 chai.use(sinonChai)
 chai.should()
 
-const AccountTemplate = require('../../lib/models/account-template')
-const UserAccount = require('../../lib/models/user-account')
+const AccountTemplate = require('../../lib/account-mgmt/account-template')
+const UserAccount = require('../../lib/account-mgmt/user-account')
 
 describe('AccountTemplate', () => {
   describe('isTemplate()', () => {

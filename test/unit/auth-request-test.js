@@ -9,10 +9,10 @@ chai.should()
 // const HttpMocks = require('node-mocks-http')
 const url = require('url')
 
-const AuthRequest = require('../../lib/requests/auth-request')
-const SolidHost = require('../../lib/models/solid-host')
-const AccountManager = require('../../lib/models/account-manager')
-const UserAccount = require('../../lib/models/user-account')
+const AuthRequest = require('../../lib/authentication/auth-request')
+const SolidHost = require('../../lib/solid-host')
+const AccountManager = require('../../lib/account-mgmt/account-manager')
+const UserAccount = require('../../lib/account-mgmt/user-account')
 
 describe('AuthRequest', () => {
   function testAuthQueryParams () {

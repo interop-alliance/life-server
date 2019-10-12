@@ -6,7 +6,7 @@ const chai = require('chai')
 const expect = chai.expect
 chai.should()
 
-const AccountTemplate = require('../../lib/models/account-template')
+const AccountTemplate = require('../../lib/account-mgmt/account-template')
 
 const templatePath = path.join(__dirname, '../../default-templates/new-account')
 const accountPath = path.join(__dirname, '../resources/new-account')

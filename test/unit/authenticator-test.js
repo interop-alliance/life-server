@@ -4,7 +4,7 @@ const { expect } = chai
 chai.use(require('chai-as-promised'))
 chai.should()
 
-const { Authenticator } = require('../../lib/models/authenticator')
+const { Authenticator } = require('../../lib/authentication/authenticator')
 
 describe('Authenticator', () => {
   describe('constructor()', () => {

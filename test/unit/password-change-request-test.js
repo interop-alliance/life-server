@@ -11,8 +11,8 @@ chai.should()
 
 const HttpMocks = require('node-mocks-http')
 
-const PasswordChangeRequest = require('../../lib/requests/password-change-request')
-const SolidHost = require('../../lib/models/solid-host')
+const PasswordChangeRequest = require('../../lib/account-mgmt/password-change-request')
+const SolidHost = require('../../lib/solid-host')
 
 describe('PasswordChangeRequest', () => {
   sinon.spy(PasswordChangeRequest.prototype, 'error')

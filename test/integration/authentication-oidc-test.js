@@ -2,7 +2,7 @@ const Solid = require('../../index')
 const path = require('path')
 const fs = require('fs-extra')
 const UserStore = require('../../lib/authentication/user-store')
-const UserAccount = require('../../lib/models/user-account')
+const UserAccount = require('../../lib/account-mgmt/user-account')
 // const SolidAuthOIDC = require('@solid/solid-auth-oidc')
 const { OIDCWebClient } = require('oidc-web')
 
