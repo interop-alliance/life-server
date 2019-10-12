@@ -1,16 +1,23 @@
 const Solid = require('../../index')
 const path = require('path')
 const fs = require('fs-extra')
-const { UserStore } = require('@solid/oidc-auth-manager')
+const UserStore = require('../../lib/authentication/user-store')
 const UserAccount = require('../../lib/models/user-account')
-const SolidAuthOIDC = require('@solid/solid-auth-oidc')
+// const SolidAuthOIDC = require('@solid/solid-auth-oidc')
+const { OIDCWebClient } = require('oidc-web')
 
 const fetch = require('node-fetch')
 const localStorage = require('localstorage-memory')
 const url = require('url')
 const URL = require('whatwg-url').URL
+
 global.URL = URL
 global.URLSearchParams = require('whatwg-url').URLSearchParams
+const currentLocation = 'https://app.com/'
+global.window = {
+  location: { href: currentLocation }
+}
+
 const { cleanDir } = require('../utils')
 
 const supertest = require('supertest')
@@ -24,17 +31,17 @@ chai.use(require('dirty-chai'))
 describe('Authentication API (OIDC)', () => {
   let alice, bob
 
-  let aliceServerUri = 'https://localhost:7000'
-  let aliceWebId = 'https://localhost:7000/profile/card#me'
-  let configPath = path.join(__dirname, '../resources/config')
-  let aliceDbPath = path.join(__dirname,
+  const aliceServerUri = 'https://localhost:7000'
+  const aliceWebId = 'https://localhost:7000/profile/card#me'
+  const configPath = path.join(__dirname, '../resources/config')
+  const aliceDbPath = path.join(__dirname,
     '../resources/accounts-scenario/alice/db')
-  let userStorePath = path.join(aliceDbPath, 'oidc/users')
-  let aliceUserStore = UserStore.from({ path: userStorePath, saltRounds: 1 })
+  const userStorePath = path.join(aliceDbPath, 'oidc/users')
+  const aliceUserStore = UserStore.from({ path: userStorePath, saltRounds: 1 })
   aliceUserStore.initCollections()
 
-  let bobServerUri = 'https://localhost:7001'
-  let bobDbPath = path.join(__dirname,
+  const bobServerUri = 'https://localhost:7001'
+  const bobDbPath = path.join(__dirname,
     '../resources/accounts-scenario/bob/db')
 
   const serverConfig = {
@@ -69,8 +76,8 @@ describe('Authentication API (OIDC)', () => {
     })
   }
 
-  before(() => {
-    return Promise.all([
+  before(async () => {
+    await Promise.all([
       startServer(alicePod, 7000),
       startServer(bobPod, 7001)
     ]).then(() => {
@@ -122,7 +129,7 @@ describe('Authentication API (OIDC)', () => {
         .send('webid=' + aliceServerUri)
         .expect(302)
         .end((err, res) => {
-          let loginUri = res.header.location
+          const loginUri = res.header.location
           expect(loginUri.startsWith(aliceServerUri + '/authorize'))
           done(err)
         })
@@ -138,8 +145,8 @@ describe('Authentication API (OIDC)', () => {
 
   describe('Login by Username and Password (POST /login/password)', () => {
     // Logging in as alice, to alice's pod
-    let aliceAccount = UserAccount.from({ webId: aliceWebId })
-    let alicePassword = '12345'
+    const aliceAccount = UserAccount.from({ webId: aliceWebId })
+    const alicePassword = '12345'
 
     beforeEach(() => {
       aliceUserStore.initCollections()
@@ -285,7 +292,7 @@ describe('Authentication API (OIDC)', () => {
         .expect(401)
         .end((err, res) => {
           if (err) return done(err)
-          let redirectString = 'http-equiv="refresh" ' +
+          const redirectString = 'http-equiv="refresh" ' +
             `content="0; url=${bobServerUri}/api/auth/select-provider`
           expect(res.text).to.match(new RegExp(redirectString))
           done()
@@ -299,120 +306,110 @@ describe('Authentication API (OIDC)', () => {
         .expect(302)
         .then(res => {
           // Submitting select-provider form redirects to Alice's pod's /authorize
-          let authorizeUri = res.header.location
+          const authorizeUri = res.header.location
           expect(authorizeUri.startsWith(aliceServerUri + '/authorize'))
 
           // Follow the redirect to /authorize
-          let authorizePath = url.parse(authorizeUri).path
+          const authorizePath = url.parse(authorizeUri).path
           return alice.get(authorizePath)
         })
         .then(res => {
           // Since alice not logged in to her pod, /authorize redirects to /login
-          let loginUri = res.header.location
+          const loginUri = res.header.location
           expect(loginUri.startsWith('/login'))
         })
     })
   })
 
   describe('Two Pods + Web App Login Workflow', () => {
-    let aliceAccount = UserAccount.from({ webId: aliceWebId })
-    let alicePassword = '12345'
+    const aliceAccount = UserAccount.from({ webId: aliceWebId })
+    const alicePassword = '12345'
+    const aliceIdentityProvider = aliceServerUri
 
-    let auth
+    const auth = new OIDCWebClient({
+      popToken: true,
+      store: localStorage,
+      provider: aliceIdentityProvider
+    })
+
     let authorizationUri, loginUri, authParams, callbackUri
     let loginFormFields = ''
-    let bearerToken
+    let currentSession, bearerToken
 
-    before(() => {
-      auth = new SolidAuthOIDC({ store: localStorage, window: { location: {} } })
-      let appOptions = {
-        redirectUri: 'https://app.example.com/callback'
+    before(async () => {
+      const aliceRpOptions = {
+        popToken: true,
+        redirect_uri: 'https://app.example.com/callback'
       }
 
       aliceUserStore.initCollections()
 
-      return aliceUserStore.createUser(aliceAccount, alicePassword)
-        .then(() => {
-          return auth.registerClient(aliceServerUri, appOptions)
-        })
-        .then(registeredClient => {
-          auth.currentClient = registeredClient
-        })
+      await aliceUserStore.createUser(aliceAccount, alicePassword)
+
+      return auth.registerPublicClient(aliceIdentityProvider, aliceRpOptions)
     })
 
     after(() => {
       fs.removeSync(path.join(aliceDbPath, 'users/users'))
       fs.removeSync(path.join(aliceDbPath, 'oidc/op/tokens'))
 
-      let clientId = auth.currentClient.registration['client_id']
-      let registration = `_key_${clientId}.json`
-      fs.removeSync(path.join(aliceDbPath, 'oidc/op/clients', registration))
+      // const clientId = auth.currentClient.registration['client_id']
+      // const registration = `_key_${clientId}.json`
+      // fs.removeSync(path.join(aliceDbPath, 'oidc/op/clients', registration))
     })
 
     // Step 1: An app makes a GET request and receives a 401
-    it('should get a 401 error on a REST request to a protected resource', () => {
-      return fetch(bobServerUri + '/shared-with-alice.txt')
-        .then(res => {
-          expect(res.status).to.equal(401)
+    it('should get a 401 error on a REST request to a protected resource', async () => {
+      const response = await fetch(bobServerUri + '/shared-with-alice.txt')
 
-          expect(res.headers.get('www-authenticate'))
-            .to.equal(`Bearer realm="${bobServerUri}", scope="openid webid"`)
-        })
+      expect(response.status).to.equal(401)
+      expect(response.headers.get('www-authenticate'))
+        .to.equal(`Bearer realm="${bobServerUri}", scope="openid webid"`)
     })
 
     // Step 2: App presents the Select Provider UI to user, determine the
     //   preferred provider uri (here, aliceServerUri), and constructs
     //   an authorization uri for that provider
-    it('should determine the authorization uri for a preferred provider', () => {
-      return auth.currentClient.createRequest({}, auth.store)
-        .then(authUri => {
-          authorizationUri = authUri
-
-          expect(authUri.startsWith(aliceServerUri + '/authorize')).to.be.true()
-        })
+    it('should determine the authorization uri for a preferred provider', async () => {
+      authorizationUri = await auth.prepareAuthRequest({ provider: aliceIdentityProvider })
+      expect(authorizationUri.startsWith(aliceServerUri + '/authorize'))
     })
 
     // Step 3: App redirects user to the authorization uri for login
-    it('should redirect user to /authorize and /login', () => {
-      return fetch(authorizationUri, { redirect: 'manual' })
-        .then(res => {
-          // Since user is not logged in, /authorize redirects to /login
-          expect(res.status).to.equal(302)
+    it('should redirect user to /authorize and /login', async () => {
+      const response = await fetch(authorizationUri, { redirect: 'manual' })
+      // Since user is not logged in, /authorize redirects to /login
+      expect(response.status).to.equal(302)
 
-          loginUri = new URL(res.headers.get('location'))
-          expect(loginUri.toString().startsWith(aliceServerUri + '/login'))
-            .to.be.true()
+      loginUri = new URL(response.headers.get('location'))
+      expect(loginUri.toString().startsWith(aliceServerUri + '/login'))
+        .to.be.true()
 
-          authParams = loginUri.searchParams
-        })
+      authParams = loginUri.searchParams
     })
 
     // Step 4: Pod returns a /login page with appropriate hidden form fields
-    it('should display the /login form', () => {
-      return fetch(loginUri.toString())
-        .then(loginPage => {
-          return loginPage.text()
-        })
-        .then(pageText => {
-          // Login page should contain the relevant auth params as hidden fields
+    it('should display the /login form', async () => {
+      const loginPage = await fetch(loginUri.toString())
+      const pageText = await loginPage.text()
 
-          authParams.forEach((value, key) => {
-            let hiddenField = `<input type="hidden" name="${key}" id="${key}" value="${value}" />`
+      // Login page should contain the relevant auth params as hidden fields
+      authParams.forEach((value, key) => {
+        const hiddenField = `<input type="hidden" name="${key}" id="${key}" value="${value}" />`
 
-            let fieldRegex = new RegExp(hiddenField)
+        const fieldRegex = new RegExp(hiddenField)
 
-            expect(pageText).to.match(fieldRegex)
+        expect(pageText).to.match(fieldRegex)
 
-            loginFormFields += `${key}=` + encodeURIComponent(value) + '&'
-          })
-        })
+        loginFormFields += `${key}=` + encodeURIComponent(value) + '&'
+      })
     })
 
     // Step 5: User submits their username & password via the /login form
-    it('should login via the /login form', () => {
+    it('should login via the /login form', async () => {
       loginFormFields += `username=${'alice'}&password=${alicePassword}`
 
-      return fetch(aliceServerUri + '/login/password', {
+      const loginResponse = await fetch(aliceServerUri + '/login/password', {
         method: 'POST',
         body: loginFormFields,
         redirect: 'manual',
@@ -421,71 +418,61 @@ describe('Authentication API (OIDC)', () => {
         },
         credentials: 'include'
       })
-        .then(res => {
-          expect(res.status).to.equal(302)
-          let postLoginUri = res.headers.get('location')
-          let cookie = res.headers.get('set-cookie')
+      expect(loginResponse.status).to.equal(302)
+      const postLoginUri = loginResponse.headers.get('location')
+      const cookie = loginResponse.headers.get('set-cookie')
 
-          // Successful login gets redirected back to /authorize and then
-          // back to app
-          expect(postLoginUri.startsWith(aliceServerUri + '/authorize'))
-            .to.be.true()
+      // Successful login gets redirected back to /authorize and then
+      // back to app
+      expect(postLoginUri.startsWith(aliceServerUri + '/authorize'))
+        .to.be.true()
 
-          return fetch(postLoginUri, { redirect: 'manual', headers: { cookie } })
-        })
-        .then(res => {
-          // User gets redirected back to original app
-          expect(res.status).to.equal(302)
-          callbackUri = res.headers.get('location')
-          expect(callbackUri.startsWith('https://app.example.com#'))
-        })
+      const postLoginResponse = await fetch(postLoginUri, {
+        redirect: 'manual', headers: { cookie }
+      })
+      // User gets redirected back to original app
+      expect(postLoginResponse.status).to.equal(302)
+      callbackUri = postLoginResponse.headers.get('location')
+      expect(callbackUri.startsWith('https://app.example.com#'))
     })
 
     // Step 6: Web App extracts tokens from the uri hash fragment, uses
     //  them to access protected resource
-    it('should use id token from the callback uri to access shared resource', () => {
-      auth.window.location.href = callbackUri
+    it('should use id token from the callback uri to access shared resource', async () => {
+      global.window.location.href = callbackUri
 
-      let protectedResourcePath = bobServerUri + '/shared-with-alice.txt'
+      const bobProtectedResource = bobServerUri + '/shared-with-alice.txt'
 
-      return auth.initUserFromResponse(auth.currentClient)
-        .then(webId => {
-          expect(webId).to.equal(aliceWebId)
+      currentSession = await auth.currentSession()
 
-          return auth.issuePoPTokenFor(bobServerUri, auth.session)
-        })
-        .then(popToken => {
-          bearerToken = popToken
+      const webId = currentSession.idClaims.sub
+      expect(webId).to.equal(aliceWebId)
 
-          return fetch(protectedResourcePath, {
-            headers: {
-              'Authorization': 'Bearer ' + bearerToken
-            }
-          })
-        })
-        .then(res => {
-          expect(res.status).to.equal(200)
+      bearerToken = await currentSession.bearerTokenFor(bobProtectedResource)
 
-          return res.text()
-        })
-        .then(contents => {
-          expect(contents).to.equal('protected contents\n')
-        })
-    })
-
-    it('should not be able to reuse the bearer token for bob server on another server', () => {
-      let privateAliceResourcePath = aliceServerUri + '/private-for-alice.txt'
-
-      return fetch(privateAliceResourcePath, {
+      const response = await fetch(bobProtectedResource, {
         headers: {
-          // This is Alice's bearer token with her own Web ID
+          // This is Alice's bearer token (issued to Bob's server) with her own Web ID
           'Authorization': 'Bearer ' + bearerToken
         }
       })
-        .then(res => {
-          // It will get rejected; it was issued for Bob's server only
-          expect(res.status).to.equal(403)
-        })
+
+      expect(response.status).to.equal(200)
+      const contents = await response.text()
+      expect(contents).to.equal('protected contents\n')
+    })
+
+    it('should not be able to reuse the bearer token for bob server on another server', async () => {
+      const privateAliceResourcePath = aliceServerUri + '/private-for-alice.txt'
+
+      const response = await fetch(privateAliceResourcePath, {
+        headers: {
+          // This is Alice's bearer token (issued to Bob's server) with her own Web ID
+          'Authorization': 'Bearer ' + bearerToken
+        }
+      })
+      // It will get rejected; it was issued for Bob's server only
+      expect(response.status).to.equal(403)
     })
   })
 
