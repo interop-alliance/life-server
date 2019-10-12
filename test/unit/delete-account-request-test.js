@@ -11,9 +11,9 @@ chai.should()
 
 const HttpMocks = require('node-mocks-http')
 
-const DeleteAccountRequest = require('../../lib/requests/delete-account-request')
-const AccountManager = require('../../lib/models/account-manager')
-const SolidHost = require('../../lib/models/solid-host')
+const DeleteAccountRequest = require('../../lib/account-mgmt/delete-account-request')
+const AccountManager = require('../../lib/account-mgmt/account-manager')
+const SolidHost = require('../../lib/solid-host')
 const { testAccountManagerOptions } = require('../utils')
 
 describe('DeleteAccountRequest', () => {

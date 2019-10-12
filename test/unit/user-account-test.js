@@ -2,7 +2,7 @@
 
 const chai = require('chai')
 const expect = chai.expect
-const UserAccount = require('../../lib/models/user-account')
+const UserAccount = require('../../lib/account-mgmt/user-account')
 
 describe('UserAccount', () => {
   describe('from()', () => {

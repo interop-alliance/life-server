@@ -12,7 +12,7 @@ chai.use(sinonChai)
 chai.should()
 
 const { OidcManager } = require('../../lib/authentication/oidc-manager')
-const SolidHost = require('../../lib/models/solid-host')
+const SolidHost = require('../../lib/solid-host')
 
 const dbPath = path.resolve(__dirname, '../db/oidc')
 const serverUri = 'https://example.com'

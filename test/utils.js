@@ -7,7 +7,7 @@ const dns = require('dns')
 const TEST_HOSTS = ['nic.localhost', 'tim.localhost', 'nicola.localhost']
 
 const { initStorage } = require('../lib/server-config')
-const LegacyResourceMapper = require('../lib/storage/legacy-resource-mapper')
+const LegacyResourceMapper = require('../lib/data-storage/legacy-resource-mapper')
 
 function testAccountManagerOptions (host, options = {}) {
   const mapper = LegacyResourceMapper.from({ host })

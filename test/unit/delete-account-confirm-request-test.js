@@ -11,8 +11,8 @@ chai.should()
 
 const HttpMocks = require('node-mocks-http')
 
-const DeleteAccountConfirmRequest = require('../../lib/requests/delete-account-confirm-request')
-const SolidHost = require('../../lib/models/solid-host')
+const DeleteAccountConfirmRequest = require('../../lib/account-mgmt/delete-account-confirm-request')
+const SolidHost = require('../../lib/solid-host')
 
 describe('DeleteAccountConfirmRequest', () => {
   sinon.spy(DeleteAccountConfirmRequest.prototype, 'error')

@@ -1,5 +1,5 @@
 'use strict'
-const { getPossibleACLs } = require('../../lib/ldp-wac')
+const { getPossibleACLs } = require('../../lib/authorization/ldp-wac')
 const chai = require('chai')
 const { expect } = chai
 chai.use(require('chai-as-promised'))
