@@ -95,7 +95,7 @@
     "nock": "^11.4.0",
     "node-mocks-http": "^1.8.0",
     "nyc": "^13.0.1",
-    "oidc-web": "^0.2.1",
+    "oidc-web": "interop-alliance/oidc-web#rc0.3.0",
     "sinon": "^7.5.0",
     "sinon-chai": "^3.3.0",
     "sonarjs": "^1.0.0",
