@@ -95,14 +95,32 @@ describe('SolidHost', () => {
 
   describe('authEndpoint getter', () => {
     it('should return an /authorize url object', () => {
-      let host = SolidHost.from({
+      const host = SolidHost.from({
         serverUri: 'https://localhost:8443'
       })
 
-      let authUrl = host.authEndpoint
+      const authUrl = host.authEndpoint
 
       expect(authUrl.host).to.equal('localhost:8443')
       expect(authUrl.path).to.equal('/authorize')
+    })
+  })
+
+  describe('parseTargetUrl()', () => {
+    it('should extract a fully-qualified url from an Express request', () => {
+      const host = SolidHost.from({
+        serverUri: 'https://example.com'
+      })
+
+      const req = {
+        protocol: 'https:',
+        get: (host) => 'example.com',
+        baseUrl: '/',
+        path: '/resource1',
+        query: { sort: 'desc' }
+      }
+
+      expect(host.parseTargetUrl(req)).to.equal('https://example.com/resource1?sort=desc')
     })
   })
 })

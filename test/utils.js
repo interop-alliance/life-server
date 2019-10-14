@@ -3,6 +3,7 @@ var rimraf = require('rimraf')
 var path = require('path')
 const OIDCProvider = require('@solid/oidc-op')
 const dns = require('dns')
+const from = require('from2')
 
 const TEST_HOSTS = ['nic.localhost', 'tim.localhost', 'nicola.localhost']
 
@@ -92,3 +93,22 @@ exports.loadProvider = function loadProvider (configPath) {
       return provider.initializeKeyChain(config.keys)
     })
 }
+
+function stringToStream (string) {
+  return from(function (size, next) {
+    // if there's no more content
+    // left in the string, close the stream.
+    if (!string || string.length <= 0) {
+      return next(null, null)
+    }
+
+    // Pull in a new chunk of text,
+    // removing it from the string.
+    const chunk = string.slice(0, size)
+    string = string.slice(size)
+
+    // Emit "chunk" from the stream.
+    next(null, chunk)
+  })
+}
+module.exports.stringToStream = stringToStream
