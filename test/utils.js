@@ -1,5 +1,4 @@
 var fs = require('fs-extra')
-var rimraf = require('rimraf')
 var path = require('path')
 const OIDCProvider = require('@solid/oidc-op')
 const dns = require('dns')
@@ -20,7 +19,7 @@ function testAccountManagerOptions (host, options = {}) {
 module.exports.testAccountManagerOptions = testAccountManagerOptions
 
 exports.rm = function (file) {
-  return rimraf.sync(path.join(__dirname, '/resources/' + file))
+  return fs.removeSync(path.join(__dirname, '/resources/' + file))
 }
 
 exports.cleanDir = function (dirPath) {

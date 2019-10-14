@@ -58,11 +58,6 @@ function bin (argv, server) {
     delete argv['emailAuthPass']
   }
 
-  // Set up debug environment
-  if (!argv.quiet) {
-    require('debug').enable('solid:*')
-  }
-
   // Set up port
   argv.port = argv.port || 3456
 
