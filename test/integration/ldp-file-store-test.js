@@ -15,8 +15,6 @@ const { LdpFileStore } = require('../../lib/data-storage/ldp-file-store')
 // var read = require('./../utils').read
 // var fs = require('fs')
 
-// const { META_SUFFIX } = require('../../lib/constants')
-
 const SERVER_URI = 'https://example.com'
 
 describe('LdpFileStore', () => {

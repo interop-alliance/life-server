@@ -3,7 +3,7 @@
 const expect = require('chai').expect
 
 const SolidHost = require('../../lib/solid-host')
-const defaults = require('../../config/defaults')
+const defaults = require('../../lib/defaults')
 
 describe('SolidHost', () => {
   describe('from()', () => {

@@ -6,7 +6,7 @@ var rm = require('./../utils').rm
 var path = require('path')
 // const rdf = require('rdflib')
 
-const { ACL_SUFFIX, META_SUFFIX } = require('../../lib/constants')
+const { ACL_SUFFIX, META_SUFFIX } = require('../../lib/defaults')
 
 var ldpServer = ldnode.createServer({
   live: true,
