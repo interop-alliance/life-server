@@ -79,7 +79,7 @@ describe('AccountManager', () => {
     })
   })
 
-  describe('createAccountDir()', () => {
+  describe('createAccountStorage()', () => {
     it('should create an account directory', () => {
       host.root = testAccountsDir
       host.multiuser = true
@@ -98,7 +98,7 @@ describe('AccountManager', () => {
 
       let accountDir = accountManager.accountDirFor('alice')
 
-      return accountManager.createAccountDir(userAccount)
+      return accountManager.createAccountStorage(userAccount)
         .then(() => {
           return accountManager.accountExists('alice')
         })
