@@ -63,6 +63,8 @@ This phase focuses on general cleanup and refactoring from the source
     [`solid-multi-rp-client`](https://github.com/solid/solid-multi-rp-client))
     libs into this repository (to make for a faster release and refactoring
     process).
+* [x] Replace logging layer (currently a mix of `console` and `debug`) with a
+    dedicated logger like Bunyan or Pino.
 * [ ] Simplify the new account templating system
 
 #### Roadmap Phase Two

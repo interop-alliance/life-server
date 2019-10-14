@@ -29,8 +29,7 @@ describe('AuthCallbackRequest', () => {
         response: res,
         session: {},
         serverUri: 'https://example.com',
-        returnToUrl: 'https://example.com/resource',
-        debug: {}
+        returnToUrl: 'https://example.com/resource'
       }
 
       const request = new AuthCallbackRequest(options)
@@ -41,14 +40,7 @@ describe('AuthCallbackRequest', () => {
       expect(request.response).to.equal(options.response)
       expect(request.session).to.equal(options.session)
       expect(request.serverUri).to.equal(options.serverUri)
-      expect(request.debug).to.equal(options.debug)
       expect(request.returnToUrl).to.equal(options.returnToUrl)
-    })
-
-    it('should init debug to console by default', () => {
-      const request = new AuthCallbackRequest({})
-
-      expect(request.debug).to.exist()
     })
   })
 
