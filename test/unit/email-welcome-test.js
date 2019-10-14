@@ -9,7 +9,7 @@ chai.use(sinonChai)
 chai.should()
 
 const SolidHost = require('../../lib/solid-host')
-const AccountManager = require('../../lib/account-mgmt/account-manager')
+const { AccountManager } = require('../../lib/account-mgmt/account-manager')
 const EmailService = require('../../lib/email-service')
 const { testAccountManagerOptions } = require('../utils')
 
