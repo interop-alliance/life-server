@@ -12,7 +12,7 @@ chai.should()
 const rdf = require('rdflib')
 const ns = require('solid-namespace')(rdf)
 const SolidHost = require('../../lib/solid-host')
-const AccountManager = require('../../lib/account-mgmt/account-manager')
+const { AccountManager, isValidUsername } = require('../../lib/account-mgmt/account-manager')
 const UserAccount = require('../../lib/account-mgmt/user-account')
 const TokenService = require('../../lib/account-mgmt/token-service')
 const { testAccountManagerOptions } = require('../utils')
@@ -495,6 +495,31 @@ describe('AccountManager', () => {
           expect(error.message).to.equal('Account recovery email has not been provided')
           done()
         })
+    })
+  })
+
+  describe('isValidUsername', () => {
+    it('should accept valid usernames', () => {
+      const usernames = [
+        'foo',
+        'bar'
+      ]
+      const validUsernames = usernames.filter(username => isValidUsername(username))
+      expect(validUsernames.length).to.equal(usernames.length)
+    })
+
+    it('should not accept invalid usernames', () => {
+      const usernames = [
+        '-',
+        '-a',
+        'a-',
+        '9-',
+        'alice--bob',
+        'alice bob',
+        'alice.bob'
+      ]
+      const validUsernames = usernames.filter(username => isValidUsername(username))
+      expect(validUsernames.length).to.equal(0)
     })
   })
 })
