@@ -11,7 +11,7 @@ const url = require('url')
 
 const AuthRequest = require('../../lib/authentication/auth-request')
 const SolidHost = require('../../lib/solid-host')
-const AccountManager = require('../../lib/account-mgmt/account-manager')
+const { AccountManager } = require('../../lib/account-mgmt/account-manager')
 const UserAccount = require('../../lib/account-mgmt/user-account')
 
 describe('AuthRequest', () => {

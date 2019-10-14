@@ -7,7 +7,7 @@ const expect = chai.expect
 chai.should()
 
 const SolidHost = require('../../lib/solid-host')
-const AccountManager = require('../../lib/account-mgmt/account-manager')
+const { AccountManager } = require('../../lib/account-mgmt/account-manager')
 const { testAccountManagerOptions } = require('../utils')
 
 const testAccountsDir = path.join(__dirname, '../resources/accounts')

@@ -12,7 +12,7 @@ const AuthRequest = require('../../lib/authentication/auth-request')
 const { LoginRequest } = require('../../lib/authentication/login-request')
 
 const SolidHost = require('../../lib/solid-host')
-const AccountManager = require('../../lib/account-mgmt/account-manager')
+const { AccountManager } = require('../../lib/account-mgmt/account-manager')
 const { testAccountManagerOptions } = require('../utils')
 
 const mockUserStore = {
