@@ -66,6 +66,7 @@ This phase focuses on general cleanup and refactoring from the source
 * [x] Replace logging layer (currently a mix of `console` and `debug`) with a
     dedicated logger like Bunyan or Pino.
 * [ ] Simplify the new account templating system
+* [ ] Update `commander` and `node-mailer` to latest versions
 
 #### Roadmap Phase Two
 
@@ -73,12 +74,13 @@ This phase focuses on exploring some advanced features that may make it into
 Solid spec proposals, as well as integration with external Solid-adjacent
 projects and specs.
 
+* [ ] Implement an in-Memory based LDP backend, to go alongside the FS backend.
+* [ ] Integrate or implement Static OIDC Client Registration functionality,
+    to make interfacing with server-side Solid apps easier.
 * [ ] Investigate level of effort required to switch from the current `oidc-op`
     OpenID Connect Provider library to a more widely supported one, such as
     Filip's [`node-oidc-provider`](https://github.com/panva/node-oidc-provider)
     lib.
-* [ ] Integrate or implement Static OIDC Client Registration functionality,
-    to make interfacing with server-side Solid apps easier.
 * [ ] Implement a server-side metadata mechanism, to support being able to
     [record who created a resource](https://github.com/solid/specification/issues/66)
 * [ ] _(in progress)_ Experimental integration with 
