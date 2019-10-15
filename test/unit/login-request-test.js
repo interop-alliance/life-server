@@ -15,7 +15,7 @@ const SolidHost = require('../../lib/solid-host')
 const { AccountManager } = require('../../lib/account-mgmt/account-manager')
 const { testAccountManagerOptions } = require('../utils')
 
-const mockUserStore = {
+const mockUserCredentialStore = {
   findUser: () => { return Promise.resolve(true) },
   matchPassword: (user, password) => { return Promise.resolve(user) }
 }
@@ -35,7 +35,7 @@ describe('LoginRequest', () => {
 
     beforeEach(() => {
       req = {
-        app: { locals: { oidc: { users: mockUserStore }, localAuth, host } },
+        app: { locals: { oidc: { users: mockUserCredentialStore }, localAuth, host } },
         body: { username: 'alice', password: '12345' }
       }
       res = HttpMocks.createResponse()
@@ -91,7 +91,7 @@ describe('LoginRequest', () => {
   })
 
   describe('login()', () => {
-    let userStore = mockUserStore
+    let userStore = mockUserCredentialStore
     let response
 
     let options = {

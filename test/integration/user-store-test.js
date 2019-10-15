@@ -8,10 +8,10 @@ chai.use(dirtyChai)
 const expect = chai.expect
 chai.should()
 
-const UserStore = require('../../lib/authentication/user-store')
+const { UserCredentialStore } = require('../../lib/authentication/user-credential-store')
 const dbPath = path.resolve(__dirname, '../db')
 
-describe('UserStore (integration)', () => {
+describe('UserCredentialStore (integration)', () => {
   beforeEach(() => {
     fs.removeSync(dbPath)
   })
@@ -23,7 +23,7 @@ describe('UserStore (integration)', () => {
   describe('initCollections()', () => {
     it('should create collection directories in db path', () => {
       let options = { path: dbPath }
-      let store = UserStore.from(options)
+      let store = UserCredentialStore.from(options)
 
       store.initCollections()
 
@@ -35,7 +35,7 @@ describe('UserStore (integration)', () => {
   describe('createUser()', () => {
     it('should create a user record and relevant index entries', () => {
       let options = { path: dbPath }
-      let store = UserStore.from(options)
+      let store = UserCredentialStore.from(options)
       store.initCollections()
 
       let user = {
@@ -63,7 +63,7 @@ describe('UserStore (integration)', () => {
   describe('updatePassword()', () => {
     it('should update the user record with the provided password', () => {
       let options = { path: dbPath }
-      let store = UserStore.from(options)
+      let store = UserCredentialStore.from(options)
       store.initCollections()
 
       let user = {
@@ -86,7 +86,7 @@ describe('UserStore (integration)', () => {
   describe('findUser()', () => {
     it('loads a previously saved user', () => {
       let options = { path: dbPath, saltRounds: 2 }
-      let store = UserStore.from(options)
+      let store = UserCredentialStore.from(options)
       store.initCollections()
 
       let user = {
@@ -109,7 +109,7 @@ describe('UserStore (integration)', () => {
   describe('hashing and matching passwords', () => {
     it('returns the user object when password matches', () => {
       let options = { path: dbPath, saltRounds: 2 }
-      let store = UserStore.from(options)
+      let store = UserCredentialStore.from(options)
 
       let plaintextPassword = '12345'
       let user = { id: 'alice.example.com' }
@@ -129,7 +129,7 @@ describe('UserStore (integration)', () => {
 
     it('returns null when password does not match', () => {
       let options = { path: dbPath, saltRounds: 2 }
-      let store = UserStore.from(options)
+      let store = UserCredentialStore.from(options)
 
       let user = {
         id: 'alice.example.com',
@@ -146,7 +146,7 @@ describe('UserStore (integration)', () => {
   describe('deleteUser()', () => {
     it('deletes a previously saved user', () => {
       let options = { path: dbPath, saltRounds: 2 }
-      let store = UserStore.from(options)
+      let store = UserCredentialStore.from(options)
       store.initCollections()
 
       let user = {

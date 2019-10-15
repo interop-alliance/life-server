@@ -8,13 +8,13 @@ const sinon = require('sinon')
 chai.use(require('sinon-chai'))
 chai.should()
 
-const UserStore = require('../../lib/authentication/user-store')
+const { UserCredentialStore, DEFAULT_SALT_ROUNDS } = require('../../lib/authentication/user-credential-store')
 
-describe('UserStore', () => {
+describe('UserCredentialStore', () => {
   describe('backendOptionsFor()', () => {
     it('should return a backend options object', () => {
       let path = './db'
-      let options = UserStore.backendOptionsFor(path)
+      let options = UserCredentialStore.backendOptionsFor(path)
 
       expect(options.path).to.equal(path)
       expect(options.collections).to.deep.equal(['users', 'users-by-email'])
@@ -22,13 +22,13 @@ describe('UserStore', () => {
   })
 
   describe('from()', () => {
-    it('should initialize a UserStore instance from options', () => {
+    it('should initialize a UserCredentialStore instance from options', () => {
       let path = './db'
       let options = { path }
 
-      let store = UserStore.from(options)
+      let store = UserCredentialStore.from(options)
 
-      expect(store.saltRounds).to.equal(UserStore.DEFAULT_SALT_ROUNDS)
+      expect(store.saltRounds).to.equal(DEFAULT_SALT_ROUNDS)
       expect(store.backend.path).to.equal(path)
       expect(store.backend).to.respondTo('put')
     })
@@ -36,29 +36,29 @@ describe('UserStore', () => {
 
   describe('normalizeEmailKey()', () => {
     it('should return a null if no email is passed in', () => {
-      let key = UserStore.normalizeEmailKey(null)
+      let key = UserCredentialStore.normalizeEmailKey(null)
       expect(key).to.be.null()
     })
 
     it('should uri-escape an email that is passed in', () => {
-      let key = UserStore.normalizeEmailKey('alice@example.com')
+      let key = UserCredentialStore.normalizeEmailKey('alice@example.com')
       expect(key).to.equal('alice%40example.com')
     })
   })
 
   describe('normalizeIdKey()', () => {
     it('should return a null if no id is passed in', () => {
-      let key = UserStore.normalizeIdKey(null)
+      let key = UserCredentialStore.normalizeIdKey(null)
       expect(key).to.be.null()
     })
 
     it('should cast an integer id to string', () => {
-      let key = UserStore.normalizeIdKey(10)
+      let key = UserCredentialStore.normalizeIdKey(10)
       expect(key).to.equal('10')
     })
 
     it('should uri-escape an email that is passed in', () => {
-      let key = UserStore.normalizeIdKey('https://alice.example.com/#me')
+      let key = UserCredentialStore.normalizeIdKey('https://alice.example.com/#me')
       expect(key).to.equal('https%3A%2F%2Falice.example.com%2F%23me')
     })
   })
@@ -67,7 +67,7 @@ describe('UserStore', () => {
     let store
 
     beforeEach(() => {
-      store = UserStore.from({ path: './db' })
+      store = UserCredentialStore.from({ path: './db' })
     })
 
     it('should throw an error if no user is provided', (done) => {
@@ -169,7 +169,7 @@ describe('UserStore', () => {
     let store
 
     beforeEach(() => {
-      store = UserStore.from({ path: './db' })
+      store = UserCredentialStore.from({ path: './db' })
     })
 
     it('should look up user record by normalized user id', () => {
@@ -213,7 +213,7 @@ describe('UserStore', () => {
     let store
 
     beforeEach(() => {
-      store = UserStore.from({ path: './db' })
+      store = UserCredentialStore.from({ path: './db' })
     })
 
     it('should call backend.del with normalized user id and email', () => {
@@ -224,8 +224,8 @@ describe('UserStore', () => {
 
       return store.deleteUser({ id: userId, email: email })
         .then(() => {
-          expect(store.backend.del).to.have.been.calledWith('users', UserStore.normalizeIdKey(userId))
-          expect(store.backend.del).to.have.been.calledWith('users-by-email', UserStore.normalizeEmailKey(email))
+          expect(store.backend.del).to.have.been.calledWith('users', UserCredentialStore.normalizeIdKey(userId))
+          expect(store.backend.del).to.have.been.calledWith('users-by-email', UserCredentialStore.normalizeEmailKey(email))
         })
     })
 
@@ -236,8 +236,8 @@ describe('UserStore', () => {
 
       return store.deleteUser({ id: userId })
         .then(() => {
-          expect(store.backend.del).to.have.been.calledWith('users', UserStore.normalizeIdKey(userId))
-          expect(store.backend.del).to.not.have.been.calledWith('users-by-email', UserStore.normalizeEmailKey())
+          expect(store.backend.del).to.have.been.calledWith('users', UserCredentialStore.normalizeIdKey(userId))
+          expect(store.backend.del).to.not.have.been.calledWith('users-by-email', UserCredentialStore.normalizeEmailKey())
         })
         .then(
           () => Promise.reject(new Error('Expected method to reject.')),

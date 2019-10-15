@@ -13,7 +13,7 @@ const SolidHost = require('../../lib/solid-host')
 const { AccountManager } = require('../../lib/account-mgmt/account-manager')
 const { testAccountManagerOptions } = require('../utils')
 
-const mockUserStore = {
+const mockUserCredentialStore = {
   findUser: () => { return Promise.resolve(true) },
   matchPassword: (user, password) => { return Promise.resolve(user) }
 }
@@ -29,12 +29,12 @@ describe('PasswordAuthenticator', () => {
     let req = {
       body: { username: 'alice', password: '12345' }
     }
-    let options = { userStore: mockUserStore, accountManager }
+    let options = { userStore: mockUserCredentialStore, accountManager }
 
     it('should return a PasswordAuthenticator instance', () => {
       let pwAuth = PasswordAuthenticator.fromParams(req, options)
 
-      expect(pwAuth.userStore).to.equal(mockUserStore)
+      expect(pwAuth.userStore).to.equal(mockUserCredentialStore)
       expect(pwAuth.accountManager).to.equal(accountManager)
       expect(pwAuth.username).to.equal('alice')
       expect(pwAuth.password).to.equal('12345')
@@ -149,7 +149,7 @@ describe('PasswordAuthenticator', () => {
       const accountManager = AccountManager.from(testAccountManagerOptions(host))
 
       let aliceRecord = { webId: 'https://alice.example.com/profile/card#me' }
-      let mockUserStore = {
+      let mockUserCredentialStore = {
         findUser: sinon.stub().resolves(aliceRecord),
         matchPassword: (user, password) => { return Promise.resolve(user) }
       }
@@ -158,7 +158,7 @@ describe('PasswordAuthenticator', () => {
         let options = {
           username: 'alice',
           password: '1234',
-          userStore: mockUserStore,
+          userStore: mockUserCredentialStore,
           accountManager
         }
         let pwAuth = new PasswordAuthenticator(options)
@@ -167,7 +167,7 @@ describe('PasswordAuthenticator', () => {
 
         return pwAuth.findValidUser()
           .then(() => {
-            expect(mockUserStore.findUser).to.be.calledWith(userStoreKey)
+            expect(mockUserCredentialStore.findUser).to.be.calledWith(userStoreKey)
           })
       })
 
@@ -176,7 +176,7 @@ describe('PasswordAuthenticator', () => {
         let options = {
           username: webId,
           password: '1234',
-          userStore: mockUserStore,
+          userStore: mockUserCredentialStore,
           accountManager
         }
         let pwAuth = new PasswordAuthenticator(options)
@@ -185,7 +185,7 @@ describe('PasswordAuthenticator', () => {
 
         return pwAuth.findValidUser()
           .then(() => {
-            expect(mockUserStore.findUser).to.be.calledWith(userStoreKey)
+            expect(mockUserCredentialStore.findUser).to.be.calledWith(userStoreKey)
           })
       })
     })
@@ -198,33 +198,33 @@ describe('PasswordAuthenticator', () => {
       const accountManager = AccountManager.from(testAccountManagerOptions(host))
 
       let aliceRecord = { webId: 'https://localhost:8443/profile/card#me' }
-      let mockUserStore = {
+      let mockUserCredentialStore = {
         findUser: sinon.stub().resolves(aliceRecord),
         matchPassword: (user, password) => { return Promise.resolve(user) }
       }
 
       it('should load user from store if provided with username', () => {
-        let options = { username: 'admin', password: '1234', userStore: mockUserStore, accountManager }
+        let options = { username: 'admin', password: '1234', userStore: mockUserCredentialStore, accountManager }
         let pwAuth = new PasswordAuthenticator(options)
 
         let userStoreKey = 'localhost:8443/profile/card#me'
 
         return pwAuth.findValidUser()
           .then(() => {
-            expect(mockUserStore.findUser).to.be.calledWith(userStoreKey)
+            expect(mockUserCredentialStore.findUser).to.be.calledWith(userStoreKey)
           })
       })
 
       it('should load user from store if provided with WebID', () => {
         let webId = 'https://localhost:8443/profile/card#me'
-        let options = { username: webId, password: '1234', userStore: mockUserStore, accountManager }
+        let options = { username: webId, password: '1234', userStore: mockUserCredentialStore, accountManager }
         let pwAuth = new PasswordAuthenticator(options)
 
         let userStoreKey = 'localhost:8443/profile/card#me'
 
         return pwAuth.findValidUser()
           .then(() => {
-            expect(mockUserStore.findUser).to.be.calledWith(userStoreKey)
+            expect(mockUserCredentialStore.findUser).to.be.calledWith(userStoreKey)
           })
       })
     })

@@ -129,8 +129,8 @@ describe('OidcManager', () => {
     })
   })
 
-  describe('initUserStore()', () => {
-    it('should initialize a UserStore instance', () => {
+  describe('initUserCredentialStore()', () => {
+    it('should initialize a UserCredentialStore instance', () => {
       let dbPath = './db/oidc-mgr'
       let providerUri = 'https://localhost:8443'
       let authCallbackUri = providerUri + '/api/oidc/rp'
@@ -145,7 +145,7 @@ describe('OidcManager', () => {
       }
 
       let oidc = OidcManager.from(config)
-      oidc.initUserStore()
+      oidc.initUserCredentialStore()
 
       expect(oidc.users.backend.path.endsWith('oidc-mgr/users'))
       expect(oidc.users.saltRounds).to.equal(config.saltRounds)

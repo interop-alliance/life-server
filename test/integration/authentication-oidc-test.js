@@ -1,7 +1,7 @@
 const Solid = require('../../index')
 const path = require('path')
 const fs = require('fs-extra')
-const UserStore = require('../../lib/authentication/user-store')
+const { UserCredentialStore } = require('../../lib/authentication/user-credential-store')
 const UserAccount = require('../../lib/account-mgmt/user-account')
 // const SolidAuthOIDC = require('@solid/solid-auth-oidc')
 const { OIDCWebClient } = require('oidc-web')
@@ -37,8 +37,8 @@ describe('Authentication API (OIDC)', () => {
   const aliceDbPath = path.join(__dirname,
     '../resources/accounts-scenario/alice/db')
   const userStorePath = path.join(aliceDbPath, 'oidc/users')
-  const aliceUserStore = UserStore.from({ path: userStorePath, saltRounds: 1 })
-  aliceUserStore.initCollections()
+  const aliceCredentialStore = UserCredentialStore.from({ path: userStorePath, saltRounds: 1 })
+  aliceCredentialStore.initCollections()
 
   const bobServerUri = 'https://localhost:7001'
   const bobDbPath = path.join(__dirname,
@@ -149,9 +149,9 @@ describe('Authentication API (OIDC)', () => {
     const alicePassword = '12345'
 
     beforeEach(() => {
-      aliceUserStore.initCollections()
+      aliceCredentialStore.initCollections()
 
-      return aliceUserStore.createUser(aliceAccount, alicePassword)
+      return aliceCredentialStore.createUser(aliceAccount, alicePassword)
         .catch(console.error.bind(console))
     })
 
@@ -162,8 +162,8 @@ describe('Authentication API (OIDC)', () => {
     describe('after performing a correct login', () => {
       let response, cookie
       before(done => {
-        aliceUserStore.initCollections()
-        aliceUserStore.createUser(aliceAccount, alicePassword)
+        aliceCredentialStore.initCollections()
+        aliceCredentialStore.createUser(aliceAccount, alicePassword)
         alice.post('/login/password')
           .type('form')
           .send({ username: 'alice' })
@@ -342,9 +342,9 @@ describe('Authentication API (OIDC)', () => {
         redirect_uri: 'https://app.example.com/callback'
       }
 
-      aliceUserStore.initCollections()
+      aliceCredentialStore.initCollections()
 
-      await aliceUserStore.createUser(aliceAccount, alicePassword)
+      await aliceCredentialStore.createUser(aliceAccount, alicePassword)
 
       return auth.registerPublicClient(aliceIdentityProvider, aliceRpOptions)
     })
