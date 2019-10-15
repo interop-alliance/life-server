@@ -164,11 +164,9 @@ describe('DeleteAccountConfirmRequest', () => {
       }
       const request = new DeleteAccountConfirmRequest({ accountManager, token: null })
 
-      return request.validateToken()
-        .then(result => {
-          expect(result).to.be.false()
-          expect(accountManager.validateDeleteToken).to.not.have.been.called()
-        })
+      const result = request.validateToken()
+      expect(result).to.be.false()
+      expect(accountManager.validateDeleteToken).to.not.have.been.called()
     })
   })
 

@@ -179,16 +179,14 @@ describe('PasswordChangeRequest', () => {
 
   describe('validateToken()', () => {
     it('should return false if no token is present', () => {
-      let accountManager = {
+      const accountManager = {
         validateResetToken: sinon.stub()
       }
-      let request = new PasswordChangeRequest({ accountManager, token: null })
+      const request = new PasswordChangeRequest({ accountManager, token: null })
 
-      return request.validateToken()
-        .then(result => {
-          expect(result).to.be.false()
-          expect(accountManager.validateResetToken).to.not.have.been.called()
-        })
+      const result = request.validateToken()
+      expect(result).to.be.false()
+      expect(accountManager.validateResetToken).to.not.have.been.called()
     })
   })
 

@@ -29,17 +29,14 @@ let userCredentials = {
   user2: ''
 }
 
-function issueIdToken (oidcProvider, webId) {
-  return Promise.resolve()
-    .then(() => {
-      let jwt = IDToken.issue(oidcProvider, {
-        sub: webId,
-        aud: [ serverUri, 'client123' ],
-        azp: 'client123'
-      })
+async function issueIdToken (oidcProvider, webId) {
+  const jwt = IDToken.issue(oidcProvider, {
+    sub: webId,
+    aud: [ serverUri, 'client123' ],
+    azp: 'client123'
+  })
 
-      return jwt.encode()
-    })
+  return jwt.encode()
 }
 
 const argv = {
