@@ -35,7 +35,7 @@ describe('LoginRequest', () => {
 
     beforeEach(() => {
       req = {
-        app: { locals: { oidc: { users: mockUserStore }, localAuth, accountManager } },
+        app: { locals: { oidc: { users: mockUserStore }, localAuth, host } },
         body: { username: 'alice', password: '12345' }
       }
       res = HttpMocks.createResponse()
@@ -69,7 +69,7 @@ describe('LoginRequest', () => {
     let session = {}
     let req = {
       session,
-      app: { locals: { accountManager } },
+      app: { locals: { host } },
       body: { username: 'alice', password: '12345' }
     }
     let res = HttpMocks.createResponse()
@@ -79,7 +79,7 @@ describe('LoginRequest', () => {
 
       expect(request.response).to.equal(res)
       expect(request.session).to.equal(session)
-      expect(request.accountManager).to.equal(accountManager)
+      expect(request.host).to.equal(host)
     })
 
     it('should initialize the query params', () => {
@@ -96,7 +96,7 @@ describe('LoginRequest', () => {
 
     let options = {
       userStore,
-      accountManager,
+      host,
       localAuth: {}
     }
 
@@ -197,7 +197,7 @@ describe('LoginRequest', () => {
 
       let body = { redirect_uri: 'undefined' }
 
-      let options = { accountManager, response: res }
+      let options = { host, response: res }
       let request = new LoginRequest(options)
       request.authQueryParams = AuthRequest.extractAuthParams({ body })
 
