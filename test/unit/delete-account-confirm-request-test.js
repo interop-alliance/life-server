@@ -188,14 +188,14 @@ describe('DeleteAccountConfirmRequest', () => {
       const user = { webId, id: webId }
       const accountManager = {
         userAccountFrom: sinon.stub().returns(user),
-        accountDirFor: sinon.stub().returns('/some/path/to/data/for/alice.example.com/')
+        deleteAccountStorage: sinon.stub().resolves()
       }
       const userStore = {
         deleteUser: sinon.stub().resolves()
       }
 
       const options = {
-        accountManager, userStore, newPassword: 'swordfish'
+        accountManager, userStore
       }
       const request = new DeleteAccountConfirmRequest(options)
       const tokenContents = { webId }
@@ -203,7 +203,7 @@ describe('DeleteAccountConfirmRequest', () => {
       return request.deleteAccount(tokenContents)
         .then(() => {
           expect(accountManager.userAccountFrom).to.have.been.calledWith(tokenContents)
-          expect(accountManager.accountDirFor).to.have.been.calledWith(user.username)
+          expect(accountManager.deleteAccountStorage).to.have.been.calledWith(user)
           expect(userStore.deleteUser).to.have.been.calledWith(user)
         })
     })

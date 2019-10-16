@@ -96,7 +96,7 @@ describe('AccountManager', () => {
       }
       const userAccount = accountManager.userAccountFrom(userData)
 
-      const accountDir = accountManager.accountDirFor('alice')
+      const accountDir = path.join(testAccountsDir, '/alice.example.com')
 
       await accountManager.provisionAccountStorage(userAccount)
       const found = await accountManager.accountExists('alice')

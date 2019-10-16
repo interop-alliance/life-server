@@ -1,6 +1,5 @@
 'use strict'
 
-const path = require('path')
 const chai = require('chai')
 const expect = chai.expect
 const sinon = require('sinon')
@@ -16,8 +15,6 @@ const { AccountManager, isValidUsername } = require('../../lib/account-mgmt/acco
 const UserAccount = require('../../lib/account-mgmt/user-account')
 const TokenService = require('../../lib/account-mgmt/token-service')
 const { testAccountManagerOptions } = require('../utils')
-
-const testAccountsDir = path.join(__dirname, '../resources/accounts')
 
 var host
 
@@ -99,34 +96,6 @@ describe('AccountManager', () => {
       const mgr = AccountManager.from(options)
       let webId = mgr.accountWebIdFor('alice')
       expect(webId).to.equal('https://localhost/profile/card#me')
-    })
-  })
-
-  describe('accountDirFor()', () => {
-    it('should match the solid root dir config, in single user mode', () => {
-      const host = SolidHost.from({
-        serverUri: 'https://example.com',
-        multiuser: false,
-        root: testAccountsDir
-      })
-      const options = testAccountManagerOptions(host)
-      const accountManager = AccountManager.from(options)
-
-      let accountDir = accountManager.accountDirFor('alice')
-      expect(accountDir).to.equal(host.root)
-    })
-
-    it('should compose the account dir in multi user mode', () => {
-      const host = SolidHost.from({
-        serverUri: 'https://localhost',
-        multiuser: true,
-        root: testAccountsDir
-      })
-      const options = testAccountManagerOptions(host)
-      const accountManager = AccountManager.from(options)
-
-      let accountDir = accountManager.accountDirFor('alice')
-      expect(accountDir).to.equal(path.join(testAccountsDir, 'alice.localhost'))
     })
   })
 
