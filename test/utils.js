@@ -9,20 +9,22 @@ const TEST_HOSTS = ['nic.localhost', 'tim.localhost', 'nicola.localhost']
 const { initStorage } = require('../lib/server-config')
 const LegacyResourceMapper = require('../lib/data-storage/ldp-backend-fs/legacy-resource-mapper')
 
-function testAccountManagerOptions (host, options = {}) {
+function testStorage (host) {
   const mapper = LegacyResourceMapper.from({ host })
-  const storage = initStorage({ host, mapper })
-  const ldpStore = storage.accountStore()
-  return { host, ldpStore, ...options }
+  return initStorage({ host, mapper })
 }
 
-module.exports.testAccountManagerOptions = testAccountManagerOptions
+function testAccountManagerOptions (host, options = {}) {
+  const storage = testStorage(host)
+  const accountStore = storage.accountStore
+  return { host, accountStore, ...options }
+}
 
-exports.rm = function (file) {
+function rm (file) {
   return fs.removeSync(path.join(__dirname, '/resources/' + file))
 }
 
-exports.cleanDir = function (dirPath) {
+function cleanDir (dirPath) {
   fs.removeSync(path.join(dirPath, '.well-known/.acl'))
   fs.removeSync(path.join(dirPath, 'favicon.ico'))
   fs.removeSync(path.join(dirPath, 'favicon.ico.acl'))
@@ -32,35 +34,35 @@ exports.cleanDir = function (dirPath) {
   fs.removeSync(path.join(dirPath, 'robots.txt.acl'))
 }
 
-exports.write = function (text, file) {
+function write (text, file) {
   return fs.writeFileSync(path.join(__dirname, '/resources/' + file), text)
 }
 
-exports.cp = function (src, dest) {
+function cp (src, dest) {
   return fs.copySync(
     path.join(__dirname, '/resources/' + src),
     path.join(__dirname, '/resources/' + dest))
 }
 
-exports.read = function (file) {
+function read (file) {
   return fs.readFileSync(path.join(__dirname, '/resources/' + file), {
     'encoding': 'utf8'
   })
 }
 
 // Backs up the given file
-exports.backup = function (src) {
-  exports.cp(src, src + '.bak')
+function backup (src) {
+  cp(src, src + '.bak')
 }
 
 // Restores a backup of the given file
-exports.restore = function (src) {
-  exports.cp(src + '.bak', src)
-  exports.rm(src + '.bak')
+function restore (src) {
+  cp(src + '.bak', src)
+  rm(src + '.bak')
 }
 
 // Verifies that all HOSTS entries are present
-exports.checkDnsSettings = function () {
+async function checkDnsSettings () {
   return Promise.all(TEST_HOSTS.map(hostname => {
     return new Promise((resolve, reject) => {
       dns.lookup(hostname, (error, ip) => {
@@ -82,7 +84,7 @@ exports.checkDnsSettings = function () {
  *
  * @returns {Promise<Provider>}
  */
-exports.loadProvider = function loadProvider (configPath) {
+async function loadProvider (configPath) {
   return Promise.resolve()
     .then(() => {
       const config = require(configPath)
@@ -110,4 +112,18 @@ function stringToStream (string) {
     next(null, chunk)
   })
 }
-module.exports.stringToStream = stringToStream
+
+module.exports = {
+  backup,
+  checkDnsSettings,
+  cleanDir,
+  cp,
+  loadProvider,
+  read,
+  restore,
+  rm,
+  stringToStream,
+  testAccountManagerOptions,
+  testStorage,
+  write
+}

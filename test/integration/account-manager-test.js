@@ -79,40 +79,34 @@ describe('AccountManager', () => {
     })
   })
 
-  describe('createAccountStorage()', () => {
-    it('should create an account directory', () => {
+  describe('provisionAccountStorage()', () => {
+    it('should create an account directory', async () => {
       host.root = testAccountsDir
       host.multiuser = true
 
       const options = testAccountManagerOptions(host)
-      let accountManager = AccountManager.from({
+      const accountManager = AccountManager.from({
         accountTemplatePath, ...options
       })
 
-      let userData = {
+      const userData = {
         username: 'alice',
         email: 'alice@example.com',
         name: 'Alice Q.'
       }
-      let userAccount = accountManager.userAccountFrom(userData)
+      const userAccount = accountManager.userAccountFrom(userData)
 
-      let accountDir = accountManager.accountDirFor('alice')
+      const accountDir = accountManager.accountDirFor('alice')
 
-      return accountManager.createAccountStorage(userAccount)
-        .then(() => {
-          return accountManager.accountExists('alice')
-        })
-        .then(found => {
-          expect(found).to.be.true
-        })
-        .then(() => {
-          let profile = fs.readFileSync(path.join(accountDir, '/profile/card'), 'utf8')
-          expect(profile).to.include('"Alice Q."')
+      await accountManager.provisionAccountStorage(userAccount)
+      const found = await accountManager.accountExists('alice')
+      expect(found).to.be.true
+      const profile = fs.readFileSync(path.join(accountDir, '/profile/card'), 'utf8')
+      expect(profile).to.include('"Alice Q."')
 
-          let rootAcl = fs.readFileSync(path.join(accountDir, '.acl'), 'utf8')
-          expect(rootAcl).to.include('<mailto:alice@')
-          expect(rootAcl).to.include('<https://alice.example.com/profile/card#me>')
-        })
+      const rootAcl = fs.readFileSync(path.join(accountDir, '.acl'), 'utf8')
+      expect(rootAcl).to.include('<mailto:alice@')
+      expect(rootAcl).to.include('<https://alice.example.com/profile/card#me>')
     })
   })
 })

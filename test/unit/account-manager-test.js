@@ -31,6 +31,7 @@ describe('AccountManager', () => {
       host.multiuser = true
       const config = {
         host,
+        accountStore: {},
         authMethod: 'oidc',
         emailService: {},
         tokenService: {}
@@ -39,6 +40,7 @@ describe('AccountManager', () => {
       const mgr = AccountManager.from(config)
       expect(mgr.host).to.equal(config.host)
       expect(mgr.authMethod).to.equal(config.authMethod)
+      expect(mgr.accountStore).to.equal(config.accountStore)
       expect(mgr.multiuser).to.equal(host.multiuser)
       expect(mgr.emailService).to.equal(config.emailService)
       expect(mgr.tokenService).to.equal(config.tokenService)
@@ -247,7 +249,7 @@ describe('AccountManager', () => {
         multiuser: true
       })
       const options = testAccountManagerOptions(host)
-      options.ldpStore.loadParsedGraph = sinon.stub().resolves(rootAclGraph)
+      options.accountStore.loadParsedGraph = sinon.stub().resolves(rootAclGraph)
       const accountManager = AccountManager.from(options)
 
       const recoveryEmail = await accountManager.loadAccountRecoveryEmail(userAccount)
@@ -264,7 +266,7 @@ describe('AccountManager', () => {
         multiuser: true
       })
       const options = testAccountManagerOptions(host)
-      options.ldpStore.loadParsedGraph = sinon.stub().resolves(emptyGraph)
+      options.accountStore.loadParsedGraph = sinon.stub().resolves(emptyGraph)
       const accountManager = AccountManager.from(options)
 
       const recoveryEmail = await accountManager.loadAccountRecoveryEmail(userAccount)

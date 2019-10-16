@@ -6,10 +6,18 @@ const chai = require('chai')
 const expect = chai.expect
 chai.should()
 
+const SolidHost = require('../../lib/solid-host')
 const { AccountTemplate } = require('../../lib/account-mgmt/account-template')
+const { testStorage } = require('../utils')
 
 const templatePath = path.join(__dirname, '../../default-templates/new-account')
 const accountPath = path.join(__dirname, '../resources/new-account')
+
+const host = SolidHost.from({
+  serverUri: 'https://example.com',
+  root: accountPath
+})
+const storage = testStorage(host)
 
 describe('AccountTemplate', () => {
   beforeEach(() => {
@@ -20,37 +28,27 @@ describe('AccountTemplate', () => {
     fs.removeSync(accountPath)
   })
 
-  describe('copy()', () => {
-    it('should copy a directory', () => {
-      return AccountTemplate.copyTemplateDir(templatePath, accountPath)
-        .then(() => {
-          let rootAcl = fs.readFileSync(path.join(accountPath, '.acl'), 'utf8')
-          expect(rootAcl).to.exist
-        })
-    })
-  })
-
-  describe('processAccount()', () => {
-    it('should process all the files in an account', () => {
-      let substitutions = {
-        webId: 'https://alice.example.com/#me',
+  describe('provisionAccountFrom()', () => {
+    it('should process all the files in an account', async () => {
+      const substitutions = {
+        webId: 'https://example.com/#me',
         email: 'alice@example.com',
         name: 'Alice Q.'
       }
-      let template = new AccountTemplate({ substitutions })
+      const template = new AccountTemplate({
+        substitutions, accountStore: storage.accountStore
+      })
 
-      return AccountTemplate.copyTemplateDir(templatePath, accountPath)
-        .then(() => {
-          return template.processAccount(accountPath)
-        })
-        .then(() => {
-          let profile = fs.readFileSync(path.join(accountPath, '/profile/card'), 'utf8')
-          expect(profile).to.include('"Alice Q."')
+      await template.provisionAccountFrom({
+        templatePath, accountUrl: 'https://example.com'
+      })
 
-          let rootAcl = fs.readFileSync(path.join(accountPath, '.acl'), 'utf8')
-          expect(rootAcl).to.include('<mailto:alice@')
-          expect(rootAcl).to.include('<https://alice.example.com/#me>')
-        })
+      const profile = fs.readFileSync(path.join(accountPath, '/profile/card'), 'utf8')
+      expect(profile).to.include('"Alice Q."')
+
+      const rootAcl = fs.readFileSync(path.join(accountPath, '.acl'), 'utf8')
+      expect(rootAcl).to.include('<mailto:alice@')
+      expect(rootAcl).to.include('<https://example.com/#me>')
     })
   })
 })
