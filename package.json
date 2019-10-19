@@ -81,7 +81,7 @@
     "recursive-readdir": "^2.1.0",
     "shortid": "^2.2.13",
     "solid-namespace": "^0.2.0",
-    "solid-permissions": "interop-alliance/solid-permissions#rc0.7.0",
+    "solid-permissions": "interop-alliance/solid-permissions#rc0.8.0",
     "standard-http-error": "^2.0.1",
     "ulid": "^0.1.0",
     "uuid": "^3.3.3",

@@ -512,12 +512,12 @@ describe('ACL with WebID+OIDC over HTTP', function () {
     })
   })
 
-  describe('Group', function () {
+  describe.skip('Group', function () {
     // before(function () {
     //   rm('/accounts-acl/tim.localhost/group/test-folder/.acl')
     // })
 
-    it.skip('should PUT new ACL file', function (done) {
+    it('should PUT new ACL file', (done) => {
       var options = createOptions('/group/test-folder/.acl', 'user1')
       options.body = '<#Owner> a <http://www.w3.org/ns/auth/acl#Authorization>;\n' +
         ' <http://www.w3.org/ns/auth/acl#accessTo> <./.acl>;\n' +
