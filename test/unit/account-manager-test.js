@@ -94,7 +94,7 @@ describe('AccountManager', () => {
       })
       const options = testAccountManagerOptions(host)
       const mgr = AccountManager.from(options)
-      let webId = mgr.accountWebIdFor('alice')
+      const webId = mgr.accountWebIdFor('alice')
       expect(webId).to.equal('https://localhost/profile/card#me')
     })
   })
@@ -119,18 +119,18 @@ describe('AccountManager', () => {
       })
 
       it('should init webId from param if no username is passed', () => {
-        let userData = { webId: 'https://example.com' }
-        let newAccount = accountManager.userAccountFrom(userData)
+        const userData = { webId: 'https://example.com' }
+        const newAccount = accountManager.userAccountFrom(userData)
         expect(newAccount.webId).to.equal(userData.webId)
       })
 
       it('should derive the local account id from username, for external webid', () => {
-        let userData = {
+        const userData = {
           externalWebId: 'https://alice.external.com/profile#me',
           username: 'user1'
         }
 
-        let newAccount = accountManager.userAccountFrom(userData)
+        const newAccount = accountManager.userAccountFrom(userData)
 
         expect(newAccount.username).to.equal('user1')
         expect(newAccount.webId).to.equal('https://alice.external.com/profile#me')
@@ -139,11 +139,11 @@ describe('AccountManager', () => {
       })
 
       it('should use the external web id as username if no username given', () => {
-        let userData = {
+        const userData = {
           externalWebId: 'https://alice.external.com/profile#me'
         }
 
-        let newAccount = accountManager.userAccountFrom(userData)
+        const newAccount = accountManager.userAccountFrom(userData)
 
         expect(newAccount.username).to.equal('https://alice.external.com/profile#me')
         expect(newAccount.webId).to.equal('https://alice.external.com/profile#me')
@@ -195,9 +195,9 @@ describe('AccountManager', () => {
       const options = testAccountManagerOptions(host)
       const accountManager = AccountManager.from(options)
 
-      let userAccount = UserAccount.from({ username: 'alice' })
+      const userAccount = UserAccount.from({ username: 'alice' })
 
-      let rootAclUri = accountManager.rootAclFor(userAccount)
+      const rootAclUri = accountManager.rootAclFor(userAccount)
 
       expect(rootAclUri).to.equal('https://alice.example.com/.acl')
     })
@@ -275,8 +275,8 @@ describe('AccountManager', () => {
       const options = testAccountManagerOptions(host, { tokenService })
       const accountManager = AccountManager.from(options)
 
-      let aliceWebId = 'https://alice.example.com/#me'
-      let userAccount = {
+      const aliceWebId = 'https://alice.example.com/#me'
+      const userAccount = {
         webId: aliceWebId
       }
 

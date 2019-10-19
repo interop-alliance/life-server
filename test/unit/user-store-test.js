@@ -13,8 +13,8 @@ const { UserCredentialStore, DEFAULT_SALT_ROUNDS } = require('../../lib/authenti
 describe('UserCredentialStore', () => {
   describe('backendOptionsFor()', () => {
     it('should return a backend options object', () => {
-      let path = './db'
-      let options = UserCredentialStore.backendOptionsFor(path)
+      const path = './db'
+      const options = UserCredentialStore.backendOptionsFor(path)
 
       expect(options.path).to.equal(path)
       expect(options.collections).to.deep.equal(['users', 'users-by-email'])
@@ -23,10 +23,10 @@ describe('UserCredentialStore', () => {
 
   describe('from()', () => {
     it('should initialize a UserCredentialStore instance from options', () => {
-      let path = './db'
-      let options = { path }
+      const path = './db'
+      const options = { path }
 
-      let store = UserCredentialStore.from(options)
+      const store = UserCredentialStore.from(options)
 
       expect(store.saltRounds).to.equal(DEFAULT_SALT_ROUNDS)
       expect(store.backend.path).to.equal(path)
@@ -36,29 +36,29 @@ describe('UserCredentialStore', () => {
 
   describe('normalizeEmailKey()', () => {
     it('should return a null if no email is passed in', () => {
-      let key = UserCredentialStore.normalizeEmailKey(null)
+      const key = UserCredentialStore.normalizeEmailKey(null)
       expect(key).to.be.null()
     })
 
     it('should uri-escape an email that is passed in', () => {
-      let key = UserCredentialStore.normalizeEmailKey('alice@example.com')
+      const key = UserCredentialStore.normalizeEmailKey('alice@example.com')
       expect(key).to.equal('alice%40example.com')
     })
   })
 
   describe('normalizeIdKey()', () => {
     it('should return a null if no id is passed in', () => {
-      let key = UserCredentialStore.normalizeIdKey(null)
+      const key = UserCredentialStore.normalizeIdKey(null)
       expect(key).to.be.null()
     })
 
     it('should cast an integer id to string', () => {
-      let key = UserCredentialStore.normalizeIdKey(10)
+      const key = UserCredentialStore.normalizeIdKey(10)
       expect(key).to.equal('10')
     })
 
     it('should uri-escape an email that is passed in', () => {
-      let key = UserCredentialStore.normalizeIdKey('https://alice.example.com/#me')
+      const key = UserCredentialStore.normalizeIdKey('https://alice.example.com/#me')
       expect(key).to.equal('https%3A%2F%2Falice.example.com%2F%23me')
     })
   })
@@ -71,7 +71,7 @@ describe('UserCredentialStore', () => {
     })
 
     it('should throw an error if no user is provided', (done) => {
-      let password = '12345'
+      const password = '12345'
 
       store.createUser(null, password)
         .catch(error => {
@@ -81,8 +81,8 @@ describe('UserCredentialStore', () => {
     })
 
     it('should throw an error if no user id is provided', (done) => {
-      let user = {}
-      let password = '12345'
+      const user = {}
+      const password = '12345'
 
       store.createUser(user, password)
         .catch(error => {
@@ -92,7 +92,7 @@ describe('UserCredentialStore', () => {
     })
 
     it('should throw an error if no password is provided', (done) => {
-      let user = { id: 'abc' }
+      const user = { id: 'abc' }
 
       store.createUser(user, null)
         .catch(error => {
@@ -102,8 +102,8 @@ describe('UserCredentialStore', () => {
     })
 
     it('should create a hashed password', () => {
-      let user = { id: 'abc' }
-      let password = '12345'
+      const user = { id: 'abc' }
+      const password = '12345'
 
       store.backend.put = sinon.stub().resolves()
       store.hashPassword = sinon.spy(store, 'hashPassword')
@@ -115,8 +115,8 @@ describe('UserCredentialStore', () => {
     })
 
     it('should save the user record', () => {
-      let user = { id: 'abc' }
-      let password = '12345'
+      const user = { id: 'abc' }
+      const password = '12345'
 
       store.backend.put = sinon.stub().resolves()
       store.saveUser = sinon.spy(store, 'saveUser')
@@ -128,8 +128,8 @@ describe('UserCredentialStore', () => {
     })
 
     it('should create an entry in the users-by-email index', () => {
-      let user = { id: 'abc', email: 'alice@example.com' }
-      let password = '12345'
+      const user = { id: 'abc', email: 'alice@example.com' }
+      const password = '12345'
 
       store.backend.put = sinon.stub().resolves()
       store.saveUserByEmail = sinon.spy(store, 'saveUserByEmail')
@@ -173,8 +173,8 @@ describe('UserCredentialStore', () => {
     })
 
     it('should look up user record by normalized user id', () => {
-      let userId = 'alice.solidtest.space/profile/card#me'
-      let user = {}
+      const userId = 'alice.solidtest.space/profile/card#me'
+      const user = {}
 
       store.backend.get = sinon.stub().resolves(user)
 
@@ -188,11 +188,11 @@ describe('UserCredentialStore', () => {
     })
 
     it('should look up user record via an alias record', () => {
-      let aliasId = 'alice.solidtest.space/profile/card#me'
-      let aliasKey = 'alice.solidtest.space%2Fprofile%2Fcard%23me'
-      let aliasRecord = { link: 'example.com/profile#me' }
+      const aliasId = 'alice.solidtest.space/profile/card#me'
+      const aliasKey = 'alice.solidtest.space%2Fprofile%2Fcard%23me'
+      const aliasRecord = { link: 'example.com/profile#me' }
 
-      let userRecord = { name: 'Alice' }
+      const userRecord = { name: 'Alice' }
 
       store.backend.get = sinon.stub()
 
@@ -217,8 +217,8 @@ describe('UserCredentialStore', () => {
     })
 
     it('should call backend.del with normalized user id and email', () => {
-      let userId = 'alice.solidtest.space/profile/card#me'
-      let email = 'alice@example.com'
+      const userId = 'alice.solidtest.space/profile/card#me'
+      const email = 'alice@example.com'
 
       store.backend.del = sinon.stub()
 
@@ -230,7 +230,7 @@ describe('UserCredentialStore', () => {
     })
 
     it('should call backend.del with normalized user id but no email', () => {
-      let userId = 'alice.solidtest.space/profile/card#me'
+      const userId = 'alice.solidtest.space/profile/card#me'
 
       store.backend.del = sinon.stub()
 

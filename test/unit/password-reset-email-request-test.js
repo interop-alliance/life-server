@@ -19,15 +19,15 @@ const { testAccountManagerOptions } = require('../utils')
 describe('PasswordResetEmailRequest', () => {
   describe('constructor()', () => {
     it('should initialize a request instance from options', () => {
-      let res = HttpMocks.createResponse()
+      const res = HttpMocks.createResponse()
 
-      let options = {
+      const options = {
         returnToUrl: 'https://example.com/resource',
         response: res,
         username: 'alice'
       }
 
-      let request = new PasswordResetEmailRequest(options)
+      const request = new PasswordResetEmailRequest(options)
 
       expect(request.returnToUrl).to.equal(options.returnToUrl)
       expect(request.response).to.equal(res)
@@ -37,18 +37,18 @@ describe('PasswordResetEmailRequest', () => {
 
   describe('fromParams()', () => {
     it('should return a request instance from options', () => {
-      let returnToUrl = 'https://example.com/resource'
-      let username = 'alice'
-      let accountManager = {}
+      const returnToUrl = 'https://example.com/resource'
+      const username = 'alice'
+      const accountManager = {}
 
-      let req = {
+      const req = {
         app: { locals: { accountManager } },
         query: { returnToUrl },
         body: { username }
       }
-      let res = HttpMocks.createResponse()
+      const res = HttpMocks.createResponse()
 
-      let request = PasswordResetEmailRequest.fromParams(req, res)
+      const request = PasswordResetEmailRequest.fromParams(req, res)
 
       expect(request.accountManager).to.equal(accountManager)
       expect(request.returnToUrl).to.equal(returnToUrl)
@@ -59,16 +59,16 @@ describe('PasswordResetEmailRequest', () => {
 
   describe('get()', () => {
     it('should create an instance and render a reset password form', () => {
-      let returnToUrl = 'https://example.com/resource'
-      let username = 'alice'
-      let accountManager = { multiuser: true }
+      const returnToUrl = 'https://example.com/resource'
+      const username = 'alice'
+      const accountManager = { multiuser: true }
 
-      let req = {
+      const req = {
         app: { locals: { accountManager } },
         query: { returnToUrl },
         body: { username }
       }
-      let res = HttpMocks.createResponse()
+      const res = HttpMocks.createResponse()
       res.render = sinon.stub()
 
       PasswordResetEmailRequest.get(req, res)
@@ -82,8 +82,8 @@ describe('PasswordResetEmailRequest', () => {
     it('creates a request instance and invokes handlePost()', () => {
       sinon.spy(PasswordResetEmailRequest, 'handlePost')
 
-      let returnToUrl = 'https://example.com/resource'
-      let username = 'alice'
+      const returnToUrl = 'https://example.com/resource'
+      const username = 'alice'
 
       const host = SolidHost.from({
         serverUri: 'https://example.com',
@@ -96,12 +96,12 @@ describe('PasswordResetEmailRequest', () => {
       accountManager.loadAccountRecoveryEmail = sinon.stub().resolves('alice@example.com')
       accountManager.sendPasswordResetEmail = sinon.stub().resolves()
 
-      let req = {
+      const req = {
         app: { locals: { accountManager } },
         query: { returnToUrl },
         body: { username }
       }
-      let res = HttpMocks.createResponse()
+      const res = HttpMocks.createResponse()
 
       PasswordResetEmailRequest.post(req, res)
         .then(() => {
@@ -118,7 +118,7 @@ describe('PasswordResetEmailRequest', () => {
       })
       const accountManager = AccountManager.from(testAccountManagerOptions(host))
 
-      let request = new PasswordResetEmailRequest({ accountManager })
+      const request = new PasswordResetEmailRequest({ accountManager })
 
       expect(() => request.validate()).to.throw(/Username required/)
     })
@@ -130,7 +130,7 @@ describe('PasswordResetEmailRequest', () => {
       })
       const accountManager = AccountManager.from(testAccountManagerOptions(host))
 
-      let request = new PasswordResetEmailRequest({ accountManager })
+      const request = new PasswordResetEmailRequest({ accountManager })
 
       expect(() => request.validate()).to.not.throw()
     })
@@ -148,13 +148,13 @@ describe('PasswordResetEmailRequest', () => {
       accountManager.sendPasswordResetEmail = sinon.stub().resolves()
       accountManager.accountExists = sinon.stub().resolves(true)
 
-      let returnToUrl = 'https://example.com/resource'
-      let username = 'alice'
-      let response = HttpMocks.createResponse()
+      const returnToUrl = 'https://example.com/resource'
+      const username = 'alice'
+      const response = HttpMocks.createResponse()
       response.render = sinon.stub()
 
-      let options = { accountManager, username, returnToUrl, response }
-      let request = new PasswordResetEmailRequest(options)
+      const options = { accountManager, username, returnToUrl, response }
+      const request = new PasswordResetEmailRequest(options)
 
       sinon.spy(request, 'error')
 
@@ -176,10 +176,10 @@ describe('PasswordResetEmailRequest', () => {
       })
       const accountManager = AccountManager.from(testAccountManagerOptions(host))
       accountManager.accountExists = sinon.stub().resolves(true)
-      let username = 'alice'
+      const username = 'alice'
 
-      let options = { accountManager, username }
-      let request = new PasswordResetEmailRequest(options)
+      const options = { accountManager, username }
+      const request = new PasswordResetEmailRequest(options)
 
       return request.loadUser()
         .then(account => {
@@ -194,10 +194,10 @@ describe('PasswordResetEmailRequest', () => {
       })
       const accountManager = AccountManager.from(testAccountManagerOptions(host))
       accountManager.accountExists = sinon.stub().resolves(false)
-      let username = 'alice'
+      const username = 'alice'
 
-      let options = { accountManager, username }
-      let request = new PasswordResetEmailRequest(options)
+      const options = { accountManager, username }
+      const request = new PasswordResetEmailRequest(options)
 
       request.loadUser()
         .catch(error => {

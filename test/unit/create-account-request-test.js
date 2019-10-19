@@ -31,11 +31,11 @@ describe('CreateAccountRequest', () => {
 
   describe('constructor()', () => {
     it('should create an instance with the given config', () => {
-      let aliceData = { username: 'alice' }
-      let userAccount = accountManager.userAccountFrom(aliceData)
+      const aliceData = { username: 'alice' }
+      const userAccount = accountManager.userAccountFrom(aliceData)
 
-      let options = { accountManager, userAccount, session, response: res }
-      let request = new CreateAccountRequest(options)
+      const options = { accountManager, userAccount, session, response: res }
+      const request = new CreateAccountRequest(options)
 
       expect(request.accountManager).to.equal(accountManager)
       expect(request.userAccount).to.equal(userAccount)
@@ -46,14 +46,12 @@ describe('CreateAccountRequest', () => {
 
   describe('fromParams()', () => {
     it('should create subclass depending on authMethod', () => {
-      let request, aliceData, req
-
-      aliceData = { username: 'alice', password: '12345' }
-      req = HttpMocks.createRequest({
+      const aliceData = { username: 'alice', password: '12345' }
+      const req = HttpMocks.createRequest({
         app: { locals: { accountManager, oidc: {} } }, body: aliceData, session
       })
       req.app.locals.authMethod = 'oidc'
-      request = CreateAccountRequest.fromParams(req, res, accountManager)
+      const request = CreateAccountRequest.fromParams(req, res, accountManager)
       expect(request).to.exist()
     })
   })
@@ -95,12 +93,12 @@ describe('CreateAccountRequest', () => {
       let invalidUsernamesCount = 0
 
       const requests = invalidUsernames.map((username) => {
-        let aliceData = {
+        const aliceData = {
           username: username, password: '1234'
         }
 
-        let req = HttpMocks.createRequest({ app: { locals }, body: aliceData })
-        let request = CreateAccountRequest.fromParams(req, res)
+        const req = HttpMocks.createRequest({ app: { locals }, body: aliceData })
+        const request = CreateAccountRequest.fromParams(req, res)
 
         return request.createAccount()
           .then(() => {
@@ -122,7 +120,7 @@ describe('CreateAccountRequest', () => {
 })
 
 describe('CreateOidcAccountRequest', () => {
-  let authMethod = 'oidc'
+  const authMethod = 'oidc'
   let host, options
   let session, res
 

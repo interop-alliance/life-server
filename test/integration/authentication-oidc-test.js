@@ -8,8 +8,7 @@ const { OIDCWebClient } = require('oidc-web')
 
 const fetch = require('node-fetch')
 const localStorage = require('localstorage-memory')
-const url = require('url')
-const URL = require('whatwg-url').URL
+const { URL } = require('url')
 
 global.URL = URL
 global.URLSearchParams = require('whatwg-url').URLSearchParams
@@ -310,7 +309,7 @@ describe('Authentication API (OIDC)', () => {
           expect(authorizeUri.startsWith(aliceServerUri + '/authorize'))
 
           // Follow the redirect to /authorize
-          const authorizePath = url.parse(authorizeUri).path
+          const authorizePath = authorizeUri.replace(aliceServerUri, '') // (new URL(authorizeUri)).pathname
           return alice.get(authorizePath)
         })
         .then(res => {
@@ -419,15 +418,17 @@ describe('Authentication API (OIDC)', () => {
         credentials: 'include'
       })
       expect(loginResponse.status).to.equal(302)
-      const postLoginUri = loginResponse.headers.get('location')
+      const postLoginUrl = loginResponse.headers.get('location')
       const cookie = loginResponse.headers.get('set-cookie')
 
       // Successful login gets redirected back to /authorize and then
       // back to app
-      expect(postLoginUri.startsWith(aliceServerUri + '/authorize'))
+      expect(postLoginUrl.startsWith(aliceServerUri + '/authorize'))
         .to.be.true()
+      expect(postLoginUrl.includes('scope=openid'))
+        .to.be.true('Post-login url must include auth query params')
 
-      const postLoginResponse = await fetch(postLoginUri, {
+      const postLoginResponse = await fetch(postLoginUrl, {
         redirect: 'manual', headers: { cookie }
       })
       // User gets redirected back to original app
@@ -453,7 +454,7 @@ describe('Authentication API (OIDC)', () => {
       const response = await fetch(bobProtectedResource, {
         headers: {
           // This is Alice's bearer token (issued to Bob's server) with her own Web ID
-          'Authorization': 'Bearer ' + bearerToken
+          Authorization: 'Bearer ' + bearerToken
         }
       })
 
@@ -468,7 +469,7 @@ describe('Authentication API (OIDC)', () => {
       const response = await fetch(privateAliceResourcePath, {
         headers: {
           // This is Alice's bearer token (issued to Bob's server) with her own Web ID
-          'Authorization': 'Bearer ' + bearerToken
+          Authorization: 'Bearer ' + bearerToken
         }
       })
       // It will get rejected; it was issued for Bob's server only

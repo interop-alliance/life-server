@@ -1,20 +1,21 @@
 'use strict'
 
 const chai = require('chai')
-const expect = chai.expect
+chai.use(require('dirty-chai'))
+const { expect } = chai
 const UserAccount = require('../../lib/account-mgmt/user-account')
 
 describe('UserAccount', () => {
   describe('from()', () => {
     it('initializes the object with passed in options', () => {
-      let options = {
+      const options = {
         username: 'alice',
         webId: 'https://alice.com/#me',
         name: 'Alice',
         email: 'alice@alice.com'
       }
 
-      let account = UserAccount.from(options)
+      const account = UserAccount.from(options)
       expect(account.username).to.equal(options.username)
       expect(account.webId).to.equal(options.webId)
       expect(account.name).to.equal(options.name)
@@ -24,14 +25,14 @@ describe('UserAccount', () => {
 
   describe('id getter', () => {
     it('should return null if webId is null', () => {
-      let account = new UserAccount()
+      const account = new UserAccount()
 
-      expect(account.id).to.be.null
+      expect(account.id).to.not.be.ok()
     })
 
     it('should return the WebID uri minus the protocol and slashes', () => {
-      let webId = 'https://alice.example.com/profile/card#me'
-      let account = new UserAccount({ webId })
+      const webId = 'https://alice.example.com/profile/card#me'
+      const account = new UserAccount({ webId })
 
       expect(account.id).to.equal('alice.example.com/profile/card#me')
     })

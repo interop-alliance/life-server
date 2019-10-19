@@ -6,6 +6,7 @@ const expect = chai.expect
 const sinon = require('sinon')
 const sinonChai = require('sinon-chai')
 chai.use(sinonChai)
+chai.use(require('dirty-chai'))
 chai.should()
 
 const SolidHost = require('../../lib/solid-host')
@@ -36,37 +37,33 @@ beforeEach(() => {
 
 describe('Account Creation Welcome Email', () => {
   describe('accountManager.sendWelcomeEmail() (unit tests)', () => {
-    it('should resolve to null if email service not set up', () => {
+    it('should resolve to null if email service not set up', async () => {
       accountManager.emailService = null
 
-      let userData = { name: 'Alice', username: 'alice', email: 'alice@alice.com' }
-      let newUser = accountManager.userAccountFrom(userData)
+      const userData = { name: 'Alice', username: 'alice', email: 'alice@alice.com' }
+      const newUser = accountManager.userAccountFrom(userData)
 
-      return accountManager.sendWelcomeEmail(newUser)
-        .then(result => {
-          expect(result).to.be.null
-        })
+      const result = await accountManager.sendWelcomeEmail(newUser)
+      expect(result).to.not.be.ok()
     })
 
-    it('should resolve to null if a new user has no email', () => {
-      let userData = { name: 'Alice', username: 'alice' }
-      let newUser = accountManager.userAccountFrom(userData)
+    it('should resolve to null if a new user has no email', async () => {
+      const userData = { name: 'Alice', username: 'alice' }
+      const newUser = accountManager.userAccountFrom(userData)
 
-      return accountManager.sendWelcomeEmail(newUser)
-        .then(result => {
-          expect(result).to.be.null
-        })
+      const result = await accountManager.sendWelcomeEmail(newUser)
+      expect(result).to.not.be.ok()
     })
 
     it('should send an email using the welcome template', () => {
-      let sendWithTemplate = sinon
+      const sendWithTemplate = sinon
         .stub(accountManager.emailService, 'sendWithTemplate')
         .returns(Promise.resolve())
 
-      let userData = { name: 'Alice', username: 'alice', email: 'alice@alice.com' }
-      let newUser = accountManager.userAccountFrom(userData)
+      const userData = { name: 'Alice', username: 'alice', email: 'alice@alice.com' }
+      const newUser = accountManager.userAccountFrom(userData)
 
-      let expectedEmailData = {
+      const expectedEmailData = {
         webid: 'https://alice.example.com/profile/card#me',
         to: 'alice@alice.com',
         name: 'Alice'

@@ -22,8 +22,8 @@ describe('UserCredentialStore (integration)', () => {
 
   describe('initCollections()', () => {
     it('should create collection directories in db path', () => {
-      let options = { path: dbPath }
-      let store = UserCredentialStore.from(options)
+      const options = { path: dbPath }
+      const store = UserCredentialStore.from(options)
 
       store.initCollections()
 
@@ -34,27 +34,27 @@ describe('UserCredentialStore (integration)', () => {
 
   describe('createUser()', () => {
     it('should create a user record and relevant index entries', () => {
-      let options = { path: dbPath }
-      let store = UserCredentialStore.from(options)
+      const options = { path: dbPath }
+      const store = UserCredentialStore.from(options)
       store.initCollections()
 
-      let user = {
+      const user = {
         id: 'alice.example.com',
         email: 'alice@example.com'
       }
-      let password = '12345'
+      const password = '12345'
 
       return store.createUser(user, password)
         .then(createdUser => {
           expect(createdUser.password).to.not.exist()
           expect(createdUser.hashedPassword).to.not.exist()
 
-          let userFileName = store.backend.fileNameFor(user.id)
-          let userFilePath = path.join(dbPath, 'users', userFileName)
+          const userFileName = store.backend.fileNameFor(user.id)
+          const userFilePath = path.join(dbPath, 'users', userFileName)
           expect(fs.existsSync(userFilePath)).to.be.true()
 
-          let emailIndexFile = store.backend.fileNameFor('alice%40example.com')
-          let emailIndexPath = path.join(dbPath, 'users-by-email', emailIndexFile)
+          const emailIndexFile = store.backend.fileNameFor('alice%40example.com')
+          const emailIndexPath = path.join(dbPath, 'users-by-email', emailIndexFile)
           expect(fs.existsSync(emailIndexPath)).to.be.true()
         })
     })
@@ -62,22 +62,22 @@ describe('UserCredentialStore (integration)', () => {
 
   describe('updatePassword()', () => {
     it('should update the user record with the provided password', () => {
-      let options = { path: dbPath }
-      let store = UserCredentialStore.from(options)
+      const options = { path: dbPath }
+      const store = UserCredentialStore.from(options)
       store.initCollections()
 
-      let user = {
+      const user = {
         id: 'alice.example.com'
       }
-      let password = '12345'
+      const password = '12345'
 
       return store.updatePassword(user, password)
         .then(updatedUser => {
           expect(updatedUser.password).to.not.exist()
           expect(updatedUser.hashedPassword).to.not.exist()
 
-          let userFileName = store.backend.fileNameFor(user.id)
-          let userFilePath = path.join(dbPath, 'users', userFileName)
+          const userFileName = store.backend.fileNameFor(user.id)
+          const userFilePath = path.join(dbPath, 'users', userFileName)
           expect(fs.existsSync(userFilePath)).to.be.true()
         })
     })
@@ -85,15 +85,15 @@ describe('UserCredentialStore (integration)', () => {
 
   describe('findUser()', () => {
     it('loads a previously saved user', () => {
-      let options = { path: dbPath, saltRounds: 2 }
-      let store = UserCredentialStore.from(options)
+      const options = { path: dbPath, saltRounds: 2 }
+      const store = UserCredentialStore.from(options)
       store.initCollections()
 
-      let user = {
+      const user = {
         id: 'alice.example.com',
         email: 'alice@example.com'
       }
-      let password = '12345'
+      const password = '12345'
 
       return store.createUser(user, password)
         .then(() => {
@@ -108,11 +108,11 @@ describe('UserCredentialStore (integration)', () => {
 
   describe('hashing and matching passwords', () => {
     it('returns the user object when password matches', () => {
-      let options = { path: dbPath, saltRounds: 2 }
-      let store = UserCredentialStore.from(options)
+      const options = { path: dbPath, saltRounds: 2 }
+      const store = UserCredentialStore.from(options)
 
-      let plaintextPassword = '12345'
-      let user = { id: 'alice.example.com' }
+      const plaintextPassword = '12345'
+      const user = { id: 'alice.example.com' }
 
       return store.hashPassword(plaintextPassword)
         .then(hashedPassword => {
@@ -128,14 +128,14 @@ describe('UserCredentialStore (integration)', () => {
     })
 
     it('returns null when password does not match', () => {
-      let options = { path: dbPath, saltRounds: 2 }
-      let store = UserCredentialStore.from(options)
+      const options = { path: dbPath, saltRounds: 2 }
+      const store = UserCredentialStore.from(options)
 
-      let user = {
+      const user = {
         id: 'alice.example.com',
         hashedPassword: '12345'
       }
-      let wrongPassword = '67890'
+      const wrongPassword = '67890'
 
       return store.matchPassword(user, wrongPassword)
         .then(matchedUser => {
@@ -145,15 +145,15 @@ describe('UserCredentialStore (integration)', () => {
   })
   describe('deleteUser()', () => {
     it('deletes a previously saved user', () => {
-      let options = { path: dbPath, saltRounds: 2 }
-      let store = UserCredentialStore.from(options)
+      const options = { path: dbPath, saltRounds: 2 }
+      const store = UserCredentialStore.from(options)
       store.initCollections()
 
-      let user = {
+      const user = {
         id: 'alice.example.com',
         email: 'alice@example.com'
       }
-      let password = '12345'
+      const password = '12345'
 
       return store.createUser(user, password)
         .then(() => {
