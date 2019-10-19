@@ -10,7 +10,7 @@ const AuthResponseSent = require('../../lib/authentication/errors/auth-response-
 
 describe('AuthResponseSent', () => {
   it('should create a handled error', () => {
-    let authSuccess = new AuthResponseSent()
+    const authSuccess = new AuthResponseSent()
 
     expect(authSuccess.handled).to.be.true()
   })

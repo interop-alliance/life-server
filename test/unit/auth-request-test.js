@@ -7,7 +7,7 @@ chai.use(require('sinon-chai'))
 chai.use(require('dirty-chai'))
 chai.should()
 // const HttpMocks = require('node-mocks-http')
-const url = require('url')
+const { URL } = require('url')
 
 const AuthRequest = require('../../lib/authentication/auth-request')
 const SolidHost = require('../../lib/solid-host')
@@ -16,13 +16,13 @@ const UserAccount = require('../../lib/account-mgmt/user-account')
 describe('AuthRequest', () => {
   function testAuthQueryParams () {
     const body = {}
-    body['response_type'] = 'code'
-    body['scope'] = 'openid'
-    body['client_id'] = 'client1'
-    body['redirect_uri'] = 'https://redirect.example.com/'
-    body['state'] = '1234'
-    body['nonce'] = '5678'
-    body['display'] = 'page'
+    body.response_type = 'code'
+    body.scope = 'openid'
+    body.client_id = 'client1'
+    body.redirect_uri = 'https://redirect.example.com/'
+    body.state = '1234'
+    body.nonce = '5678'
+    body.display = 'page'
 
     return body
   }
@@ -32,7 +32,7 @@ describe('AuthRequest', () => {
   describe('extractAuthParams()', () => {
     it('should initialize the auth url query object from params', () => {
       const body = testAuthQueryParams()
-      body['other_key'] = 'whatever'
+      body.other_key = 'whatever'
       const req = { body, method: 'POST' }
 
       const extracted = AuthRequest.extractAuthParams(req)
@@ -42,7 +42,7 @@ describe('AuthRequest', () => {
       }
 
       // make sure *only* the listed params were copied
-      expect(extracted['other_key']).to.not.exist()
+      expect(extracted.other_key).to.not.exist()
     })
 
     it('should return empty params with no request body present', () => {
@@ -70,11 +70,10 @@ describe('AuthRequest', () => {
 
       const authUrl = request.authorizeUrl()
 
-      const parseQueryString = true
-      const parsedUrl = url.parse(authUrl, parseQueryString)
+      const parsedUrl = new URL(authUrl)
 
       for (const param in body) {
-        expect(body[param]).to.equal(parsedUrl.query[param])
+        expect(body[param]).to.equal(parsedUrl.searchParams.get(param))
       }
     })
   })
@@ -91,8 +90,7 @@ describe('AuthRequest', () => {
 
       expect(request.session.userId).to.equal(webId)
       const subject = request.session.subject
-      expect(subject['_id']).to.equal(webId)
+      expect(subject._id).to.equal(webId)
     })
   })
 })
-

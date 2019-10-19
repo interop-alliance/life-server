@@ -29,19 +29,19 @@ describe('OidcManager (integration tests)', () => {
 
   describe('fromServerConfig()', () => {
     it('should result in an initialized oidc object', () => {
-      let serverUri = 'https://localhost:8443'
-      let host = SolidHost.from({ serverUri })
+      const serverUri = 'https://localhost:8443'
+      const host = SolidHost.from({ serverUri })
 
-      let saltRounds = 5
-      let argv = {
+      const saltRounds = 5
+      const argv = {
         host,
         dbPath,
         saltRounds
       }
 
-      let oidc = OidcManager.fromServerConfig(argv)
+      const oidc = OidcManager.fromServerConfig(argv)
 
-      expect(oidc.rs.defaults.query).to.be.true
+      expect(oidc.rs.defaults.query).to.be.true()
       expect(oidc.clients.store.backend.path.endsWith('db/oidc/rp/clients'))
       expect(oidc.provider.issuer).to.equal(serverUri)
       expect(oidc.users.backend.path.endsWith('db/oidc/users'))
@@ -51,7 +51,7 @@ describe('OidcManager (integration tests)', () => {
 
   describe('loadProviderConfig()', () => {
     it('it should return a minimal config if no saved config present', () => {
-      let config = {
+      const config = {
         authCallbackUri: serverUri + '/api/oidc/rp',
         postLogoutUri: serverUri + '/goodbye',
         host: {},
@@ -59,15 +59,15 @@ describe('OidcManager (integration tests)', () => {
         providerUri: serverUri,
         dbPath
       }
-      let oidc = OidcManager.from(config)
+      const oidc = OidcManager.from(config)
 
-      let providerConfig = oidc.loadProviderConfig()
+      const providerConfig = oidc.loadProviderConfig()
       expect(providerConfig.issuer).to.equal(serverUri)
       expect(providerConfig.keys).to.not.exist()
     })
 
     it('should attempt to load a previously saved provider config', () => {
-      let config = {
+      const config = {
         authCallbackUri: serverUri + '/api/oidc/rp',
         postLogoutUri: serverUri + '/goodbye',
         host: {},
@@ -76,7 +76,7 @@ describe('OidcManager (integration tests)', () => {
         dbPath
       }
 
-      let oidc = OidcManager.from(config)
+      const oidc = OidcManager.from(config)
 
       oidc.initLocalRpClient = sinon.stub()
 
@@ -85,7 +85,7 @@ describe('OidcManager (integration tests)', () => {
           console.error('Error during .initialize(): ', err)
         })
         .then(() => {
-          let providerConfig = oidc.loadProviderConfig()
+          const providerConfig = oidc.loadProviderConfig()
 
           expect(providerConfig.issuer).to.equal(serverUri)
           expect(providerConfig.authorization_endpoint).to.exist()

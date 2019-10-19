@@ -42,8 +42,8 @@ describe('LoginRequest', () => {
     })
 
     it('should create a LoginRequest instance', () => {
-      let fromParams = sinon.spy(LoginRequest, 'fromParams')
-      let loginStub = sinon.stub(LoginRequest, 'login')
+      const fromParams = sinon.spy(LoginRequest, 'fromParams')
+      const loginStub = sinon.stub(LoginRequest, 'login')
         .returns(Promise.resolve())
 
       return LoginRequest.loginPassword(req, res)
@@ -55,7 +55,7 @@ describe('LoginRequest', () => {
     })
 
     it('should invoke login()', () => {
-      let login = sinon.spy(LoginRequest, 'login')
+      const login = sinon.spy(LoginRequest, 'login')
 
       return LoginRequest.loginPassword(req, res)
         .then(() => {
@@ -66,16 +66,16 @@ describe('LoginRequest', () => {
   })
 
   describe('fromParams()', () => {
-    let session = {}
-    let req = {
+    const session = {}
+    const req = {
       session,
       app: { locals: { host } },
       body: { username: 'alice', password: '12345' }
     }
-    let res = HttpMocks.createResponse()
+    const res = HttpMocks.createResponse()
 
     it('should return a LoginRequest instance', () => {
-      let request = LoginRequest.fromParams(req, res)
+      const request = LoginRequest.fromParams(req, res)
 
       expect(request.response).to.equal(res)
       expect(request.session).to.equal(session)
@@ -83,7 +83,7 @@ describe('LoginRequest', () => {
     })
 
     it('should initialize the query params', () => {
-      let requestOptions = sinon.spy(AuthRequest, 'requestOptions')
+      const requestOptions = sinon.spy(AuthRequest, 'requestOptions')
       LoginRequest.fromParams(req, res)
 
       expect(requestOptions).to.have.been.calledWith(req)
@@ -91,10 +91,10 @@ describe('LoginRequest', () => {
   })
 
   describe('login()', () => {
-    let userStore = mockUserCredentialStore
+    const userStore = mockUserCredentialStore
     let response
 
-    let options = {
+    const options = {
       userStore,
       host,
       localAuth: {}
@@ -105,15 +105,15 @@ describe('LoginRequest', () => {
     })
 
     it('should call initUserSession() for a valid user', () => {
-      let validUser = {}
+      const validUser = {}
       options.response = response
       options.authenticator = {
         findValidUser: sinon.stub().resolves(validUser)
       }
 
-      let request = new LoginRequest(options)
+      const request = new LoginRequest(options)
 
-      let initUserSession = sinon.spy(request, 'initUserSession')
+      const initUserSession = sinon.spy(request, 'initUserSession')
 
       return LoginRequest.login(request)
         .then(() => {
@@ -122,15 +122,15 @@ describe('LoginRequest', () => {
     })
 
     it('should call redirectPostLogin()', () => {
-      let validUser = {}
+      const validUser = {}
       options.response = response
       options.authenticator = {
         findValidUser: sinon.stub().resolves(validUser)
       }
 
-      let request = new LoginRequest(options)
+      const request = new LoginRequest(options)
 
-      let redirectPostLogin = sinon.spy(request, 'redirectPostLogin')
+      const redirectPostLogin = sinon.spy(request, 'redirectPostLogin')
 
       return LoginRequest.login(request)
         .then(() => {
@@ -141,10 +141,10 @@ describe('LoginRequest', () => {
 
   describe('postLoginUrl()', () => {
     it('should return the user account uri if no redirect_uri param', () => {
-      let request = new LoginRequest({ authQueryParams: {} })
+      const request = new LoginRequest({ authQueryParams: {} })
 
-      let aliceAccount = 'https://alice.example.com'
-      let user = { accountUri: aliceAccount }
+      const aliceAccount = 'https://alice.example.com'
+      const user = { accountUri: aliceAccount }
 
       expect(request.postLoginUrl(user)).to.equal(aliceAccount)
     })
@@ -152,16 +152,16 @@ describe('LoginRequest', () => {
 
   describe('redirectPostLogin()', () => {
     it('should redirect to the /authorize url if client_id is present', () => {
-      let res = HttpMocks.createResponse()
-      let authUrl = 'https://localhost:8443/authorize?client_id=client123'
-      let validUser = accountManager.userAccountFrom({ username: 'alice' })
+      const res = HttpMocks.createResponse()
+      const authUrl = 'https://localhost:8443/authorize?client_id=client123'
+      const validUser = accountManager.userAccountFrom({ username: 'alice' })
 
-      let authQueryParams = {
+      const authQueryParams = {
         client_id: 'client123'
       }
 
-      let options = { accountManager, authQueryParams, response: res }
-      let request = new LoginRequest(options)
+      const options = { accountManager, authQueryParams, response: res }
+      const request = new LoginRequest(options)
 
       request.authorizeUrl = sinon.stub().returns(authUrl)
 
@@ -172,40 +172,40 @@ describe('LoginRequest', () => {
     })
 
     it('should redirect to account uri if no client_id present', () => {
-      let res = HttpMocks.createResponse()
-      let authUrl = 'https://localhost/authorize?redirect_uri=https%3A%2F%2Fapp.example.com%2Fcallback'
-      let validUser = accountManager.userAccountFrom({ username: 'alice' })
+      const res = HttpMocks.createResponse()
+      const authUrl = 'https://localhost/authorize?redirect_uri=https%3A%2F%2Fapp.example.com%2Fcallback'
+      const validUser = accountManager.userAccountFrom({ username: 'alice' })
 
-      let authQueryParams = {}
+      const authQueryParams = {}
 
-      let options = { accountManager, authQueryParams, response: res }
-      let request = new LoginRequest(options)
+      const options = { accountManager, authQueryParams, response: res }
+      const request = new LoginRequest(options)
 
       request.authorizeUrl = sinon.stub().returns(authUrl)
 
       request.redirectPostLogin(validUser)
 
-      let expectedUri = accountManager.accountUriFor('alice')
+      const expectedUri = accountManager.accountUriFor('alice')
       expect(res.statusCode).to.equal(302)
       expect(res._getRedirectUrl()).to.equal(expectedUri)
     })
 
     it('should redirect to account uri if redirect_uri is string "undefined', () => {
-      let res = HttpMocks.createResponse()
-      let authUrl = 'https://localhost/authorize?client_id=123'
-      let validUser = accountManager.userAccountFrom({ username: 'alice' })
+      const res = HttpMocks.createResponse()
+      const authUrl = 'https://localhost/authorize?client_id=123'
+      const validUser = accountManager.userAccountFrom({ username: 'alice' })
 
-      let body = { redirect_uri: 'undefined' }
+      const body = { redirect_uri: 'undefined' }
 
-      let options = { host, response: res }
-      let request = new LoginRequest(options)
+      const options = { host, response: res }
+      const request = new LoginRequest(options)
       request.authQueryParams = AuthRequest.extractAuthParams({ body })
 
       request.authorizeUrl = sinon.stub().returns(authUrl)
 
       request.redirectPostLogin(validUser)
 
-      let expectedUri = accountManager.accountUriFor('alice')
+      const expectedUri = accountManager.accountUriFor('alice')
 
       expect(res.statusCode).to.equal(302)
       expect(res._getRedirectUrl()).to.equal(expectedUri)

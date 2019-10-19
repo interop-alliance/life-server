@@ -4,6 +4,7 @@ const path = require('path')
 const fs = require('fs-extra')
 const chai = require('chai')
 const expect = chai.expect
+chai.use(require('dirty-chai'))
 chai.should()
 
 const SolidHost = require('../../lib/solid-host')
@@ -35,18 +36,16 @@ describe('AccountManager', () => {
       const options = testAccountManagerOptions(host)
       const accountManager = AccountManager.from(options)
 
-      it('resolves to true if a directory for the account exists in root', () => {
+      it('resolves to true if a directory for the account exists in root', async () => {
         // Note: test/resources/accounts/tim.localhost/ exists in this repo
-        return accountManager.accountExists('tim')
-          .then(exists => {
-            expect(exists).to.be.true
-          })
+        const exists = await accountManager.accountExists('tim')
+        expect(exists).to.be.true()
       })
 
       it('resolves to false if a directory for the account does not exist', async () => {
         // Note: test/resources/accounts/alice.localhost/ does NOT exist
         const exists = await accountManager.accountExists('alice')
-        expect(exists).to.be.false
+        expect(exists).to.be.false()
       })
     })
 
@@ -60,7 +59,7 @@ describe('AccountManager', () => {
 
         return accountManager.accountExists()
           .then(exists => {
-            expect(exists).to.be.true
+            expect(exists).to.be.true()
           })
       })
 
@@ -69,11 +68,11 @@ describe('AccountManager', () => {
         host.multiuser = false
 
         const options = testAccountManagerOptions(host)
-        let accountManager = AccountManager.from(options)
+        const accountManager = AccountManager.from(options)
 
         return accountManager.accountExists()
           .then(exists => {
-            expect(exists).to.be.false
+            expect(exists).to.be.false()
           })
       })
     })
@@ -100,7 +99,7 @@ describe('AccountManager', () => {
 
       await accountManager.provisionAccountStorage(userAccount)
       const found = await accountManager.accountExists('alice')
-      expect(found).to.be.true
+      expect(found).to.be.true()
       const profile = fs.readFileSync(path.join(accountDir, '/profile/card'), 'utf8')
       expect(profile).to.include('"Alice Q."')
 

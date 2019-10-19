@@ -30,4 +30,3 @@ function getVersion () {
     return version
   }
 }
-

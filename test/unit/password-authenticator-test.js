@@ -26,13 +26,13 @@ const accountManager = AccountManager.from(options)
 
 describe('PasswordAuthenticator', () => {
   describe('fromParams()', () => {
-    let req = {
+    const req = {
       body: { username: 'alice', password: '12345' }
     }
-    let options = { userStore: mockUserCredentialStore, accountManager }
+    const options = { userStore: mockUserCredentialStore, accountManager }
 
     it('should return a PasswordAuthenticator instance', () => {
-      let pwAuth = PasswordAuthenticator.fromParams(req, options)
+      const pwAuth = PasswordAuthenticator.fromParams(req, options)
 
       expect(pwAuth.userStore).to.equal(mockUserCredentialStore)
       expect(pwAuth.accountManager).to.equal(accountManager)
@@ -41,9 +41,9 @@ describe('PasswordAuthenticator', () => {
     })
 
     it('should init with undefined username and password if no body is provided', () => {
-      let req = {}
+      const req = {}
 
-      let pwAuth = PasswordAuthenticator.fromParams(req, {})
+      const pwAuth = PasswordAuthenticator.fromParams(req, {})
 
       expect(pwAuth.username).to.be.undefined()
       expect(pwAuth.password).to.be.undefined()
@@ -52,8 +52,8 @@ describe('PasswordAuthenticator', () => {
 
   describe('validate()', () => {
     it('should throw a 400 error if no username was provided', done => {
-      let options = { username: null, password: '12345' }
-      let pwAuth = new PasswordAuthenticator(options)
+      const options = { username: null, password: '12345' }
+      const pwAuth = new PasswordAuthenticator(options)
 
       try {
         pwAuth.validate()
@@ -65,8 +65,8 @@ describe('PasswordAuthenticator', () => {
     })
 
     it('should throw a 400 error if no password was provided', done => {
-      let options = { username: 'alice', password: null }
-      let pwAuth = new PasswordAuthenticator(options)
+      const options = { username: 'alice', password: null }
+      const pwAuth = new PasswordAuthenticator(options)
 
       try {
         pwAuth.validate()
@@ -80,12 +80,12 @@ describe('PasswordAuthenticator', () => {
 
   describe('findValidUser()', () => {
     it('should throw a 400 if no valid user is found in the user store', done => {
-      let options = {
+      const options = {
         username: 'alice',
         password: '1234',
         accountManager
       }
-      let pwAuth = new PasswordAuthenticator(options)
+      const pwAuth = new PasswordAuthenticator(options)
 
       pwAuth.userStore = {
         findUser: () => { return Promise.resolve(false) }
@@ -100,12 +100,12 @@ describe('PasswordAuthenticator', () => {
     })
 
     it('should throw a 400 if user is found but password does not match', done => {
-      let options = {
+      const options = {
         username: 'alice',
         password: '1234',
         accountManager
       }
-      let pwAuth = new PasswordAuthenticator(options)
+      const pwAuth = new PasswordAuthenticator(options)
 
       pwAuth.userStore = {
         findUser: () => { return Promise.resolve(true) },
@@ -121,14 +121,14 @@ describe('PasswordAuthenticator', () => {
     })
 
     it('should return a valid user if one is found and password matches', () => {
-      let webId = 'https://alice.example.com/#me'
-      let validUser = { username: 'alice', webId }
-      let options = {
+      const webId = 'https://alice.example.com/#me'
+      const validUser = { username: 'alice', webId }
+      const options = {
         username: 'alice',
         password: '1234',
         accountManager
       }
-      let pwAuth = new PasswordAuthenticator(options)
+      const pwAuth = new PasswordAuthenticator(options)
 
       pwAuth.userStore = {
         findUser: () => { return Promise.resolve(validUser) },
@@ -148,22 +148,22 @@ describe('PasswordAuthenticator', () => {
       })
       const accountManager = AccountManager.from(testAccountManagerOptions(host))
 
-      let aliceRecord = { webId: 'https://alice.example.com/profile/card#me' }
-      let mockUserCredentialStore = {
+      const aliceRecord = { webId: 'https://alice.example.com/profile/card#me' }
+      const mockUserCredentialStore = {
         findUser: sinon.stub().resolves(aliceRecord),
         matchPassword: (user, password) => { return Promise.resolve(user) }
       }
 
       it('should load user from store if provided with username', () => {
-        let options = {
+        const options = {
           username: 'alice',
           password: '1234',
           userStore: mockUserCredentialStore,
           accountManager
         }
-        let pwAuth = new PasswordAuthenticator(options)
+        const pwAuth = new PasswordAuthenticator(options)
 
-        let userStoreKey = 'alice.example.com/profile/card#me'
+        const userStoreKey = 'alice.example.com/profile/card#me'
 
         return pwAuth.findValidUser()
           .then(() => {
@@ -172,16 +172,16 @@ describe('PasswordAuthenticator', () => {
       })
 
       it('should load user from store if provided with WebID', () => {
-        let webId = 'https://alice.example.com/profile/card#me'
-        let options = {
+        const webId = 'https://alice.example.com/profile/card#me'
+        const options = {
           username: webId,
           password: '1234',
           userStore: mockUserCredentialStore,
           accountManager
         }
-        let pwAuth = new PasswordAuthenticator(options)
+        const pwAuth = new PasswordAuthenticator(options)
 
-        let userStoreKey = 'alice.example.com/profile/card#me'
+        const userStoreKey = 'alice.example.com/profile/card#me'
 
         return pwAuth.findValidUser()
           .then(() => {
@@ -197,17 +197,17 @@ describe('PasswordAuthenticator', () => {
       })
       const accountManager = AccountManager.from(testAccountManagerOptions(host))
 
-      let aliceRecord = { webId: 'https://localhost:8443/profile/card#me' }
-      let mockUserCredentialStore = {
+      const aliceRecord = { webId: 'https://localhost:8443/profile/card#me' }
+      const mockUserCredentialStore = {
         findUser: sinon.stub().resolves(aliceRecord),
         matchPassword: (user, password) => { return Promise.resolve(user) }
       }
 
       it('should load user from store if provided with username', () => {
-        let options = { username: 'admin', password: '1234', userStore: mockUserCredentialStore, accountManager }
-        let pwAuth = new PasswordAuthenticator(options)
+        const options = { username: 'admin', password: '1234', userStore: mockUserCredentialStore, accountManager }
+        const pwAuth = new PasswordAuthenticator(options)
 
-        let userStoreKey = 'localhost:8443/profile/card#me'
+        const userStoreKey = 'localhost:8443/profile/card#me'
 
         return pwAuth.findValidUser()
           .then(() => {
@@ -216,11 +216,11 @@ describe('PasswordAuthenticator', () => {
       })
 
       it('should load user from store if provided with WebID', () => {
-        let webId = 'https://localhost:8443/profile/card#me'
-        let options = { username: webId, password: '1234', userStore: mockUserCredentialStore, accountManager }
-        let pwAuth = new PasswordAuthenticator(options)
+        const webId = 'https://localhost:8443/profile/card#me'
+        const options = { username: webId, password: '1234', userStore: mockUserCredentialStore, accountManager }
+        const pwAuth = new PasswordAuthenticator(options)
 
-        let userStoreKey = 'localhost:8443/profile/card#me'
+        const userStoreKey = 'localhost:8443/profile/card#me'
 
         return pwAuth.findValidUser()
           .then(() => {

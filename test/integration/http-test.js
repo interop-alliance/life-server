@@ -1,21 +1,23 @@
-var supertest = require('supertest')
-var fs = require('fs')
-var li = require('li')
-var ldnode = require('../../index')
-var rm = require('./../utils').rm
-var path = require('path')
+const supertest = require('supertest')
+const fs = require('fs')
+const li = require('li')
+const ldnode = require('../../index')
+const rm = require('./../utils').rm
+const path = require('path')
+const chai = require('chai')
+const { assert, expect } = chai
+chai.use(require('dirty-chai'))
 // const rdf = require('rdflib')
 
 const { ACL_SUFFIX, META_SUFFIX } = require('../../lib/defaults')
 
-var ldpServer = ldnode.createServer({
+const ldpServer = ldnode.createServer({
   live: true,
   root: path.join(__dirname, '../resources'),
   auth: 'oidc',
   webid: false
 })
-var server = supertest(ldpServer)
-var { assert, expect } = require('chai')
+const server = supertest(ldpServer)
 
 /**
  * Creates a new test basic container via an LDP POST
@@ -389,8 +391,8 @@ describe('HTTP APIs', function () {
   describe('PUT API', function () {
     var putRequestBody = fs.readFileSync(path.join(__dirname,
       '../resources/sampleContainer/put1.ttl'), {
-        'encoding': 'utf8'
-      })
+      encoding: 'utf8'
+    })
     it('should create new resource', function (done) {
       server.put('/put-resource-1.ttl')
         .send(putRequestBody)
@@ -409,7 +411,7 @@ describe('HTTP APIs', function () {
     describe('PUT and containers', () => {
       const containerMeta = fs.readFileSync(path.join(__dirname,
         '../resources/sampleContainer/post2.ttl'),
-        { 'encoding': 'utf8' })
+      { encoding: 'utf8' })
 
       after(() => {
         rm('/foo/')
@@ -419,7 +421,7 @@ describe('HTTP APIs', function () {
         return server.put('/foo/two/')
           .expect(201)
           .then(() => {
-            let stats = fs.statSync(path.join(__dirname, '../resources/foo/two/'))
+            const stats = fs.statSync(path.join(__dirname, '../resources/foo/two/'))
 
             assert(stats.isDirectory(), 'Cannot read container just created')
           })
@@ -431,7 +433,7 @@ describe('HTTP APIs', function () {
           .set('link', '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"')
           .expect(201)
           .then(() => {
-            let stats = fs.statSync(path.join(__dirname, '../resources/foo/three/'))
+            const stats = fs.statSync(path.join(__dirname, '../resources/foo/three/'))
 
             assert(stats.isDirectory(), 'Cannot read container just created')
           })
@@ -445,8 +447,8 @@ describe('HTTP APIs', function () {
           .send(containerMeta)
           .expect(201)
           .then(() => {
-            let metaFilePath = path.join(__dirname, '../resources/foo/four/' + META_SUFFIX)
-            let meta = fs.readFileSync(metaFilePath, 'utf8')
+            const metaFilePath = path.join(__dirname, '../resources/foo/four/' + META_SUFFIX)
+            const meta = fs.readFileSync(metaFilePath, 'utf8')
 
             assert.equal(meta, containerMeta)
           })
@@ -454,7 +456,7 @@ describe('HTTP APIs', function () {
 
       // TODO: Revisit this once this gets standardized
       it.skip('should update existing container .meta', () => {
-        let newMeta = '<> dcterms:title "Home loans".'
+        const newMeta = '<> dcterms:title "Home loans".'
 
         return server.put('/foo/five/')
           .set('content-type', 'text/turtle')
@@ -467,8 +469,8 @@ describe('HTTP APIs', function () {
               .expect(204)
           })
           .then(() => {
-            let metaFilePath = path.join(__dirname, '../resources/foo/five/' + META_SUFFIX)
-            let meta = fs.readFileSync(metaFilePath, 'utf8')
+            const metaFilePath = path.join(__dirname, '../resources/foo/five/' + META_SUFFIX)
+            const meta = fs.readFileSync(metaFilePath, 'utf8')
 
             assert.equal(meta, newMeta)
           })
@@ -532,12 +534,12 @@ describe('HTTP APIs', function () {
 
     var postRequest1Body = fs.readFileSync(path.join(__dirname,
       '../resources/sampleContainer/put1.ttl'), {
-        'encoding': 'utf8'
-      })
+      encoding: 'utf8'
+    })
     var postRequest2Body = fs.readFileSync(path.join(__dirname,
       '../resources/sampleContainer/post2.ttl'), {
-        'encoding': 'utf8'
-      })
+      encoding: 'utf8'
+    })
     it('should create new resource', function (done) {
       server.post('/post-tests/')
         .send(postRequest1Body)
@@ -619,8 +621,8 @@ describe('HTTP APIs', function () {
     })
 
     it('should create a container with a name hex decoded from the slug', (done) => {
-      let containerName = 'Film%4011'
-      let expectedDirName = '/post-tests/Film@11/'
+      const containerName = 'Film%4011'
+      const expectedDirName = '/post-tests/Film@11/'
       server.post('/post-tests/')
         .set('slug', containerName)
         .set('content-type', 'text/turtle')
@@ -631,7 +633,7 @@ describe('HTTP APIs', function () {
           try {
             assert(res.headers.location.endsWith(expectedDirName),
               'Uri container names should be encoded')
-            let createdDir = fs.statSync(path.join(__dirname, '../resources', expectedDirName))
+            const createdDir = fs.statSync(path.join(__dirname, '../resources', expectedDirName))
             assert(createdDir.isDirectory(), 'Container should have been created')
           } catch (err) {
             return done(err)
@@ -652,8 +654,8 @@ describe('HTTP APIs', function () {
         let response
         before(() =>
           server.post('/post-tests/')
-                .set('content-type', 'text/turtle; charset=utf-8')
-                .then(res => { response = res })
+            .set('content-type', 'text/turtle; charset=utf-8')
+            .then(res => { response = res })
         )
 
         it('is assigned an URL with the .ttl extension', () => {
@@ -666,13 +668,13 @@ describe('HTTP APIs', function () {
         let response
         before(() =>
           server.post('/post-tests/')
-                .set('slug', 'slug1')
-                .set('content-type', 'text/turtle; charset=utf-8')
-                .then(res => { response = res })
+            .set('slug', 'slug1')
+            .set('content-type', 'text/turtle; charset=utf-8')
+            .then(res => { response = res })
         )
 
         it('is assigned an URL with the .ttl extension', () => {
-          expect(response.headers['location'].endsWith('/post-tests/slug1.ttl')).to.be.true
+          expect(response.headers.location.endsWith('/post-tests/slug1.ttl')).to.be.true()
         })
       })
 
@@ -680,8 +682,8 @@ describe('HTTP APIs', function () {
         let response
         before(() =>
           server.post('/post-tests/')
-                .set('content-type', 'text/html; charset=utf-8')
-                .then(res => { response = res })
+            .set('content-type', 'text/html; charset=utf-8')
+            .then(res => { response = res })
         )
 
         it('is assigned an URL with the .html extension', () => {
@@ -694,22 +696,22 @@ describe('HTTP APIs', function () {
         let response
         before(() =>
           server.post('/post-tests/')
-                .set('slug', 'slug2')
-                .set('content-type', 'text/html; charset=utf-8')
-                .then(res => { response = res })
+            .set('slug', 'slug2')
+            .set('content-type', 'text/html; charset=utf-8')
+            .then(res => { response = res })
         )
 
         it('is assigned an URL with the .html extension', () => {
-          expect(response.headers['location'].endsWith('/post-tests/slug2.html'))
-            .to.be.true
+          expect(response.headers.location.endsWith('/post-tests/slug2.html'))
+            .to.be.true()
         })
       })
     })
 
     // No, URLs are NOT ex-encoded to make filenames -- the other way around.
     it.skip('should create a container with a url name', (done) => {
-      let containerName = 'https://example.com/page'
-      let expectedDirName = '/post-tests/https%3A%2F%2Fexample.com%2Fpage/'
+      const containerName = 'https://example.com/page'
+      const expectedDirName = '/post-tests/https%3A%2F%2Fexample.com%2Fpage/'
       server.post('/post-tests/')
         .set('slug', containerName)
         .set('content-type', 'text/turtle')
@@ -720,7 +722,7 @@ describe('HTTP APIs', function () {
           try {
             assert.equal(res.headers.location, expectedDirName,
               'Uri container names should be encoded')
-            let createdDir = fs.statSync(path.join(__dirname, 'resources', expectedDirName))
+            const createdDir = fs.statSync(path.join(__dirname, 'resources', expectedDirName))
             assert(createdDir.isDirectory(), 'Container should have been created')
           } catch (err) {
             return done(err)
@@ -730,7 +732,7 @@ describe('HTTP APIs', function () {
     })
 
     it.skip('should be able to access new url-named container', (done) => {
-      let containerUrl = '/post-tests/https%3A%2F%2Fexample.com%2Fpage/'
+      const containerUrl = '/post-tests/https%3A%2F%2Fexample.com%2Fpage/'
       server.get(containerUrl)
         .expect('content-type', /text\/turtle/)
         .expect(200, done)

@@ -11,9 +11,9 @@ describe('AccountManager (OIDC account creation tests)', function () {
   var serverUri = 'https://localhost:3457'
   var host = 'localhost:3457'
   var ldpHttpsServer
-  let rootPath = path.join(__dirname, '../resources/accounts/')
-  let configPath = path.join(__dirname, '../resources/config')
-  let dbPath = path.join(__dirname, '../resources/accounts/db')
+  const rootPath = path.join(__dirname, '../resources/accounts/')
+  const configPath = path.join(__dirname, '../resources/config')
+  const dbPath = path.join(__dirname, '../resources/accounts/db')
 
   var ldp = ldnode.createServer({
     root: rootPath,
@@ -77,14 +77,14 @@ describe('AccountManager (OIDC account creation tests)', function () {
     })
 
     it('should not create WebID if no username is given', (done) => {
-      let subdomain = supertest('https://nicola.' + host)
+      const subdomain = supertest('https://nicola.' + host)
       subdomain.post('/api/accounts/new')
         .send('username=&password=12345')
         .expect(400, done)
     })
 
     it('should not create WebID if no password is given', (done) => {
-      let subdomain = supertest('https://nicola.' + host)
+      const subdomain = supertest('https://nicola.' + host)
       subdomain.post('/api/accounts/new')
         .send('username=nicola&password=')
         .expect(400, done)
@@ -119,14 +119,14 @@ describe('AccountManager (OIDC account creation tests)', function () {
           }
           var domain = host.split(':')[0]
           var card = read(path.join('accounts/nicola.' + domain,
-           'profile/card'))
+            'profile/card'))
           var cardAcl = read(path.join('accounts/nicola.' + domain,
-           'profile/card.acl'))
+            'profile/card.acl'))
           var prefs = read(path.join('accounts/nicola.' + domain,
-           'settings/prefs.ttl'))
+            'settings/prefs.ttl'))
           var rootMeta = read(path.join('accounts/nicola.' + domain, '.meta'))
           var rootMetaAcl = read(path.join('accounts/nicola.' + domain,
-           '.meta.acl'))
+            '.meta.acl'))
 
           if (domain && card && cardAcl && prefs && rootMeta &&
              rootMetaAcl) {

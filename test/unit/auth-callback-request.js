@@ -76,7 +76,7 @@ describe('AuthCallbackRequest', () => {
         session,
         app: { locals: { oidc: oidcManager, host } },
         params: {
-          'issuer_id': encodeURIComponent(host.serverUri)
+          issuer_id: encodeURIComponent(host.serverUri)
         }
       }
       const res = HttpMocks.createResponse()

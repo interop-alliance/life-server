@@ -10,7 +10,7 @@ const LogoutRequest = require('../../lib/authentication/handlers/logout-request'
 
 describe('LogoutRequest', () => {
   it('should clear user session properties', () => {
-    let req = {
+    const req = {
       session: {
         userId: 'https://alice.example.com/#me',
         accessToken: {},
@@ -18,18 +18,18 @@ describe('LogoutRequest', () => {
         subject: {}
       }
     }
-    let res = HttpMocks.createResponse()
+    const res = HttpMocks.createResponse()
 
     return LogoutRequest.handle(req, res)
       .then(() => {
-        let session = req.session
+        const session = req.session
         expect(session.userId).to.be.empty()
       })
   })
 
   it('should redirect to /goodbye', () => {
-    let req = { session: {} }
-    let res = HttpMocks.createResponse()
+    const req = { session: {} }
+    const res = HttpMocks.createResponse()
 
     return LogoutRequest.handle(req, res)
       .then(() => {

@@ -46,7 +46,7 @@ function cp (src, dest) {
 
 function read (file) {
   return fs.readFileSync(path.join(__dirname, '/resources/' + file), {
-    'encoding': 'utf8'
+    encoding: 'utf8'
   })
 }
 
@@ -74,9 +74,9 @@ async function checkDnsSettings () {
       })
     })
   }))
-  .catch(() => {
-    throw new Error(`Expected HOSTS entries of 127.0.0.1 for ${TEST_HOSTS.join()}`)
-  })
+    .catch(() => {
+      throw new Error(`Expected HOSTS entries of 127.0.0.1 for ${TEST_HOSTS.join()}`)
+    })
 }
 
 /**
