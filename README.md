@@ -65,8 +65,11 @@ This phase focuses on general cleanup and refactoring from the source
     process).
 * [x] Replace logging layer (currently a mix of `console` and `debug`) with a
     dedicated logger like Bunyan or Pino.
+* [x] Shorten the WebID Profile URL template for new accounts from
+    `/profile/card#me` to `/web#id`
 * [ ] Simplify the new account templating system
-* [ ] Update `commander` and `node-mailer` to latest versions
+* [ ] Update `node-mailer` package to latest version
+* [ ] Update `inquirer` to package latest version
 
 #### Roadmap Phase Two
 
