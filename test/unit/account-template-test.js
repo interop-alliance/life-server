@@ -32,7 +32,7 @@ describe('AccountTemplate', () => {
     })
 
     it('should recognize reserved files with no extensions as templates', () => {
-      expect(template.isTemplate('./card')).to.be.true()
+      expect(template.isTemplate('./web')).to.be.true()
     })
 
     it('should recognize arbitrary binary files as non-templates', () => {
@@ -45,7 +45,7 @@ describe('AccountTemplate', () => {
     it('should init', () => {
       const userOptions = {
         username: 'alice',
-        webId: 'https://alice.example.com/profile/card#me',
+        webId: 'https://alice.example.com/web#id',
         name: 'Alice Q.',
         email: 'alice@example.com'
       }
@@ -54,7 +54,7 @@ describe('AccountTemplate', () => {
       const substitutions = AccountTemplate.templateSubstitutionsFor(userAccount)
       expect(substitutions.name).to.equal('Alice Q.')
       expect(substitutions.email).to.equal('alice@example.com')
-      expect(substitutions.webId).to.equal('https://alice.example.com/profile/card#me')
+      expect(substitutions.webId).to.equal('https://alice.example.com/web#id')
     })
   })
 })

@@ -31,7 +31,7 @@ describe('Authentication API (OIDC)', () => {
   let alice, bob
 
   const aliceServerUri = 'https://localhost:7000'
-  const aliceWebId = 'https://localhost:7000/profile/card#me'
+  const aliceWebId = 'https://localhost:7000/web#id'
   const configPath = path.join(__dirname, '../resources/config')
   const aliceDbPath = path.join(__dirname,
     '../resources/accounts-scenario/alice/db')

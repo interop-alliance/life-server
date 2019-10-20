@@ -3,5 +3,5 @@
 <#Owner> a acl:Authorization;
   acl:accessTo </>;
   acl:default </>;
-  acl:agent <https://tim.localhost:7777/profile/card#me>;
+  acl:agent <https://tim.localhost:7777/web#id>;
   acl:mode acl:Read, acl:Write, acl:Control.

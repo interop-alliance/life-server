@@ -14,18 +14,18 @@ const dbPath = path.join(rootPath, 'db')
 const oidcProviderPath = path.join(dbPath, 'oidc', 'op', 'provider.json')
 const configPath = path.join(rootPath, 'config')
 
-const user1 = 'https://tim.localhost:7777/profile/card#me'
+const user1 = 'https://tim.localhost:7777/web#id'
 const timAccountUri = 'https://tim.localhost:7777'
-const user2 = 'https://nicola.localhost:7777/profile/card#me'
+const user2 = 'https://nicola.localhost:7777/web#id'
 
 let oidcProvider
 
 // To be initialized in the before() block
 const userCredentials = {
   // idp: https://localhost:7777
-  // web id: https://tim.localhost:7777/profile/card#me
+  // web id: https://tim.localhost:7777/web#id
   user1: '',
-  // web id: https://nicola.localhost:7777/profile/card#me
+  // web id: https://nicola.localhost:7777/web#id
   user2: ''
 }
 

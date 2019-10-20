@@ -3,7 +3,7 @@
 <#owner>
     a acl:Authorization;
 
-    acl:agent <https://localhost:3457/profile/card#me> ;
+    acl:agent <https://localhost:3457/web#id> ;
 
     # Set the access to the root storage folder itself
     acl:accessTo </>;
