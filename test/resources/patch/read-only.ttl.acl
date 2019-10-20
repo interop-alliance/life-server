@@ -2,5 +2,5 @@
 
 <#Owner> a acl:Authorization;
   acl:accessTo <./read-only.ttl>;
-  acl:agent <https://tim.localhost:7777/profile/card#me>;
+  acl:agent <https://tim.localhost:7777/web#id>;
   acl:mode acl:Read.

@@ -31,10 +31,10 @@ describe('UserAccount', () => {
     })
 
     it('should return the WebID uri minus the protocol and slashes', () => {
-      const webId = 'https://alice.example.com/profile/card#me'
+      const webId = 'https://alice.example.com/web#id'
       const account = new UserAccount({ webId })
 
-      expect(account.id).to.equal('alice.example.com/profile/card#me')
+      expect(account.id).to.equal('alice.example.com/web#id')
     })
   })
 })

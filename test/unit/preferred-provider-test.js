@@ -19,7 +19,7 @@ describe('preferred-provider.js', () => {
   })
 
   describe('discoverProviderFor()', () => {
-    const webId = 'https://example.com/#me'
+    const webId = 'https://example.com/#id'
 
     it('should extract and validate the provider uri from link rel header', () => {
       nock(serverUri)
@@ -77,7 +77,7 @@ describe('preferred-provider.js', () => {
 
       provider.discoverProviderFor(webId)
         .catch(err => {
-          expect(err.message).to.match(/OIDC issuer not advertised for https:\/\/example.com\/#me/)
+          expect(err.message).to.match(/OIDC issuer not advertised for https:\/\/example.com\/#id/)
           done()
         })
     })
@@ -94,7 +94,7 @@ describe('preferred-provider.js', () => {
         error = thrownError
         expect(error.statusCode).to.equal(400)
         expect(error.message)
-          .to.equal('Could not reach Web ID https://example.com/#me to discover provider')
+          .to.equal('Could not reach Web ID https://example.com/#id to discover provider')
       }
       expect(error).to.exist()
     })
@@ -142,7 +142,7 @@ describe('preferred-provider.js', () => {
         .head('/.well-known/openid-configuration')
         .reply(200)
 
-      const webId = 'https://example.com/profile#me'
+      const webId = 'https://example.com/profile#id'
 
       return provider.preferredProviderFor(webId)
         .then(providerUri => {
@@ -161,7 +161,7 @@ describe('preferred-provider.js', () => {
           Link: '<https://provider.com>; rel="http://openid.net/specs/connect/1.0/issuer"'
         })
 
-      const webId = 'https://example.com/profile#me'
+      const webId = 'https://example.com/profile#id'
 
       return provider.preferredProviderFor(webId)
         .then(providerUri => {

@@ -84,7 +84,7 @@ describe('AccountManager', () => {
       const options = testAccountManagerOptions(host)
       const mgr = AccountManager.from(options)
       const webId = mgr.accountWebIdFor('alice')
-      expect(webId).to.equal('https://alice.localhost/profile/card#me')
+      expect(webId).to.equal('https://alice.localhost/web#id')
     })
 
     it('should compose a web id uri for an account in single user mode', () => {
@@ -95,7 +95,7 @@ describe('AccountManager', () => {
       const options = testAccountManagerOptions(host)
       const mgr = AccountManager.from(options)
       const webId = mgr.accountWebIdFor('alice')
-      expect(webId).to.equal('https://localhost/profile/card#me')
+      expect(webId).to.equal('https://localhost/web#id')
     })
   })
 
@@ -135,7 +135,7 @@ describe('AccountManager', () => {
         expect(newAccount.username).to.equal('user1')
         expect(newAccount.webId).to.equal('https://alice.external.com/profile#me')
         expect(newAccount.externalWebId).to.equal('https://alice.external.com/profile#me')
-        expect(newAccount.localAccountId).to.equal('user1.example.com/profile/card#me')
+        expect(newAccount.localAccountId).to.equal('user1.example.com/web#id')
       })
 
       it('should use the external web id as username if no username given', () => {

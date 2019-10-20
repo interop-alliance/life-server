@@ -64,7 +64,7 @@ describe('Account Creation Welcome Email', () => {
       const newUser = accountManager.userAccountFrom(userData)
 
       const expectedEmailData = {
-        webid: 'https://alice.example.com/profile/card#me',
+        webid: 'https://alice.example.com/web#id',
         to: 'alice@alice.com',
         name: 'Alice'
       }

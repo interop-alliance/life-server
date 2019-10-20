@@ -19,7 +19,7 @@ const serverOptions = {
   webid: true,
   sslKey: path.join(__dirname, '../keys/key.pem'),
   sslCert: path.join(__dirname, '../keys/cert.pem'),
-  forceUser: `${serverUri}/profile/card#me`
+  forceUser: `${serverUri}/web#id`
 }
 
 describe('PATCH', () => {

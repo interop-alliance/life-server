@@ -4,7 +4,7 @@
  <http://www.w3.org/ns/auth/acl#accessTo> <./private-for-alice.txt>;
 
  # Alice web id
- <http://www.w3.org/ns/auth/acl#agent> <https://localhost:7000/profile/card#me>;
+ <http://www.w3.org/ns/auth/acl#agent> <https://localhost:7000/web#id>;
 
  <http://www.w3.org/ns/auth/acl#mode>
    <http://www.w3.org/ns/auth/acl#Read>,

@@ -144,7 +144,7 @@ describe('UserCredentialStore', () => {
       const user = {
         id: 'example.com/profile#me',
         externalWebId: 'https://example.com/profile#me',
-        localAccountId: 'alice.solidtest.space/profile/card#me'
+        localAccountId: 'alice.solidtest.space/web#id'
       }
       const password = '12345'
 
@@ -173,7 +173,7 @@ describe('UserCredentialStore', () => {
     })
 
     it('should look up user record by normalized user id', () => {
-      const userId = 'alice.solidtest.space/profile/card#me'
+      const userId = 'alice.solidtest.space/web#id'
       const user = {}
 
       store.backend.get = sinon.stub().resolves(user)
@@ -183,13 +183,13 @@ describe('UserCredentialStore', () => {
           expect(fetchedUser).to.equal(user)
 
           expect(store.backend.get).to.have.been
-            .calledWith('users', 'alice.solidtest.space%2Fprofile%2Fcard%23me')
+            .calledWith('users', 'alice.solidtest.space%2Fweb%23id')
         })
     })
 
     it('should look up user record via an alias record', () => {
-      const aliasId = 'alice.solidtest.space/profile/card#me'
-      const aliasKey = 'alice.solidtest.space%2Fprofile%2Fcard%23me'
+      const aliasId = 'alice.solidtest.space/web#id'
+      const aliasKey = 'alice.solidtest.space%2Fweb%23id'
       const aliasRecord = { link: 'example.com/profile#me' }
 
       const userRecord = { name: 'Alice' }
@@ -217,7 +217,7 @@ describe('UserCredentialStore', () => {
     })
 
     it('should call backend.del with normalized user id and email', () => {
-      const userId = 'alice.solidtest.space/profile/card#me'
+      const userId = 'alice.solidtest.space/web#id'
       const email = 'alice@example.com'
 
       store.backend.del = sinon.stub()
@@ -230,7 +230,7 @@ describe('UserCredentialStore', () => {
     })
 
     it('should call backend.del with normalized user id but no email', () => {
-      const userId = 'alice.solidtest.space/profile/card#me'
+      const userId = 'alice.solidtest.space/web#id'
 
       store.backend.del = sinon.stub()
 

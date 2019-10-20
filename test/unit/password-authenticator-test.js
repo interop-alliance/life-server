@@ -148,7 +148,7 @@ describe('PasswordAuthenticator', () => {
       })
       const accountManager = AccountManager.from(testAccountManagerOptions(host))
 
-      const aliceRecord = { webId: 'https://alice.example.com/profile/card#me' }
+      const aliceRecord = { webId: 'https://alice.example.com/web#id' }
       const mockUserCredentialStore = {
         findUser: sinon.stub().resolves(aliceRecord),
         matchPassword: (user, password) => { return Promise.resolve(user) }
@@ -163,7 +163,7 @@ describe('PasswordAuthenticator', () => {
         }
         const pwAuth = new PasswordAuthenticator(options)
 
-        const userStoreKey = 'alice.example.com/profile/card#me'
+        const userStoreKey = 'alice.example.com/web#id'
 
         return pwAuth.findValidUser()
           .then(() => {
@@ -172,7 +172,7 @@ describe('PasswordAuthenticator', () => {
       })
 
       it('should load user from store if provided with WebID', () => {
-        const webId = 'https://alice.example.com/profile/card#me'
+        const webId = 'https://alice.example.com/web#id'
         const options = {
           username: webId,
           password: '1234',
@@ -181,7 +181,7 @@ describe('PasswordAuthenticator', () => {
         }
         const pwAuth = new PasswordAuthenticator(options)
 
-        const userStoreKey = 'alice.example.com/profile/card#me'
+        const userStoreKey = 'alice.example.com/web#id'
 
         return pwAuth.findValidUser()
           .then(() => {
@@ -197,7 +197,7 @@ describe('PasswordAuthenticator', () => {
       })
       const accountManager = AccountManager.from(testAccountManagerOptions(host))
 
-      const aliceRecord = { webId: 'https://localhost:8443/profile/card#me' }
+      const aliceRecord = { webId: 'https://localhost:8443/web#id' }
       const mockUserCredentialStore = {
         findUser: sinon.stub().resolves(aliceRecord),
         matchPassword: (user, password) => { return Promise.resolve(user) }
@@ -207,7 +207,7 @@ describe('PasswordAuthenticator', () => {
         const options = { username: 'admin', password: '1234', userStore: mockUserCredentialStore, accountManager }
         const pwAuth = new PasswordAuthenticator(options)
 
-        const userStoreKey = 'localhost:8443/profile/card#me'
+        const userStoreKey = 'localhost:8443/web#id'
 
         return pwAuth.findValidUser()
           .then(() => {
@@ -216,11 +216,11 @@ describe('PasswordAuthenticator', () => {
       })
 
       it('should load user from store if provided with WebID', () => {
-        const webId = 'https://localhost:8443/profile/card#me'
+        const webId = 'https://localhost:8443/web#id'
         const options = { username: webId, password: '1234', userStore: mockUserCredentialStore, accountManager }
         const pwAuth = new PasswordAuthenticator(options)
 
-        const userStoreKey = 'localhost:8443/profile/card#me'
+        const userStoreKey = 'localhost:8443/web#id'
 
         return pwAuth.findValidUser()
           .then(() => {

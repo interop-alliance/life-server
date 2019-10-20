@@ -7,9 +7,9 @@ module.exports = `
 
 <>
     a foaf:PersonalProfileDocument ;
-    foaf:primaryTopic <#me> .
+    foaf:primaryTopic <#id> .
 
-<#me>
+<#id>
     a schema:Person ;
 
     solid:account </> ;  # link to the account uri

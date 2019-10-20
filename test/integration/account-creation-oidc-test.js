@@ -119,9 +119,9 @@ describe('AccountManager (OIDC account creation tests)', function () {
           }
           var domain = host.split(':')[0]
           var card = read(path.join('accounts/nicola.' + domain,
-            'profile/card'))
+            'web'))
           var cardAcl = read(path.join('accounts/nicola.' + domain,
-            'profile/card.acl'))
+            'web.acl'))
           var prefs = read(path.join('accounts/nicola.' + domain,
             'settings/prefs.ttl'))
           var rootMeta = read(path.join('accounts/nicola.' + domain, '.meta'))

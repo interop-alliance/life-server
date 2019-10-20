@@ -43,7 +43,7 @@ describe('AccountTemplate', () => {
         templatePath, accountUrl: 'https://example.com'
       })
 
-      const profile = fs.readFileSync(path.join(accountPath, '/profile/card'), 'utf8')
+      const profile = fs.readFileSync(path.join(accountPath, '/web'), 'utf8')
       expect(profile).to.include('"Alice Q."')
 
       const rootAcl = fs.readFileSync(path.join(accountPath, '.acl'), 'utf8')

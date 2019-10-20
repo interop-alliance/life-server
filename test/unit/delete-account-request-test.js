@@ -172,7 +172,7 @@ describe('DeleteAccountRequest', () => {
 
       return request.loadUser()
         .then(account => {
-          expect(account.webId).to.equal('https://alice.example.com/profile/card#me')
+          expect(account.webId).to.equal('https://alice.example.com/web#id')
         })
     })
 

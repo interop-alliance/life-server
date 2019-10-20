@@ -4,7 +4,7 @@
     a acl:Authorization;
 
     acl:agent
-        <https://tim.localhost:7777/profile/card#me>;
+        <https://tim.localhost:7777/web#id>;
     acl:accessTo <./>;
     acl:mode
         acl:Read, acl:Write, acl:Control;
