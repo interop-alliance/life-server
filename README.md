@@ -54,7 +54,7 @@ This phase focuses on general cleanup and refactoring from the source
     realtime updates via WebSockets, WebID-TLS local authentication, CORS proxy
     and authentication proxy, storage quotas).
 * [x] Refactor the LDP interface to more closely match the [proposed Solid 
-    architecture](https://github.com/solid/solid-architecture/blob/master/server/request-flow.md), 
+    architecture](https://github.com/solid/solid-architecture/blob/master/server/request-flow.md),
     and to support modular/pluggable storage backends
     beyond the existing File System based one (such as an in-memory store, graph 
     stores and others).
