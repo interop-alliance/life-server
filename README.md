@@ -1,5 +1,8 @@
 # Life Server _(life-server)_
 
+[![Build Status](https://travis-ci.org/interop-alliance/life-server.svg?branch=master&style=flat-square)](https://travis-ci.org/interop-alliance/life-server)
+[![NPM Version](https://img.shields.io/npm/v/life-server.svg?style=flat-square)](https://npm.im/life-server)
+
 > A decentralized personal data server inspired by Solid
 
 ## Table of Contents
