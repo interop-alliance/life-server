@@ -1,5 +1,40 @@
 # History
 
+## rc6.0.0
+
+- Extensive refactoring and paring down of features. Rearranged project
+    directory structure.
+- Simplify architecture, remove a number of non-core components (globbing,
+    realtime updates via WebSockets, WebID-TLS local authentication, CORS proxy
+    and authentication proxy, storage quotas).
+- Refactor the LDP interface to more closely match the [proposed Solid 
+    architecture](https://github.com/solid/solid-architecture/blob/master/server/request-flow.md),
+    and to support modular/pluggable storage backends beyond the existing File 
+    System based one (such as an in-memory store, graph stores and others).
+- Bring some external authn-related dependencies (such as the 
+    [`oidc-auth-manager`](https://github.com/solid/oidc-auth-manager) and the 
+    [`solid-multi-rp-client`](https://github.com/solid/solid-multi-rp-client))
+    libs into this repository (to make for a faster release and refactoring
+    process).
+- Replace logging layer (previously a mix of `console` and `debug`) with a
+    dedicated logger (Pino).
+- Update most dependencies to latest
+- Shorten the WebID Profile URL template for new accounts from
+  `/profile/card#me` to `/web#id`
+- Refactor ACL system to use a new version of `interop-alliance/solid-permissions`
+- Update non-test code to use ES7 `async`/`await` syntax.
+- Update style to Standard.js v14
+
+### Upgrading from `node-solid-server` 4.x or 5.x
+
+Not supported. This is a major refactoring, many breaking changes.
+
+## 5.0.0 - Sort of
+
+- Forked from `solid/node-solid-server` and into `interop-alliance/life-server`
+    starting with NSS v4.0.14
+- Pulled in some things from NSS 5.0 (like the Delete Account feature)
+
 ## 4.0.0
 - OIDC is now supported as authentication method in addition to WebID-TLS.
 - Both Node.js 6 and 8 are now supported.
