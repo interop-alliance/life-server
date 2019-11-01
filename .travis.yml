@@ -2,15 +2,9 @@ sudo: false
 language: node_js
 node_js:
   - "10"
-env:
-  - CXX=g++-4.8
+  - "12"
 
 addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - g++-4.8
   hosts:
     - nic.localhost
     - tim.localhost
@@ -23,8 +17,3 @@ script:
   - npm run standard
   - npm run validate
   - npm run nyc
-
-cache:
-  apt: true
-  directories:
-    - node_modules
