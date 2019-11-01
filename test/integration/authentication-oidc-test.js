@@ -3,7 +3,6 @@ const path = require('path')
 const fs = require('fs-extra')
 const { UserCredentialStore } = require('../../lib/authentication/user-credential-store')
 const UserAccount = require('../../lib/account-mgmt/user-account')
-// const SolidAuthOIDC = require('@solid/solid-auth-oidc')
 const { OIDCWebClient } = require('oidc-web')
 
 const fetch = require('node-fetch')
