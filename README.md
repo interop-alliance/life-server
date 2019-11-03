@@ -55,7 +55,7 @@ This phase focuses on general cleanup and refactoring from the source
     and permission management, etc) will be performed on the server side.)
 * [x] Simplify architecture, remove a number of non-core components (globbing,
     realtime updates via WebSockets, WebID-TLS local authentication, CORS proxy
-    and authentication proxy, storage quotas).
+    and authentication proxy, storage quotas, external WebIDs).
 * [x] Refactor the LDP interface to more closely match the [proposed Solid 
     architecture](https://github.com/solid/solid-architecture/blob/master/server/request-flow.md),
     and to support modular/pluggable storage backends

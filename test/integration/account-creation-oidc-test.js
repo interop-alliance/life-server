@@ -97,12 +97,14 @@ describe('AccountManager (OIDC account creation tests)', function () {
         .expect(302)
         .end((err, res) => {
           if (err) {
+            console.log(res)
             return done(err)
           }
           subdomain.post('/api/accounts/new')
             .send('username=nicola&password=12345')
             .expect(400)
             .end((err) => {
+              console.log(err)
               done(err)
             })
         })
