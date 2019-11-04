@@ -22,10 +22,6 @@ describe('OidcManager', () => {
   })
 
   describe('fromServerConfig()', () => {
-    it('should error if no serverUri is provided in argv', () => {
-
-    })
-
     it('should result in an initialized oidc object', () => {
       const serverUri = 'https://localhost:8443'
       const host = SolidHost.from({ serverUri })
@@ -43,7 +39,7 @@ describe('OidcManager', () => {
       expect(oidc.rs.defaults.query).to.be.true()
       expect(oidc.clients.store.backend.path.endsWith('db/rp/clients'))
       expect(oidc.provider.issuer).to.equal(serverUri)
-      expect(oidc.users.backend.path.endsWith('db/users'))
+      expect(oidc.users.backend.backend.dir.endsWith('db/users'))
       expect(oidc.users.saltRounds).to.equal(saltRounds)
     })
   })
@@ -147,7 +143,7 @@ describe('OidcManager', () => {
       const oidc = OidcManager.from(config)
       oidc.initUserCredentialStore()
 
-      expect(oidc.users.backend.path.endsWith('oidc-mgr/users'))
+      expect(oidc.users.backend.backend.dir.endsWith('oidc-mgr/users'))
       expect(oidc.users.saltRounds).to.equal(config.saltRounds)
     })
   })

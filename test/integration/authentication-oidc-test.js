@@ -35,8 +35,11 @@ describe('Authentication API (OIDC)', () => {
   const aliceDbPath = path.join(__dirname,
     '../resources/accounts-scenario/alice/db')
   const userStorePath = path.join(aliceDbPath, 'oidc/users')
-  const aliceCredentialStore = UserCredentialStore.from({ path: userStorePath, saltRounds: 1 })
-  aliceCredentialStore.initCollections()
+  const aliceCredentialStore = UserCredentialStore.from({
+    backendType: 'files',
+    path: userStorePath,
+    saltRounds: 1
+  })
 
   const bobServerUri = 'https://localhost:7001'
   const bobDbPath = path.join(__dirname,
@@ -147,8 +150,6 @@ describe('Authentication API (OIDC)', () => {
     const alicePassword = '12345'
 
     beforeEach(() => {
-      aliceCredentialStore.initCollections()
-
       return aliceCredentialStore.createUser(aliceAccount, alicePassword)
         .catch(console.error.bind(console))
     })
@@ -160,7 +161,6 @@ describe('Authentication API (OIDC)', () => {
     describe('after performing a correct login', () => {
       let response, cookie
       before(done => {
-        aliceCredentialStore.initCollections()
         aliceCredentialStore.createUser(aliceAccount, alicePassword)
         alice.post('/login/password')
           .type('form')
@@ -339,8 +339,6 @@ describe('Authentication API (OIDC)', () => {
         popToken: true,
         redirect_uri: 'https://app.example.com/callback'
       }
-
-      aliceCredentialStore.initCollections()
 
       await aliceCredentialStore.createUser(aliceAccount, alicePassword)
 
