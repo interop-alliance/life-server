@@ -65,10 +65,12 @@ describe('AuthCallbackRequest', () => {
       const AuthCallbackRequest = require('../../lib/authentication/handlers/auth-callback-request')
 
       const requestUri = 'https://example.com/api/oidc/rp'
-      AuthCallbackRequest.fullUriFor = sinon.stub().returns(requestUri)
 
       const oidcManager = {}
-      const host = { serverUri: 'https://example.com' }
+      const host = {
+        serverUri: 'https://example.com',
+        parseTargetUrl: sinon.stub().returns(requestUri)
+      }
       const returnToUrl = 'https://example.com/resource#hash'
       const session = { returnToUrl }
 
