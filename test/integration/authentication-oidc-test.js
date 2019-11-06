@@ -51,6 +51,7 @@ describe('Authentication API (OIDC)', () => {
     auth: 'oidc',
     webid: true,
     multiuser: false,
+    skipWelcomePage: true,
     configPath
   }
 

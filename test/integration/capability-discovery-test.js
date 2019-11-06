@@ -19,6 +19,7 @@ describe('API', () => {
     auth: 'oidc',
     webid: true,
     multiuser: false,
+    skipWelcomePage: true,
     configPath
   }
 

@@ -19,6 +19,7 @@ describe('OIDC error handling', function () {
     auth: 'oidc',
     webid: true,
     multiuser: false,
+    skipWelcomePage: true,
     dbPath,
     serverUri
   })

@@ -70,7 +70,8 @@ This phase focuses on general cleanup and refactoring from the source
     dedicated logger like Bunyan or Pino.
 * [x] Shorten the WebID Profile URL template for new accounts from
     `/profile/card#me` to `/web#id`
-* [ ] Simplify the new account templating system
+* [x] Simplify the new account templating system (do not create template and
+    view copies for customizability)
 * [ ] Update `node-mailer` package to latest version
 * [ ] Update `inquirer` to package latest version
 

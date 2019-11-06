@@ -7,6 +7,7 @@ const serverOptions = {
   root: path.join(__dirname, '../resources/headers'),
   multiuser: false,
   webid: true,
+  skipWelcomePage: true,
   sslKey: path.join(__dirname, '../keys/key.pem'),
   sslCert: path.join(__dirname, '../keys/cert.pem'),
   forceUser: 'https://ruben.verborgh.org/profile/#me'
