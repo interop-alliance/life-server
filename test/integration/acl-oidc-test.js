@@ -49,9 +49,7 @@ const argv = {
   sslCert: path.join(__dirname, '../keys/cert.pem'),
   webid: true,
   multiuser: true,
-  auth: 'oidc',
-  strictOrigin: true,
-  host: { serverUri }
+  skipWelcomePage: true
 }
 
 describe('ACL with WebID+OIDC over HTTP', function () {

@@ -23,6 +23,7 @@ describe('AccountManager (OIDC account creation tests)', function () {
     auth: 'oidc',
     webid: true,
     multiuser: true,
+    skipWelcomePage: true,
     strictOrigin: true,
     dbPath,
     serverUri

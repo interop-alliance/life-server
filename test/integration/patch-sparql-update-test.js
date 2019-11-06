@@ -13,6 +13,7 @@ describe.skip('PATCH through application/sparql-update', function () {
   var ldp = ldnode({
     root: path.join(__dirname, '../resources/sampleContainer'),
     mount: '/test',
+    skipWelcomePage: true,
     webid: false
   })
   var server = supertest(ldp)

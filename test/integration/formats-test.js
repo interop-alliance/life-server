@@ -6,6 +6,7 @@ const assert = require('chai').assert
 describe('formats', function () {
   var ldp = ldnode.createServer({
     root: path.join(__dirname, '../resources'),
+    skipWelcomePage: true,
     webid: false
   })
 

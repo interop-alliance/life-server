@@ -16,6 +16,7 @@ const serverOptions = {
   configPath,
   serverUri,
   multiuser: false,
+  skipWelcomePage: true,
   webid: true,
   sslKey: path.join(__dirname, '../keys/key.pem'),
   sslCert: path.join(__dirname, '../keys/cert.pem'),

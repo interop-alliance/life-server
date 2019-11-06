@@ -12,9 +12,8 @@ chai.use(require('dirty-chai'))
 const { ACL_SUFFIX, META_SUFFIX } = require('../../lib/defaults')
 
 const ldpServer = ldnode.createServer({
-  live: true,
   root: path.join(__dirname, '../resources'),
-  auth: 'oidc',
+  skipWelcomePage: true,
   webid: false
 })
 const server = supertest(ldpServer)
