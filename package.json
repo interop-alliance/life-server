@@ -50,9 +50,9 @@
   "homepage": "https://github.com/interop-alliance/life-server",
   "bugs": "https://github.com/interop-alliance/life-server/issues",
   "dependencies": {
-    "@solid/oidc-op": "solid/oidc-op#remove-json-document",
+    "@solid/oidc-op": "^0.6.0",
     "@solid/oidc-rp": "solid/oidc-rp#remove-json-document",
-    "@solid/oidc-rs": "solid/oidc-rs#update-jose",
+    "@solid/oidc-rs": "^0.4.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "bootstrap": "^3.4.1",
