@@ -51,7 +51,7 @@
   "bugs": "https://github.com/interop-alliance/life-server/issues",
   "dependencies": {
     "@solid/oidc-op": "^0.6.0",
-    "@solid/oidc-rp": "^0.10.0",
+    "@interop-alliance/oidc-rp": "^0.11.0",
     "@solid/oidc-rs": "^0.4.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
@@ -98,7 +98,7 @@
     "nock": "^11.4.0",
     "node-mocks-http": "^1.8.0",
     "nyc": "^14.1.1",
-    "oidc-web": "interop-alliance/oidc-web#rc0.4.0",
+    "oidc-web": "^0.4.0",
     "sinon": "^7.5.0",
     "sinon-chai": "^3.3.0",
     "standard": "^14.3.1",
