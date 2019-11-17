@@ -7,7 +7,7 @@ chai.should()
 
 const { OIDCClientStore } = require('../../lib/authentication/client-store')
 const { MultiRpClient } = require('../../lib/authentication/multi-rp-client')
-const OIDCRelyingParty = require('@solid/oidc-rp')
+const OIDCRelyingParty = require('@interop-alliance/oidc-rp')
 
 const storeBasePath = '../resources/client-store/'
 const storeOptions = {
