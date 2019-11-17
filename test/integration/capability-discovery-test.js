@@ -37,12 +37,9 @@ describe('API', () => {
     })
   }
 
-  before(() => {
-    return Promise.all([
-      startServer(alicePod, 5000)
-    ]).then(() => {
-      alice = supertest(aliceServerUri)
-    })
+  before(async () => {
+    await startServer(alicePod, 5000)
+    alice = supertest(aliceServerUri)
   })
 
   after(() => {

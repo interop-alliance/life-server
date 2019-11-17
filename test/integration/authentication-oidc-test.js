@@ -23,6 +23,7 @@ const nock = require('nock')
 const chai = require('chai')
 const expect = chai.expect
 chai.use(require('dirty-chai'))
+chai.should()
 
 // In this test we always assume that we are Alice
 
