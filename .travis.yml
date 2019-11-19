@@ -1,8 +1,4 @@
 sudo: false
-language: node_js
-node_js:
-  - "10"
-  - "12"
 
 addons:
   hosts:
@@ -10,10 +6,34 @@ addons:
     - tim.localhost
     - nicola.localhost
 
-before_install:
-  - npm install -g npm@latest
-
-script:
-  - npm run standard
-  - npm run validate
-  - npm run nyc
+jobs:
+  include:
+  - services:
+    - docker
+    script:
+    - docker build -t life-server .
+    # Run for no more than 5s
+    - timeout 5s docker run life-server
+    - exit_code=$?
+    - echo "docker run exit_code=$exit_code"
+    - |
+      # timeout will have exit code 124.
+      # If docker run was successful or excited due to timeout, that's good.
+      # Otherwise there was an error and we should fail the build.
+      [ "$exit_code" == "0" ] || [ "$exit_code" == "124" ] || travis_terminate 1
+  - language: node_js
+    node_js: "10"
+    install: |
+      npm install -g npm@latest
+    script:
+    - npm run standard
+    - npm run validate
+    - npm run nyc
+  - language: node_js
+    node_js: "12"
+    install: |
+      npm install -g npm@latest
+    script:
+    - npm run standard
+    - npm run validate
+    - npm run nyc
