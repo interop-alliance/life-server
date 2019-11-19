@@ -12,15 +12,15 @@ jobs:
     - docker
     script:
     - docker build -t life-server .
-    # Run for no more than 5s
-    - timeout 5s docker run life-server
-    - exit_code=$?
-    - echo "docker run exit_code=$exit_code"
     - |
-      # timeout will have exit code 124.
+      # Run for no more than 5s
+      timeout --kill-after=1 5s docker run life-server
+      exit_code=$?
+      echo "docker run exit_code=$exit_code"
+      # timeout will have exit code 124 or 137 (-k flag)
       # If docker run was successful or excited due to timeout, that's good.
       # Otherwise there was an error and we should fail the build.
-      [ "$exit_code" == "0" ] || [ "$exit_code" == "124" ] || travis_terminate 1
+      [ "$exit_code" == "0" ] || [ "$exit_code" == "124" ] || [ "$exit_code" == "137" ] || travis_terminate 1
   - language: node_js
     node_js: "10"
     install: |
