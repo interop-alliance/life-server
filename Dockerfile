@@ -35,4 +35,4 @@ RUN openssl req \
     -out fullchain.pem
 
 EXPOSE 8443
-CMD npm run solid start
+CMD ["node", "./bin/solid", "start"]
