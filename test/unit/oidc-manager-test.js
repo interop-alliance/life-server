@@ -37,7 +37,7 @@ describe('OidcManager', () => {
       const oidc = OidcManager.fromServerConfig(argv)
 
       expect(oidc.rs.defaults.query).to.be.true()
-      expect(oidc.clients.store.backend.path.endsWith('db/rp/clients'))
+      expect(oidc.clients.store.backend.dir.endsWith('db/rp/clients'))
       expect(oidc.provider.issuer).to.equal(serverUri)
       expect(oidc.users.backend.backend.dir.endsWith('db/users'))
       expect(oidc.users.saltRounds).to.equal(saltRounds)
@@ -103,7 +103,7 @@ describe('OidcManager', () => {
       oidc.initMultiRpClient()
 
       const clientStore = oidc.clients
-      expect(clientStore.store.backend.path.endsWith('oidc-mgr/rp/clients'))
+      expect(clientStore.store.backend.dir.endsWith('oidc-mgr/rp/clients'))
       expect(clientStore).to.respondTo('registerClient')
     })
   })

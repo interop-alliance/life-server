@@ -42,7 +42,7 @@ describe('OidcManager (integration tests)', () => {
       const oidc = OidcManager.fromServerConfig(argv)
 
       expect(oidc.rs.defaults.query).to.be.true()
-      expect(oidc.clients.store.backend.path.endsWith('db/oidc/rp/clients'))
+      expect(oidc.clients.store.backend.dir.endsWith('db/oidc/rp/clients'))
       expect(oidc.provider.issuer).to.equal(serverUri)
       expect(oidc.users.saltRounds).to.equal(saltRounds)
     })

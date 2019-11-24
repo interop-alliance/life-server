@@ -47,7 +47,7 @@ describe('AuthCallbackRequest', () => {
   describe('AuthCallbackRequest.get', () => {
     it('should create a request instance', () => {
       const AuthCallbackRequest = require('../../lib/authentication/handlers/auth-callback-request')
-      const req = HttpMocks.createRequest({ session: {} })
+      const req = HttpMocks.createRequest({ session: {}, app: { locals: {} } })
       const next = () => {}
 
       sinon.spy(AuthCallbackRequest, 'fromParams')
