@@ -30,9 +30,10 @@ RUN openssl req \
     -days 365 \
     -nodes \
     -x509 \
-    -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=www.example.com" \
+    -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=localhost" \
     -keyout privkey.pem \
     -out fullchain.pem
 
 EXPOSE 8443
-CMD ["node", "./bin/solid", "start"]
+ENV NODE_TLS_REJECT_UNAUTHORIZED=0
+CMD ["node", "./bin/solid", "start", "--no-reject-unauthorized"]

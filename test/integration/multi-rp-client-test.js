@@ -47,10 +47,10 @@ describe('MultiRpClient', () => {
         redirect_uri: 'https://localhost:8443/rp'
       }
       const multiClient = new MultiRpClient({ localConfig })
-      const regConfig = multiClient.registrationConfigFor(issuer)
-      expect(regConfig.client_name)
-      expect(regConfig.issuer).to.equal(issuer)
-      expect(regConfig.redirect_uris)
+      const { registration } = multiClient.registrationConfigFor(issuer)
+      expect(registration.client_name)
+      expect(registration.issuer).to.equal(issuer)
+      expect(registration.redirect_uris)
         .to.eql(['https://localhost:8443/rp/https%3A%2F%2Foidc.example.com'])
     })
   })
