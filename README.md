@@ -211,6 +211,40 @@ or when using a self-signed certificate:
 After startup, the server is available at the configured server URL (by default,
 `https://localhost:8443`).
 
+## Usage with Docker
+
+You can run life-server from our [prebuilt docker image](https://hub.docker.com/r/interopalliance/life-server) with the following command:
+
+Run latest build from master branch
+
+```
+docker run -p 8443:8443 interopalliance/life-server:master
+```
+
+Run a tagged release
+
+```
+docker run -p 8443:8443 interopalliance/life-server:{gitTag}
+# e.g. docker run -p 8443:8443 interopalliance/life-server:v6.0.2
+```
+
+You can then access the application at https://localhost:8443.
+
+If you want to provide a custom config.json, mount it as a volume:
+
+```
+docker run -p 8443:8443 -v $(pwd)/config.json:/usr/src/app/config.json
+```
+
+### Build your own Docker image
+
+Clone the repository, then:
+
+```
+docker build -t life-server .
+docker run -p 8443:8443 life-server
+```
+
 ## Security
 
 TBD
