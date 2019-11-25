@@ -19,8 +19,26 @@ COPY package*.json ./
 
 RUN npm install
 
-# Bundle app source
-COPY . .
+# add directories
+COPY bin bin
+COPY common common
+COPY default-templates default-templates
+COPY default-views default-views
+COPY lib lib
+COPY test test
+# add files
+COPY \
+  .npmrc \
+  config.json-default \
+  index.js \
+  LICENSE.md \
+  package.json \
+  README.md \
+  ./
+# This is used by default config.json as 'root' dir
+# And if it doesn't exist, app will error with/
+# Error: EEXIST: file already exists, mkdir '/usr/src/app/data/localhost'
+RUN mkdir data
 
 # Include default configuration
 COPY config.json-default config.json
