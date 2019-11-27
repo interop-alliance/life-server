@@ -22,14 +22,6 @@ jobs:
       # Otherwise there was an error and we should fail the build.
       [ "$exit_code" == "0" ] || [ "$exit_code" == "124" ] || [ "$exit_code" == "137" ] || travis_terminate 1
   - language: node_js
-    node_js: "10"
-    install: |
-      npm install -g npm@latest
-    script:
-    - npm run standard
-    - npm run validate
-    - npm run nyc
-  - language: node_js
     node_js: "12"
     install: |
       npm install -g npm@latest
