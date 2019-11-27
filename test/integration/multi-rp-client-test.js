@@ -5,35 +5,32 @@ const sinonChai = require('sinon-chai')
 chai.use(sinonChai)
 chai.should()
 
-const { OIDCClientStore } = require('../../lib/authentication/client-store')
 const { MultiRpClient } = require('../../lib/authentication/multi-rp-client')
 const OIDCRelyingParty = require('@interop-alliance/oidc-rp')
+const { FlexDocStore } = require('flex-docstore')
 
 const storeBasePath = '../resources/client-store/'
-const storeOptions = {
-  path: storeBasePath
-}
+const store = FlexDocStore.using(
+  'files',
+  {
+    dir: storeBasePath,
+    modelClass: OIDCRelyingParty
+  })
 
-let store
-
-// before(async () => {
-//   store = new OIDCClientStore(storeOptions)
-//   return store.backend.createCollection('clients')
-// })
-
-describe.skip('MultiRpClient', () => {
+describe('MultiRpClient', () => {
   describe('constructor', () => {
     it('should initialize an instance', () => {
       const localIssuer = 'https://oidc.example.com'
       const localConfig = {
         issuer: localIssuer
       }
+
       const options = {
-        path: storeBasePath,
+        store,
         localConfig
       }
       const multiClient = new MultiRpClient(options)
-      expect(multiClient.store.backend.path).to.equal(storeBasePath)
+      expect(multiClient.store.backend.dir).to.equal(storeBasePath)
       expect(multiClient.localConfig).to.equal(localConfig)
       expect(multiClient.localIssuer).to.equal(localIssuer)
     })
@@ -58,8 +55,7 @@ describe.skip('MultiRpClient', () => {
   describe('clientForIssuer()', () => {
     it('should load a client from store', async () => {
       const issuer = 'https://oidc.example.com'
-      const store = new OIDCClientStore(storeOptions)
-      await store.backend.createCollection('clients')
+      const store = {}
 
       store.get = sinon.stub()
         .resolves(new OIDCRelyingParty({ provider: { url: issuer } }))
