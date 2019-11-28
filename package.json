@@ -64,7 +64,7 @@
     "express": "^4.17.1",
     "express-handlebars": "^3.1.0",
     "express-session": "^1.16.2",
-    "flex-docstore": "^0.1.0",
+    "flex-docstore": "^0.1.2",
     "from2": "^2.1.0",
     "fs-extra": "^8.1.0",
     "handlebars": "^4.4.2",

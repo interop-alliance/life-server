@@ -44,22 +44,6 @@ describe('AuthCallbackRequest', () => {
     })
   })
 
-  describe('AuthCallbackRequest.get', () => {
-    it('should create a request instance', () => {
-      const AuthCallbackRequest = require('../../lib/authentication/handlers/auth-callback-request')
-      const req = HttpMocks.createRequest({ session: {} })
-      const next = () => {}
-
-      sinon.spy(AuthCallbackRequest, 'fromParams')
-      AuthCallbackRequest.handle = sinon.stub().resolves(null)
-
-      return AuthCallbackRequest.get(req, res, next)
-        .then(() => {
-          expect(AuthCallbackRequest.fromParams).to.have.been.calledWith(req, res)
-        })
-    })
-  })
-
   describe('fromParams()', () => {
     it('should initialize an AuthCallbackRequest instance from request params', () => {
       const AuthCallbackRequest = require('../../lib/authentication/handlers/auth-callback-request')
