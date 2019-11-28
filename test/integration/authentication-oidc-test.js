@@ -16,7 +16,7 @@ global.window = {
   location: { href: currentLocation }
 }
 
-const { cleanDir } = require('../utils')
+const { cleanDir, startServer } = require('../utils')
 
 const supertest = require('supertest')
 const nock = require('nock')
@@ -72,12 +72,6 @@ describe('Authentication API (OIDC)', () => {
       dbPath: bobDbPath
     }, serverConfig)
   )
-
-  function startServer (pod, port) {
-    return new Promise((resolve) => {
-      pod.listen(port, () => { resolve() })
-    })
-  }
 
   before(async () => {
     await Promise.all([

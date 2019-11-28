@@ -9,6 +9,12 @@ const TEST_HOSTS = ['nic.localhost', 'tim.localhost', 'nicola.localhost']
 const { initStorage } = require('../lib/server-config')
 const LegacyResourceMapper = require('../lib/data-storage/ldp-backend-fs/legacy-resource-mapper')
 
+function startServer (server, port) {
+  return new Promise((resolve) => {
+    server.listen(port, () => { resolve() })
+  })
+}
+
 function testStorage (host) {
   const mapper = LegacyResourceMapper.from({ host })
   return initStorage({ host, mapper })
@@ -122,6 +128,7 @@ module.exports = {
   read,
   restore,
   rm,
+  startServer,
   stringToStream,
   testAccountManagerOptions,
   testStorage,
