@@ -1,6 +1,6 @@
 var fs = require('fs-extra')
 var path = require('path')
-const OIDCProvider = require('@solid/oidc-op')
+const OIDCProvider = require('@interop-alliance/oidc-op')
 const dns = require('dns')
 const from = require('from2')
 
