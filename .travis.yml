@@ -23,7 +23,7 @@ jobs:
       [ "$exit_code" == "0" ] || [ "$exit_code" == "124" ] || [ "$exit_code" == "137" ] || travis_terminate 1
   - language: node_js
     node_js: "12"
-    install: |
+    before_install: |
       npm install -g npm@latest
     script:
     - npm run standard
