@@ -171,12 +171,14 @@ describe('Single User signup page', () => {
   const rootDir = path.join(__dirname, '../resources/accounts/single-user/')
   const configPath = path.join(__dirname, '../resources/config')
   const server = supertest(serverUri)
+  const dbPath = path.join(__dirname, '../resources/temp/7457/db')
 
   before(async () => {
     ldp = await ldnode.createServer({
       port,
       root: rootDir,
       configPath,
+      dbPath,
       sslKey: path.join(__dirname, '../keys/key.pem'),
       sslCert: path.join(__dirname, '../keys/cert.pem'),
       webid: true,
@@ -189,6 +191,7 @@ describe('Single User signup page', () => {
 
   after(() => {
     fs.removeSync(rootDir)
+    fs.removeSync(dbPath)
     ldp.close()
   })
 
