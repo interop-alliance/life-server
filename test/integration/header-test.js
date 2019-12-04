@@ -8,7 +8,6 @@ const serverOptions = {
   multiuser: false,
   webid: true,
   skipWelcomePage: true,
-  skipInitLocalRp: true,
   sslKey: path.join(__dirname, '../keys/key.pem'),
   sslCert: path.join(__dirname, '../keys/cert.pem'),
   forceUser: 'https://ruben.verborgh.org/profile/#me'

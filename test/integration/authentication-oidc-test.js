@@ -52,7 +52,6 @@ describe('Authentication API (OIDC)', () => {
     webid: true,
     multiuser: false,
     skipWelcomePage: true,
-    skipInitLocalRp: true,
     configPath
   }
 

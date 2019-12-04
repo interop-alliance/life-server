@@ -28,7 +28,6 @@ describe('AccountManager (OIDC account creation tests)', () => {
       webid: true,
       multiuser: true,
       skipWelcomePage: true,
-      skipInitLocalRp: true,
       dbPath,
       serverUri
     })

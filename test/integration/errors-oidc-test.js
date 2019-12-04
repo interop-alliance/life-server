@@ -23,7 +23,6 @@ describe('OIDC error handling', function () {
       webid: true,
       multiuser: false,
       skipWelcomePage: true,
-      skipInitLocalRp: true,
       dbPath,
       serverUri
     })
