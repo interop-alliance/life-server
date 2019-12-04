@@ -1,36 +1,38 @@
 const supertest = require('supertest')
 const ldnode = require('../../index')
 const path = require('path')
+const { promisify } = require('util')
 const { cleanDir } = require('../utils')
 const expect = require('chai').expect
 
 describe('OIDC error handling', function () {
   const serverUri = 'https://localhost:3457'
-  var ldpHttpsServer
   const rootPath = path.join(__dirname, '../resources/accounts/errortests')
   const configPath = path.join(__dirname, '../resources/config')
   const dbPath = path.join(__dirname, '../resources/accounts/db')
 
-  const ldp = ldnode.createServer({
-    root: rootPath,
-    configPath,
-    sslKey: path.join(__dirname, '../keys/key.pem'),
-    sslCert: path.join(__dirname, '../keys/cert.pem'),
-    auth: 'oidc',
-    webid: true,
-    multiuser: false,
-    skipWelcomePage: true,
-    dbPath,
-    serverUri
-  })
+  let ldp
 
-  before(function (done) {
-    ldpHttpsServer = ldp.listen(3457, done)
+  before(async () => {
+    ldp = await ldnode.createServer({
+      root: rootPath,
+      configPath,
+      sslKey: path.join(__dirname, '../keys/key.pem'),
+      sslCert: path.join(__dirname, '../keys/cert.pem'),
+      auth: 'oidc',
+      webid: true,
+      multiuser: false,
+      skipWelcomePage: true,
+      skipInitLocalRp: true,
+      dbPath,
+      serverUri
+    })
+    await promisify(ldp.listen.bind(ldp))(3457)
   })
 
   after(function () {
-    if (ldpHttpsServer) ldpHttpsServer.close()
     cleanDir(rootPath)
+    ldp.close()
   })
 
   const server = supertest(serverUri)

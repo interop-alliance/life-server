@@ -14,13 +14,14 @@ chai.should()
 const { OidcManager } = require('../../lib/authentication/oidc-manager')
 const SolidHost = require('../../lib/solid-host')
 
-const dbPath = path.resolve(__dirname, '../db/oidc')
+const dbPath = path.resolve(__dirname, '../resources/temp/db/oidc')
 const serverUri = 'https://example.com'
 
 describe('OidcManager (integration tests)', () => {
   beforeEach(() => {
     fs.removeSync(dbPath)
     fs.mkdirpSync(dbPath)
+    fs.mkdirpSync(path.join(dbPath, 'op'))
   })
 
   after(() => {
@@ -85,7 +86,6 @@ describe('OidcManager (integration tests)', () => {
         })
         .then(() => {
           const providerConfig = oidc.loadProviderConfig()
-
           expect(providerConfig.issuer).to.equal(serverUri)
           expect(providerConfig.authorization_endpoint).to.exist()
           expect(providerConfig.keys).to.exist()
