@@ -17,19 +17,21 @@ const configPath = path.join(__dirname, '../resources/config')
 const rootPath = path.join(__dirname, '../resources/temp/tx-request/')
 const dbPath = path.join(__dirname, '../resources/temp/tx-request/db')
 
-const server = Solid.createServer({
-  root: rootPath,
-  configPath,
-  sslKey: path.join(__dirname, '../keys/key.pem'),
-  sslCert: path.join(__dirname, '../keys/cert.pem'),
-  webid: true,
-  multiuser: false,
-  skipWelcomePage: true,
-  dbPath,
-  serverUri
-})
+let server
 
 before(async () => {
+  server = await Solid.createServer({
+    root: rootPath,
+    configPath,
+    sslKey: path.join(__dirname, '../keys/key.pem'),
+    sslCert: path.join(__dirname, '../keys/cert.pem'),
+    webid: true,
+    multiuser: false,
+    skipWelcomePage: true,
+    dbPath,
+    serverUri
+  })
+
   return startServer(server, port)
 })
 
