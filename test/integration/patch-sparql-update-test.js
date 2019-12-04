@@ -10,13 +10,17 @@ var { rm, write, read } = require('../utils')
 
 describe.skip('PATCH through application/sparql-update', function () {
   // Starting LDP
-  var ldp = ldnode({
-    root: path.join(__dirname, '../resources/sampleContainer'),
-    mount: '/test',
-    skipWelcomePage: true,
-    webid: false
+  let ldp, server
+
+  before(async () => {
+    ldp = await ldnode({
+      root: path.join(__dirname, '../resources/sampleContainer'),
+      mount: '/test',
+      skipWelcomePage: true,
+      webid: false
+    })
+    server = supertest(ldp)
   })
-  var server = supertest(ldp)
 
   it('should create a new file if file does not exist', function (done) {
     rm('sampleContainer/notExisting.ttl')

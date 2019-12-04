@@ -41,7 +41,7 @@ module.exports = function (program, server) {
   })
 }
 
-function bin (argv, server) {
+async function bin (argv, server) {
   if (!argv.email) {
     argv.email = {
       host: argv.emailHost,
@@ -106,7 +106,7 @@ function bin (argv, server) {
   const solid = require('../../')
   let app
   try {
-    app = solid.createServer(argv, server)
+    app = await solid.createServer(argv, server)
   } catch (e) {
     if (e.code === 'EACCES') {
       if (e.syscall === 'mkdir') {

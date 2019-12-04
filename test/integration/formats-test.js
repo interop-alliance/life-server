@@ -3,14 +3,19 @@ var ldnode = require('../../index')
 var path = require('path')
 const assert = require('chai').assert
 
-describe('formats', function () {
-  var ldp = ldnode.createServer({
-    root: path.join(__dirname, '../resources'),
-    skipWelcomePage: true,
-    webid: false
+describe('formats', () => {
+  let ldp, server
+
+  before(async () => {
+    ldp = await ldnode.createServer({
+      root: path.join(__dirname, '../resources'),
+      skipWelcomePage: true,
+      webid: false
+    })
+
+    server = supertest(ldp)
   })
 
-  var server = supertest(ldp)
   describe('HTML', function () {
     it('should return HTML containing "Hello, World!" if Accept is set to text/html', function (done) {
       server.get('/hello.html')

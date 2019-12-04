@@ -2,6 +2,7 @@ const assert = require('chai').assert
 const fs = require('fs-extra')
 const request = require('request')
 const path = require('path')
+const { promisify } = require('util')
 const { loadProvider, rm, checkDnsSettings, cleanDir } = require('../utils')
 const IDToken = require('@interop-alliance/oidc-op/src/IDToken')
 
@@ -49,39 +50,31 @@ const argv = {
   sslCert: path.join(__dirname, '../keys/cert.pem'),
   webid: true,
   multiuser: true,
-  skipWelcomePage: true
+  skipWelcomePage: true,
+  skipInitLocalRp: true
 }
 
-describe('ACL with WebID+OIDC over HTTP', function () {
-  let ldp, ldpHttpsServer
+describe('ACL with WebID+OIDC over HTTP', () => {
+  let ldp
 
-  before(checkDnsSettings)
+  before(async () => {
+    checkDnsSettings()
 
-  before(done => {
-    ldp = ldnode.createServer(argv)
+    ldp = await ldnode.createServer(argv)
 
-    loadProvider(oidcProviderPath)
-      .then(provider => {
-        oidcProvider = provider
-
-        return Promise.all([
-          issueIdToken(oidcProvider, user1),
-          issueIdToken(oidcProvider, user2)
-        ])
-      })
-      .then(tokens => {
-        userCredentials.user1 = tokens[0]
-        userCredentials.user2 = tokens[1]
-      })
-      .then(() => {
-        ldpHttpsServer = ldp.listen(port, done)
-      })
-      .catch(console.error)
+    oidcProvider = await loadProvider(oidcProviderPath)
+    const tokens = await Promise.all([
+      issueIdToken(oidcProvider, user1),
+      issueIdToken(oidcProvider, user2)
+    ])
+    userCredentials.user1 = tokens[0]
+    userCredentials.user2 = tokens[1]
+    await promisify(ldp.listen.bind(ldp))(port)
   })
 
   after(() => {
-    if (ldpHttpsServer) ldpHttpsServer.close()
     cleanDir(rootPath)
+    ldp.close()
   })
 
   const origin1 = 'http://example.org/'

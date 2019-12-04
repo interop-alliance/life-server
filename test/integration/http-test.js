@@ -11,12 +11,16 @@ chai.use(require('dirty-chai'))
 
 const { ACL_SUFFIX, META_SUFFIX } = require('../../lib/defaults')
 
-const ldpServer = ldnode.createServer({
-  root: path.join(__dirname, '../resources'),
-  skipWelcomePage: true,
-  webid: false
+let ldpServer, server
+
+before(async () => {
+  ldpServer = await ldnode.createServer({
+    root: path.join(__dirname, '../resources'),
+    skipWelcomePage: true,
+    webid: false
+  })
+  server = supertest(ldpServer)
 })
-const server = supertest(ldpServer)
 
 /**
  * Creates a new test basic container via an LDP POST

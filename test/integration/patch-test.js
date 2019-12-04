@@ -2,6 +2,7 @@
 const { assert } = require('chai')
 const ldnode = require('../../index')
 const path = require('path')
+const { promisify } = require('util')
 const supertest = require('supertest')
 const fs = require('fs')
 const { read, rm, backup, restore } = require('../utils')
@@ -17,6 +18,7 @@ const serverOptions = {
   serverUri,
   multiuser: false,
   skipWelcomePage: true,
+  skipInitLocalRp: true,
   webid: true,
   sslKey: path.join(__dirname, '../keys/key.pem'),
   sslCert: path.join(__dirname, '../keys/cert.pem'),
@@ -24,13 +26,12 @@ const serverOptions = {
 }
 
 describe('PATCH', () => {
-  var request
-  let server
+  let server, request
 
   // Start the server
-  before(done => {
-    server = ldnode.createServer(serverOptions)
-    server.listen(port, done)
+  before(async () => {
+    server = await ldnode.createServer(serverOptions)
+    await promisify(server.listen.bind(server))(port)
     request = supertest(serverUri)
   })
 

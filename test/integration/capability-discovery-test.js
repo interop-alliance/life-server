@@ -1,6 +1,6 @@
 const Solid = require('../../index')
 const path = require('path')
-const { cleanDir } = require('../utils')
+const { cleanDir, startServer } = require('../utils')
 const supertest = require('supertest')
 // In this test we always assume that we are Alice
 
@@ -20,24 +20,20 @@ describe('API', () => {
     webid: true,
     multiuser: false,
     skipWelcomePage: true,
+    skipInitLocalRp: true,
     configPath
   }
 
-  const alicePod = Solid.createServer(
-    Object.assign({
-      root: aliceRootPath,
-      serverUri: aliceServerUri,
-      dbPath: aliceDbPath
-    }, serverConfig)
-  )
-
-  function startServer (pod, port) {
-    return new Promise((resolve) => {
-      pod.listen(port, () => { resolve() })
-    })
-  }
+  let alicePod
 
   before(async () => {
+    alicePod = await Solid.createServer(
+      Object.assign({
+        root: aliceRootPath,
+        serverUri: aliceServerUri,
+        dbPath: aliceDbPath
+      }, serverConfig)
+    )
     await startServer(alicePod, 5000)
     alice = supertest(aliceServerUri)
   })

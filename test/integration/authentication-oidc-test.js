@@ -49,44 +49,49 @@ describe('Authentication API (OIDC)', () => {
   const serverConfig = {
     sslKey: path.join(__dirname, '../keys/key.pem'),
     sslCert: path.join(__dirname, '../keys/cert.pem'),
-    auth: 'oidc',
     webid: true,
     multiuser: false,
     skipWelcomePage: true,
+    skipInitLocalRp: true,
     configPath
   }
 
   const aliceRootPath = path.join(__dirname, '../resources/accounts-scenario/alice')
-  const alicePod = Solid.createServer(
-    Object.assign({
-      root: aliceRootPath,
-      serverUri: aliceServerUri,
-      dbPath: aliceDbPath
-    }, serverConfig)
-  )
+  let alicePod
+
   const bobRootPath = path.join(__dirname, '../resources/accounts-scenario/bob')
-  const bobPod = Solid.createServer(
-    Object.assign({
-      root: bobRootPath,
-      serverUri: bobServerUri,
-      dbPath: bobDbPath
-    }, serverConfig)
-  )
+  let bobPod
 
   before(async () => {
-    await Promise.all([
-      startServer(alicePod, 7000),
-      startServer(bobPod, 7001)
-    ]).then(() => {
-      alice = supertest(aliceServerUri)
-      bob = supertest(bobServerUri)
-    })
+    alicePod = await Solid.createServer(
+      Object.assign({
+        root: aliceRootPath,
+        serverUri: aliceServerUri,
+        dbPath: aliceDbPath
+      }, serverConfig))
+
+    await startServer(alicePod, 7000)
+
+    bobPod = await Solid.createServer(
+      Object.assign({
+        root: bobRootPath,
+        serverUri: bobServerUri,
+        dbPath: bobDbPath
+      }, serverConfig)
+    )
+
+    await startServer(bobPod, 7001)
+
+    alice = supertest(aliceServerUri)
+    bob = supertest(bobServerUri)
   })
 
   after(() => {
     alicePod.close()
     bobPod.close()
     fs.removeSync(path.join(aliceDbPath, 'oidc/users'))
+    fs.removeSync(path.join(aliceDbPath, 'oidc/rp'))
+    fs.removeSync(path.join(bobDbPath, 'oidc/rp/clients'))
     cleanDir(aliceRootPath)
     cleanDir(bobRootPath)
   })
@@ -142,10 +147,10 @@ describe('Authentication API (OIDC)', () => {
 
   describe('Login by Username and Password (POST /login/password)', () => {
     // Logging in as alice, to alice's pod
-    const aliceAccount = UserAccount.from({ webId: aliceWebId })
     const alicePassword = '12345'
-
     beforeEach(() => {
+      const aliceAccount = UserAccount.from({ webId: aliceWebId })
+
       return aliceCredentialStore.createUser(aliceAccount, alicePassword)
         .catch(console.error.bind(console))
     })
@@ -156,7 +161,10 @@ describe('Authentication API (OIDC)', () => {
 
     describe('after performing a correct login', () => {
       let response, cookie
+
       before(done => {
+        const aliceAccount = UserAccount.from({ webId: aliceWebId })
+
         aliceCredentialStore.createUser(aliceAccount, alicePassword)
         alice.post('/login/password')
           .type('form')
@@ -303,6 +311,8 @@ describe('Authentication API (OIDC)', () => {
           const authorizeUri = res.header.location
           expect(authorizeUri.startsWith(aliceServerUri + '/authorize'))
 
+          console.log('REDIRECTED TO:', authorizeUri)
+
           // Follow the redirect to /authorize
           const authorizePath = authorizeUri.replace(aliceServerUri, '') // (new URL(authorizeUri)).pathname
           return alice.get(authorizePath)
@@ -310,6 +320,7 @@ describe('Authentication API (OIDC)', () => {
         .then(res => {
           // Since alice not logged in to her pod, /authorize redirects to /login
           const loginUri = res.header.location
+
           expect(loginUri.startsWith('/login'))
         })
     })
@@ -343,7 +354,7 @@ describe('Authentication API (OIDC)', () => {
 
     after(() => {
       fs.removeSync(path.join(aliceDbPath, 'users/users'))
-      fs.removeSync(path.join(aliceDbPath, 'oidc/op/tokens'))
+      // fs.removeSync(path.join(aliceDbPath, 'oidc/op/tokens'))
 
       // const clientId = auth.currentClient.registration['client_id']
       // const registration = `_key_${clientId}.json`

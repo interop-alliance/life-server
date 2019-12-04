@@ -1,4 +1,5 @@
 const chai = require('chai')
+chai.use(require('dirty-chai'))
 const { expect } = chai
 chai.should()
 // const rdf = require('rdflib')

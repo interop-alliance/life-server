@@ -169,8 +169,6 @@ describe('OidcManager', () => {
       oidc.initProvider()
 
       expect(oidc.provider.issuer).to.equal(providerUri)
-      const storePath = oidc.provider.backend.path
-      expect(storePath.endsWith('oidc-mgr/op')).to.be.true()
       expect(oidc.provider.host.authenticate).to.equal(host.authenticate)
       expect(loadProviderConfig).to.have.been.called()
     })
