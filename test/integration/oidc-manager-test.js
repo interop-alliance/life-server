@@ -6,9 +6,6 @@ const chai = require('chai')
 const dirtyChai = require('dirty-chai')
 chai.use(dirtyChai)
 const expect = chai.expect
-const sinon = require('sinon')
-const sinonChai = require('sinon-chai')
-chai.use(sinonChai)
 chai.should()
 
 const { OidcManager } = require('../../lib/authentication/oidc-manager')
@@ -78,8 +75,6 @@ describe('OidcManager (integration tests)', () => {
 
       const oidc = OidcManager.from(config)
 
-      oidc.initLocalRpClient = sinon.stub()
-
       return oidc.initialize()
         .catch(err => {
           console.error('Error during .initialize(): ', err)
@@ -89,7 +84,6 @@ describe('OidcManager (integration tests)', () => {
           expect(providerConfig.issuer).to.equal(serverUri)
           expect(providerConfig.authorization_endpoint).to.exist()
           expect(providerConfig.keys).to.exist()
-          expect(oidc.initLocalRpClient).to.have.been.called()
         })
     }).timeout(20000)
   })

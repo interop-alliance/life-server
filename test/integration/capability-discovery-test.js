@@ -20,7 +20,6 @@ describe('API', () => {
     webid: true,
     multiuser: false,
     skipWelcomePage: true,
-    skipInitLocalRp: true,
     configPath
   }
 
