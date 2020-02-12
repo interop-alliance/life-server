@@ -1,6 +1,5 @@
 'use strict'
 
-const path = require('path')
 const chai = require('chai')
 const nock = require('nock')
 const chaiAsPromised = require('chai-as-promised')
@@ -14,34 +13,10 @@ chai.use(sinonChai)
 chai.should()
 
 const { OidcManager } = require('../../lib/authentication/oidc-manager')
-const SolidHost = require('../../lib/solid-host')
 
 describe('OidcManager', () => {
   afterEach(() => {
     nock.cleanAll()
-  })
-
-  describe('fromServerConfig()', () => {
-    it('should result in an initialized oidc object', () => {
-      const serverUri = 'https://localhost:8443'
-      const host = SolidHost.from({ serverUri })
-
-      const dbPath = path.join(__dirname, '../resources/db')
-      const saltRounds = 5
-      const argv = {
-        host,
-        dbPath,
-        saltRounds
-      }
-
-      const oidc = OidcManager.fromServerConfig(argv)
-
-      expect(oidc.rs.defaults.query).to.be.true()
-      expect(oidc.clients.store.backend.dir.endsWith('db/rp/clients'))
-      expect(oidc.provider.issuer).to.equal(serverUri)
-      expect(oidc.users.backend.backend.dir.endsWith('db/users'))
-      expect(oidc.users.saltRounds).to.equal(saltRounds)
-    })
   })
 
   describe('from()', () => {
@@ -76,11 +51,6 @@ describe('OidcManager', () => {
       expect(storePaths.providerStore.endsWith('oidc/op'))
       expect(storePaths.multiRpStore.endsWith('oidc/rp'))
       expect(storePaths.userStore.endsWith('oidc/users'))
-
-      expect(oidc.rs).to.exist()
-      expect(oidc.clients).to.exist()
-      expect(oidc.users).to.exist()
-      expect(oidc.provider).to.exist()
     })
   })
 
@@ -149,7 +119,7 @@ describe('OidcManager', () => {
   })
 
   describe('initProvider()', () => {
-    it('should initialize an OIDC Provider instance', () => {
+    it('should initialize an OIDC Provider instance', async () => {
       const providerUri = 'https://localhost:8443'
       const authCallbackUri = providerUri + '/api/oidc/rp'
       const postLogoutUri = providerUri + '/goodbye'
@@ -166,26 +136,11 @@ describe('OidcManager', () => {
 
       const loadProviderConfig = sinon.spy(oidc, 'loadProviderConfig')
 
-      oidc.initProvider()
+      await oidc.initProvider()
 
       expect(oidc.provider.issuer).to.equal(providerUri)
       expect(oidc.provider.host.authenticate).to.equal(host.authenticate)
       expect(loadProviderConfig).to.have.been.called()
-    })
-  })
-
-  describe('providerConfigPath()', () => {
-    it('should return the Provider config file path', () => {
-      const providerUri = 'https://localhost:8443'
-      const authCallbackUri = providerUri + '/api/oidc/rp'
-      const postLogoutUri = providerUri + '/goodbye'
-      const dbPath = './db/oidc-mgr'
-      const config = { dbPath, providerUri, authCallbackUri, postLogoutUri }
-
-      const oidc = OidcManager.from(config)
-
-      const file = oidc.providerConfigPath()
-      expect(file.endsWith('oidc-mgr/op/provider.json')).to.be.true()
     })
   })
 
