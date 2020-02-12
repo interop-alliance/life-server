@@ -17,6 +17,9 @@
 - [Contribute](#contribute)
 - [License](#license)
 
+**Important:** For upgrade notes and change history, see 
+**[CHANGELOG.md](CHANGELOG.md)**.
+
 ## Background
 
 Life Server is personal data server written in Node.js, originally
@@ -72,6 +75,9 @@ This phase focuses on general cleanup and refactoring from the source
     `/profile/card#me` to `/web#id`
 * [x] Simplify the new account templating system (do not create template and
     view copies for customizability)
+
+Bonus/If-time:
+
 * [ ] Update `node-mailer` package to latest version
 * [ ] Update `inquirer` to package latest version
 
@@ -81,6 +87,8 @@ This phase focuses on exploring some advanced features that may make it into
 Solid spec proposals, as well as integration with external Solid-adjacent
 projects and specs.
 
+* [x] Fix/update Dockerfile (to enable **[Life Server to be hosted on 
+  PermanentCloud](https://permanent.cloud/apps/life-server)**)
 * [ ] Implement an in-Memory based LDP backend, to go alongside the FS backend.
 * [ ] Integrate or implement Static OIDC Client Registration functionality,
     to make interfacing with server-side Solid apps easier.
