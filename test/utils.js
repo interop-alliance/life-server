@@ -91,14 +91,10 @@ async function checkDnsSettings () {
  * @returns {Promise<Provider>}
  */
 async function loadProvider (configPath) {
-  return Promise.resolve()
-    .then(() => {
-      const config = require(configPath)
+  const config = require(configPath)
 
-      const provider = new OIDCProvider(config)
-
-      return provider.initializeKeyChain(config.keys)
-    })
+  const provider = new OIDCProvider(config)
+  return provider.initializeKeyChain(config.keys)
 }
 
 function stringToStream (string) {

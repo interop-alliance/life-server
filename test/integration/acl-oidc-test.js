@@ -12,7 +12,8 @@ const port = 7777
 const serverUri = 'https://localhost:7777'
 const rootPath = path.join(__dirname, '../resources/accounts-acl')
 const dbPath = path.join(rootPath, 'db')
-const oidcProviderPath = path.join(dbPath, 'oidc', 'op', 'provider.json')
+const oidcProviderPath = path.join(dbPath, 'oidc', 'op', 'provider',
+  'https%3A%2F%2Flocalhost%3A7777.json')
 const configPath = path.join(rootPath, 'config')
 
 const user1 = 'https://tim.localhost:7777/web#id'
@@ -94,8 +95,8 @@ describe('ACL with WebID+OIDC over HTTP', () => {
     return options
   }
 
-  describe('no ACL', function () {
-    it('should return 403 for any resource', function (done) {
+  describe('no ACL', () => {
+    it('should return 403 for any resource', (done) => {
       var options = createOptions('/no-acl/', 'user1')
       request(options, function (error, response, body) {
         assert.equal(error, null)
