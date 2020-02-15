@@ -15,7 +15,7 @@
       <tr>
         <td>
           <a href="{{this.target.url}}">
-            {{#if this.target.isContainer}}
+            {{#if this.isContainer}}
               <img src="/common/img/folder_icon.png"/>
             {{/if}}
             {{this.target.name}}
@@ -38,14 +38,22 @@
   </table>
 </div>
 <script>
-  window.addEventListener('load', () => { init() })
+  onReady(init)
+
+  function onReady(fn) {
+    if (document.readyState != 'loading'){
+      fn();
+    } else {
+      document.addEventListener('DOMContentLoaded', fn);
+    }
+  }
 
   function init () {
     const buttons = document.getElementsByClassName('share')
 
     for (let button of buttons) {
       button.addEventListener('click', (event) => {
-        const resourceUrl = event.target.id.split('-')[1]
+        const resourceUrl = event.currentTarget.id.split('-').slice(1).join('-')
 
         const popupUrl = '/api/share?url=' + resourceUrl
 

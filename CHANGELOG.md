@@ -3,11 +3,14 @@
 ## 7.0.0 - TBD
 
 ### Changed
+- Fixed display server welcome page in single-user mode.
 - Fixed/updated Dockerfile (to enable [Life Server to be hosted on 
   PermanentCloud](https://permanent.cloud/apps/life-server))
-- Do not init 'welcome page' on startup in single user mode.
+- Do not init 'welcome page' on startup in single user mode, implement a
+  `ServerWelcomeRequest` handler instead.
 - Refactor `OidcManager` to use flex-docstore.
 - **BREAKING**: Refactor OIDC provider config to load from flex-docstore.
+- Fix Share request (adding and removing permissions to resource).
 
 ### Upgrade notes from 6.x
 The main thing that has changed is the location of where the OpenID Connect 
