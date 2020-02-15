@@ -1,6 +1,6 @@
 # History
 
-## 7.0.0 - TBD
+## 7.0.0 - 2020-02-15
 
 ### Changed
 - Fixed display server welcome page in single-user mode.
