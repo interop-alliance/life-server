@@ -78,7 +78,7 @@ This phase focuses on general cleanup and refactoring from the source
 
 Bonus/If-time:
 
-* [ ] Update `node-mailer` package to latest version
+* [x] Update `node-mailer` package to latest version
 * [x] Update `inquirer` and `commander` packages to latest version
 
 #### Roadmap Phase Two
