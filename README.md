@@ -79,7 +79,7 @@ This phase focuses on general cleanup and refactoring from the source
 Bonus/If-time:
 
 * [ ] Update `node-mailer` package to latest version
-* [ ] Update `inquirer` to package latest version
+* [x] Update `inquirer` and `commander` packages to latest version
 
 #### Roadmap Phase Two
 
@@ -193,7 +193,7 @@ Edit your `/etc/hosts` file, and append:
 ### Generate a config file
 
 The easiest way to setup `life-server` is by running the `init` wizard.
-This will create a `config.json` in your current folder:
+This will create a `config.dev.js` in your current folder:
 
 ```
 ./bin/solid init
@@ -238,10 +238,10 @@ docker run -p 8443:8443 interopalliance/life-server:{gitTag}
 
 You can then access the application at https://localhost:8443.
 
-If you want to provide a custom config.json, mount it as a volume:
+If you want to provide a custom config.js, mount it as a volume:
 
 ```
-docker run -p 8443:8443 -v $(pwd)/config.json:/usr/src/app/config.json
+docker run -p 8443:8443 -v $(pwd)/config.json:/usr/src/app/config.dev.js
 ```
 
 ### Build your own Docker image
