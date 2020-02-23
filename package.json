@@ -115,6 +115,10 @@
     "clean": "rm -rf config/templates config/views",
     "reset": "rm -rf .db data && npm run clean"
   },
+  "mocha": {
+    "recursive": true,
+    "timeout": 100000
+  },
   "nyc": {
     "reporter": [
       "html",
