@@ -4,14 +4,14 @@ const loadStart = require('./start')
 const { spawnSync } = require('child_process')
 const path = require('path')
 
-module.exports = function startCli (server) {
-  program.version(getVersion())
+module.exports = function startCli () {
+  program
+    .version(getVersion())
 
   loadInit(program)
-  loadStart(program, server)
+  loadStart(program)
 
   program.parse(process.argv)
-  if (program.args.length === 0) program.help()
 }
 
 function getVersion () {

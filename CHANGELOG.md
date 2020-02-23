@@ -1,5 +1,13 @@
 # History
 
+## 8.0.0 - TBD
+
+### Changed
+- **BREAKING**: Refactored configuration system. Config file is now
+  a `.js` file (to enable comments, etc), and not JSON. Default config file
+  is now `config.dev.js` instead of `config.json`.
+- Updated `commander` and `inquirer` packages to latest versions.
+
 ## 7.0.0 - 2020-02-15
 
 ### Changed

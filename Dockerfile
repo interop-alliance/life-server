@@ -29,19 +29,19 @@ COPY test test
 # add files
 COPY \
   .npmrc \
-  config.json-default \
+  config.default.js \
   index.js \
   LICENSE.md \
   package.json \
   README.md \
   ./
-# This is used by default config.json as 'root' dir
+# This is used by default config.js as 'root' dir
 # And if it doesn't exist, app will error with/
 # Error: EEXIST: file already exists, mkdir '/usr/src/app/data/localhost'
 RUN mkdir data
 
 # Include default configuration
-COPY config.json-default config.json
+COPY config.default.js config.dev.js
 RUN openssl req \
     -new \
     -newkey rsa:4096 \
@@ -54,4 +54,4 @@ RUN openssl req \
 
 EXPOSE 8443
 ENV NODE_TLS_REJECT_UNAUTHORIZED=0
-CMD ["node", "./bin/solid", "start", "--no-reject-unauthorized"]
+CMD ["node", "./bin/solid", "start"]

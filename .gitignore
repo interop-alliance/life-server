@@ -7,10 +7,11 @@
 /.db
 /accounts
 /config.json
-/config/account-template
-/config/email-templates
-/config/templates
-/config/views
+/config.js
+/config.dev.js
+/config.live.js
+/config.prod.js
+/config.test.js
 /data
 /coverage
 /node_modules
