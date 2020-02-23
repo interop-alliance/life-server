@@ -13,14 +13,14 @@ describe('AccountManager (OIDC account creation tests)', () => {
   const serverUri = 'https://localhost:3457'
   const host = 'localhost:3457'
 
-  let ldp
+  let server
   const rootPath = path.join(__dirname, '../resources/accounts/')
   const configPath = path.join(__dirname, '../resources/config')
   const dbPath = path.join(__dirname, '../resources/accounts/db')
 
   before(async () => {
     await checkDnsSettings()
-    ldp = await ldnode.createServer({
+    server = await ldnode.createServer({
       root: rootPath,
       configPath,
       sslKey: path.join(__dirname, '../keys/key.pem'),
@@ -32,11 +32,13 @@ describe('AccountManager (OIDC account creation tests)', () => {
       serverUri
     })
 
-    await promisify(ldp.listen.bind(ldp))(3457)
+    console.log('server created!')
+
+    await promisify(server.listen.bind(server))(3457)
   })
 
   after(async () => {
-    ldp.close()
+    server.close()
     cleanDir(path.join(rootPath, 'localhost'))
     await fs.remove(path.join(dbPath, 'oidc', 'users'))
   })
