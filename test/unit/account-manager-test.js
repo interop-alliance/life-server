@@ -218,7 +218,7 @@ describe('AccountManager', () => {
         multiuser: true
       })
       const options = testAccountManagerOptions(host)
-      options.accountStore.loadParsedGraph = sinon.stub().resolves(rootAclGraph)
+      options.accountStorage.loadParsedGraph = sinon.stub().resolves(rootAclGraph)
       const accountManager = AccountManager.from(options)
 
       const recoveryEmail = await accountManager.loadAccountRecoveryEmail(userAccount)
@@ -235,7 +235,7 @@ describe('AccountManager', () => {
         multiuser: true
       })
       const options = testAccountManagerOptions(host)
-      options.accountStore.loadParsedGraph = sinon.stub().resolves(emptyGraph)
+      options.accountStorage.loadParsedGraph = sinon.stub().resolves(emptyGraph)
       const accountManager = AccountManager.from(options)
 
       const recoveryEmail = await accountManager.loadAccountRecoveryEmail(userAccount)
