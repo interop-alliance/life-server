@@ -7,18 +7,16 @@ const sinon = require('sinon')
 chai.use(require('sinon-chai'))
 chai.should()
 
-const { UserCredentialStore, DEFAULT_SALT_ROUNDS } = require('../../lib/authentication/user-credential-store')
+const { UserCredentialStore } = require('../../lib/authentication/user-credential-store')
 
 describe('UserCredentialStore', () => {
   describe('from()', () => {
     it('should initialize a UserCredentialStore instance from options', () => {
-      const path = './db'
-      const options = { path }
+      const backend = {}
 
-      const store = UserCredentialStore.from(options)
+      const store = UserCredentialStore.from({ backend })
 
-      expect(store.saltRounds).to.equal(DEFAULT_SALT_ROUNDS)
-      expect(store.backend).to.respondTo('put')
+      expect(store.backend).to.equal(backend)
     })
   })
 
@@ -26,7 +24,7 @@ describe('UserCredentialStore', () => {
     let store
 
     beforeEach(() => {
-      store = UserCredentialStore.from({ path: './db' })
+      store = UserCredentialStore.from({ backend: {} })
     })
 
     it('should throw an error if no user is provided', (done) => {
@@ -105,7 +103,7 @@ describe('UserCredentialStore', () => {
     let store
 
     beforeEach(() => {
-      store = UserCredentialStore.from({ path: './db' })
+      store = UserCredentialStore.from({ backend: {} })
     })
 
     it('should look up user record by user id', () => {
@@ -128,7 +126,7 @@ describe('UserCredentialStore', () => {
     let store
 
     beforeEach(() => {
-      store = UserCredentialStore.from({ path: './db' })
+      store = UserCredentialStore.from({ backend: {} })
     })
 
     it('should call backend.del with user id and email', () => {

@@ -10,6 +10,7 @@ chai.should()
 
 const { OidcManager } = require('../../lib/authentication/oidc-manager')
 const SolidHost = require('../../lib/solid-host')
+const { testStorage } = require('../utils')
 
 const dbPath = path.resolve(__dirname, '../resources/temp/db/oidc')
 const serverUri = 'https://example.com'
@@ -25,27 +26,21 @@ describe('OidcManager (integration tests)', () => {
     fs.removeSync(dbPath)
   })
 
-  describe('fromServerConfig()', () => {
+  describe('from()', () => {
     it('should result in an oidc instance', () => {
       const serverUri = 'https://localhost:8443'
       const host = SolidHost.from({ serverUri })
 
-      const saltRounds = 5
-      const argv = {
-        host,
-        dbPath,
-        saltRounds
-      }
+      const argv = { host }
+      const storage = testStorage(host)
 
-      const oidc = OidcManager.fromServerConfig(argv)
+      const oidc = OidcManager.from(argv, storage)
 
       expect(oidc.serverUri).to.equal(serverUri)
       expect(oidc.providerUri).to.equal(serverUri)
-      expect(oidc.saltRounds).to.equal(saltRounds)
       expect(oidc.authCallbackUri).to.equal(serverUri + '/api/oidc/rp')
       expect(oidc.postLogoutUri).to.equal(serverUri + '/goodbye')
-      expect(oidc.providerStore).to.exist()
-      expect(oidc.host).to.exist()
+      expect(oidc.storage).to.equal(storage)
     })
   })
 
@@ -54,38 +49,34 @@ describe('OidcManager (integration tests)', () => {
       const serverUri = 'https://localhost:8443'
       const host = SolidHost.from({ serverUri })
 
-      const saltRounds = 5
-      const argv = {
-        host,
-        dbPath,
-        saltRounds
-      }
-      const oidc = OidcManager.fromServerConfig(argv)
+      const argv = { host }
+      const storage = testStorage(host)
+      const oidc = OidcManager.from(argv, storage)
       await oidc.initialize()
       expect(oidc.rs).to.exist()
       expect(oidc.clients).to.exist()
       expect(oidc.users).to.exist()
       expect(oidc.provider).to.exist()
-      expect(oidc.providerStore).to.exist()
 
       expect(oidc.rs.defaults.query).to.be.true()
       expect(oidc.clients.store.backend.dir.endsWith('db/oidc/rp/clients'))
       expect(oidc.provider.issuer).to.equal(serverUri)
-      expect(oidc.users.saltRounds).to.equal(saltRounds)
     })
   })
 
   describe('loadProviderConfig()', () => {
+    const host = SolidHost.from({ serverUri })
+
     it('it should return minimal config if no saved config present', async () => {
       const config = {
         authCallbackUri: serverUri + '/api/oidc/rp',
         postLogoutUri: serverUri + '/goodbye',
-        host: {},
+        host,
         serverUri,
-        providerUri: serverUri,
-        dbPath
+        providerUri: serverUri
       }
-      const oidc = OidcManager.from(config)
+      const storage = testStorage(host)
+      const oidc = OidcManager.from(config, storage)
 
       const providerConfig = await oidc.loadProviderConfig()
       expect(providerConfig.issuer).to.equal(serverUri)
@@ -96,13 +87,12 @@ describe('OidcManager (integration tests)', () => {
       const config = {
         authCallbackUri: serverUri + '/api/oidc/rp',
         postLogoutUri: serverUri + '/goodbye',
-        host: {},
+        host,
         serverUri,
-        providerUri: serverUri,
-        dbPath
+        providerUri: serverUri
       }
-
-      const oidc = OidcManager.from(config)
+      const storage = testStorage(host, dbPath)
+      const oidc = OidcManager.from(config, storage)
 
       await oidc.initialize()
       const providerConfig = await oidc.loadProviderConfig()

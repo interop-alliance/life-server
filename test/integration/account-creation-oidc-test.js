@@ -32,15 +32,13 @@ describe('AccountManager (OIDC account creation tests)', () => {
       serverUri
     })
 
-    console.log('server created!')
-
     await promisify(server.listen.bind(server))(3457)
   })
 
   after(async () => {
     server.close()
     cleanDir(path.join(rootPath, 'localhost'))
-    await fs.remove(path.join(dbPath, 'oidc', 'users'))
+    await fs.remove(path.join(dbPath, 'users'))
   })
 
   // FIXME: Does this test even make sense?

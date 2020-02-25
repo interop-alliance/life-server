@@ -1,7 +1,6 @@
 const Solid = require('../../index')
 const path = require('path')
 const fs = require('fs-extra')
-const { UserCredentialStore } = require('../../lib/authentication/user-credential-store')
 const UserAccount = require('../../lib/account-mgmt/user-account')
 const { OIDCWebClient } = require('oidc-web')
 
@@ -16,7 +15,7 @@ global.window = {
   location: { href: currentLocation }
 }
 
-const { cleanDir, startServer } = require('../utils')
+const { cleanDir, startServer, testStorage } = require('../utils')
 
 const supertest = require('supertest')
 const nock = require('nock')
@@ -35,12 +34,10 @@ describe('Authentication API (OIDC)', () => {
   const configPath = path.join(__dirname, '../resources/config')
   const aliceDbPath = path.join(__dirname,
     '../resources/accounts-scenario/alice/db')
-  const userStorePath = path.join(aliceDbPath, 'oidc/users')
-  const aliceCredentialStore = UserCredentialStore.from({
-    backendType: 'files',
-    path: userStorePath,
-    saltRounds: 1
-  })
+
+  const aliceHost = { serverUri: aliceServerUri }
+  const storage = testStorage(aliceHost, aliceDbPath)
+  const aliceCredentialStore = storage.users
 
   const bobServerUri = 'https://localhost:7001'
   const bobDbPath = path.join(__dirname,
@@ -88,7 +85,7 @@ describe('Authentication API (OIDC)', () => {
   after(() => {
     alicePod.close()
     bobPod.close()
-    fs.removeSync(path.join(aliceDbPath, 'oidc/users'))
+    fs.removeSync(path.join(aliceDbPath, 'users'))
     fs.removeSync(path.join(aliceDbPath, 'oidc/rp'))
     fs.removeSync(path.join(bobDbPath, 'oidc/rp/clients'))
     cleanDir(aliceRootPath)

@@ -13,6 +13,9 @@ chai.use(sinonChai)
 chai.should()
 
 const { OidcManager } = require('../../lib/authentication/oidc-manager')
+const SolidHost = require('../../lib/solid-host')
+const { testStorage } = require('../utils')
+const host = SolidHost.from({ serverUri: 'https://localhost:8443' })
 
 describe('OidcManager', () => {
   afterEach(() => {
@@ -23,34 +26,24 @@ describe('OidcManager', () => {
     it('should create an OidcManager instance from config', () => {
       const providerUri = 'https://localhost:8443'
       const dbPath = './db/oidc'
-      const saltRounds = 5
-      const host = {}
       const authCallbackUri = providerUri + '/api/oidc/rp'
       const postLogoutUri = providerUri + '/goodbye'
 
       const options = {
         serverUri: providerUri,
         providerUri,
-        dbPath,
         host,
-        saltRounds,
         authCallbackUri,
         postLogoutUri
       }
+      const storage = testStorage(host, dbPath)
 
-      const oidc = OidcManager.from(options)
+      const oidc = OidcManager.from(options, storage)
 
       expect(oidc.providerUri).to.equal(providerUri)
       expect(oidc.serverUri).to.equal(providerUri)
-      expect(oidc.host).to.equal(host)
-      expect(oidc.saltRounds).to.equal(saltRounds)
       expect(oidc.authCallbackUri).to.equal(authCallbackUri)
       expect(oidc.postLogoutUri).to.equal(postLogoutUri)
-
-      const storePaths = oidc.storePaths
-      expect(storePaths.providerStore.endsWith('oidc/op'))
-      expect(storePaths.multiRpStore.endsWith('oidc/rp'))
-      expect(storePaths.userStore.endsWith('oidc/users'))
     })
   })
 
@@ -66,10 +59,10 @@ describe('OidcManager', () => {
         providerUri,
         authCallbackUri,
         postLogoutUri,
-        dbPath
+        host
       }
-
-      const oidc = OidcManager.from(config)
+      const storage = testStorage(host, dbPath)
+      const oidc = OidcManager.from(config, storage)
       oidc.initMultiRpClient()
 
       const clientStore = oidc.clients
@@ -84,37 +77,17 @@ describe('OidcManager', () => {
       const authCallbackUri = serverUri + '/api/oidc/rp'
       const postLogoutUri = serverUri + '/goodbye'
 
-      const config = { serverUri, providerUri: serverUri, authCallbackUri, postLogoutUri }
+      const config = {
+        serverUri, providerUri: serverUri, authCallbackUri, postLogoutUri, host
+      }
+      const storage = testStorage(host)
 
-      const oidc = OidcManager.from(config)
+      const oidc = OidcManager.from(config, storage)
       oidc.initRs()
 
       expect(oidc.rs.defaults.query).to.be.true()
       expect(oidc.rs.defaults.realm).to.equal(serverUri)
       expect(oidc.rs).to.respondTo('authenticate')
-    })
-  })
-
-  describe('initUserCredentialStore()', () => {
-    it('should initialize a UserCredentialStore instance', () => {
-      const dbPath = './db/oidc-mgr'
-      const providerUri = 'https://localhost:8443'
-      const authCallbackUri = providerUri + '/api/oidc/rp'
-      const postLogoutUri = providerUri + '/goodbye'
-
-      const config = {
-        providerUri,
-        authCallbackUri,
-        postLogoutUri,
-        saltRounds: 5,
-        dbPath
-      }
-
-      const oidc = OidcManager.from(config)
-      oidc.initUserCredentialStore()
-
-      expect(oidc.users.backend.backend.dir.endsWith('oidc-mgr/users'))
-      expect(oidc.users.saltRounds).to.equal(config.saltRounds)
     })
   })
 
@@ -124,22 +97,17 @@ describe('OidcManager', () => {
       const authCallbackUri = providerUri + '/api/oidc/rp'
       const postLogoutUri = providerUri + '/goodbye'
 
-      const host = {
-        authenticate: () => {},
-        obtainConsent: () => {},
-        logout: () => {}
-      }
       const dbPath = './db/oidc-mgr'
-      const config = { providerUri, host, dbPath, authCallbackUri, postLogoutUri }
+      const config = { providerUri, authCallbackUri, postLogoutUri, host }
 
-      const oidc = OidcManager.from(config)
+      const storage = testStorage(host, dbPath)
+      const oidc = OidcManager.from(config, storage)
 
       const loadProviderConfig = sinon.spy(oidc, 'loadProviderConfig')
 
       await oidc.initProvider()
 
       expect(oidc.provider.issuer).to.equal(providerUri)
-      expect(oidc.provider.host.authenticate).to.equal(host.authenticate)
       expect(loadProviderConfig).to.have.been.called()
     })
   })
@@ -202,8 +170,9 @@ describe('OidcManager', () => {
     const providerUri = 'https://example.com'
     const authCallbackUri = providerUri + '/api/oidc/rp'
     const postLogoutUri = providerUri + '/goodbye'
-    const config = { providerUri, authCallbackUri, postLogoutUri }
-    const oidc = OidcManager.from(config)
+    const config = { providerUri, authCallbackUri, postLogoutUri, host }
+    const storage = testStorage(host)
+    const oidc = OidcManager.from(config, storage)
 
     it('should resolve with null webid with missing claims', () => {
       return oidc.webIdFromClaims(null)
@@ -303,8 +272,10 @@ describe('OidcManager', () => {
     const providerUri = 'https://example.com'
     const authCallbackUri = providerUri + '/api/oidc/rp'
     const postLogoutUri = providerUri + '/goodbye'
-    const config = { providerUri, authCallbackUri, postLogoutUri }
-    const oidc = OidcManager.from(config)
+    const host = { serverUri: 'https://example.com' }
+    const config = { providerUri, authCallbackUri, postLogoutUri, host, dbPath: '' }
+    const storage = testStorage(host)
+    const oidc = OidcManager.from(config, storage)
 
     it('should be false if no audience passed in', () => {
       expect(oidc.filterAudience(undefined)).to.be.false()

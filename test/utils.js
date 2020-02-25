@@ -7,7 +7,6 @@ const from = require('from2')
 const TEST_HOSTS = ['nic.localhost', 'tim.localhost', 'nicola.localhost']
 
 const { StorageManager } = require('../lib/storage-manager')
-const LegacyResourceMapper = require('../lib/data-storage/ldp-backend-fs/legacy-resource-mapper')
 
 function startServer (server, port) {
   return new Promise((resolve) => {
@@ -15,13 +14,12 @@ function startServer (server, port) {
   })
 }
 
-function testStorage (host) {
-  const mapper = LegacyResourceMapper.from({ host })
-  return StorageManager.from({ host, mapper, saltRounds: 1 })
+function testStorage (host, dbPath = '') {
+  return StorageManager.from({ host, dbPath, saltRounds: 1 })
 }
 
 function testAccountManagerOptions (host, options = {}) {
-  const storage = testStorage(host)
+  const storage = testStorage(host, options.dbPath)
   return { host, storage, ...options }
 }
 
