@@ -29,7 +29,7 @@ describe('PasswordAuthenticator', () => {
     const req = {
       body: { username: 'alice', password: '12345' }
     }
-    const options = { userStore: mockUserCredentialStore, accountManager }
+    const options = { storage: { users: mockUserCredentialStore }, accountManager }
 
     it('should return a PasswordAuthenticator instance', () => {
       const pwAuth = PasswordAuthenticator.fromParams(req, options)
@@ -158,7 +158,7 @@ describe('PasswordAuthenticator', () => {
         const options = {
           username: 'alice',
           password: '1234',
-          userStore: mockUserCredentialStore,
+          storage: { users: mockUserCredentialStore },
           accountManager
         }
         const pwAuth = new PasswordAuthenticator(options)
@@ -176,7 +176,7 @@ describe('PasswordAuthenticator', () => {
         const options = {
           username: webId,
           password: '1234',
-          userStore: mockUserCredentialStore,
+          storage: { users: mockUserCredentialStore },
           accountManager
         }
         const pwAuth = new PasswordAuthenticator(options)
@@ -204,7 +204,12 @@ describe('PasswordAuthenticator', () => {
       }
 
       it('should load user from store if provided with username', () => {
-        const options = { username: 'admin', password: '1234', userStore: mockUserCredentialStore, accountManager }
+        const options = {
+          username: 'admin',
+          password: '1234',
+          storage: { users: mockUserCredentialStore },
+          accountManager
+        }
         const pwAuth = new PasswordAuthenticator(options)
 
         const userStoreKey = 'localhost:8443/web#id'
@@ -217,7 +222,12 @@ describe('PasswordAuthenticator', () => {
 
       it('should load user from store if provided with WebID', () => {
         const webId = 'https://localhost:8443/web#id'
-        const options = { username: webId, password: '1234', userStore: mockUserCredentialStore, accountManager }
+        const options = {
+          username: webId,
+          password: '1234',
+          storage: { users: mockUserCredentialStore },
+          accountManager
+        }
         const pwAuth = new PasswordAuthenticator(options)
 
         const userStoreKey = 'localhost:8443/web#id'

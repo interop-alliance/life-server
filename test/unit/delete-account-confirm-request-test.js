@@ -26,7 +26,7 @@ describe('DeleteAccountConfirmRequest', () => {
 
       const options = {
         accountManager,
-        userStore,
+        storage: { users: userStore },
         response: res,
         token: '12345'
       }
@@ -47,7 +47,7 @@ describe('DeleteAccountConfirmRequest', () => {
       const userStore = {}
 
       const req = {
-        app: { locals: { accountManager, oidc: { users: userStore } } },
+        app: { locals: { accountManager, storage: { users: userStore } } },
         query: { token }
       }
       const res = HttpMocks.createResponse()
@@ -190,12 +190,12 @@ describe('DeleteAccountConfirmRequest', () => {
         userAccountFrom: sinon.stub().returns(user),
         deleteAccountStorage: sinon.stub().resolves()
       }
-      const userStore = {
+      const users = {
         deleteUser: sinon.stub().resolves()
       }
 
       const options = {
-        accountManager, userStore
+        accountManager, storage: { users }
       }
       const request = new DeleteAccountConfirmRequest(options)
       const tokenContents = { webId }
@@ -204,7 +204,7 @@ describe('DeleteAccountConfirmRequest', () => {
         .then(() => {
           expect(accountManager.userAccountFrom).to.have.been.calledWith(tokenContents)
           expect(accountManager.deleteAccountStorage).to.have.been.calledWith(user)
-          expect(userStore.deleteUser).to.have.been.calledWith(user)
+          expect(users.deleteUser).to.have.been.calledWith(user)
         })
     })
   })

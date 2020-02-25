@@ -26,7 +26,7 @@ describe('PasswordChangeRequest', () => {
 
       const options = {
         accountManager,
-        userStore,
+        storage: { users: userStore },
         returnToUrl: 'https://example.com/resource',
         response: res,
         token: '12345',
@@ -53,7 +53,7 @@ describe('PasswordChangeRequest', () => {
       const userStore = {}
 
       const req = {
-        app: { locals: { accountManager, oidc: { users: userStore } } },
+        app: { locals: { accountManager, storage: { users: userStore } } },
         query: { returnToUrl, token },
         body: { newPassword }
       }
@@ -124,13 +124,13 @@ describe('PasswordChangeRequest', () => {
         webId: 'https://alice.example.com/#me'
       }
       const storedToken = { webId: alice.webId }
-      const store = {
+      const accountStorage = {
         findUser: sinon.stub().resolves(alice),
         updatePassword: sinon.stub()
       }
       const accountManager = {
         host,
-        store,
+        storage: { accountStorage },
         userAccountFrom: sinon.stub().resolves(alice),
         validateResetToken: sinon.stub().resolves(storedToken)
       }
@@ -140,7 +140,7 @@ describe('PasswordChangeRequest', () => {
       accountManager.sendPasswordResetEmail = sinon.stub().resolves()
 
       const req = {
-        app: { locals: { accountManager, oidc: { users: store } } },
+        app: { locals: { accountManager } },
         query: { returnToUrl },
         body: { token, newPassword }
       }
@@ -218,20 +218,20 @@ describe('PasswordChangeRequest', () => {
       const accountManager = {
         userAccountFrom: sinon.stub().returns(user)
       }
-      const userStore = {
+      const users = {
         findUser: sinon.stub().resolves(null), // no user found
         createUser: sinon.stub().resolves(),
         updatePassword: sinon.stub().resolves()
       }
 
       const options = {
-        accountManager, userStore, newPassword: 'swordfish'
+        accountManager, storage: { users }, newPassword: 'swordfish'
       }
       const request = new PasswordChangeRequest(options)
 
       return request.changePassword(user)
         .then(() => {
-          expect(userStore.createUser).to.have.been.calledWith(user, options.newPassword)
+          expect(users.createUser).to.have.been.calledWith(user, options.newPassword)
         })
     })
   })

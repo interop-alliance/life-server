@@ -35,7 +35,9 @@ describe('LoginRequest', () => {
 
     beforeEach(() => {
       req = {
-        app: { locals: { oidc: { users: mockUserCredentialStore }, localAuth, host } },
+        app: {
+          locals: { storage: { users: mockUserCredentialStore }, localAuth, host }
+        },
         body: { username: 'alice', password: '12345' }
       }
       res = HttpMocks.createResponse()

@@ -29,7 +29,8 @@ describe('AccountManager (OIDC account creation tests)', () => {
       multiuser: true,
       skipWelcomePage: true,
       dbPath,
-      serverUri
+      serverUri,
+      saltRounds: 1
     })
 
     await promisify(server.listen.bind(server))(3457)
