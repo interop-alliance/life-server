@@ -37,7 +37,7 @@ module.exports = {
   // email: {
   //   host: 'smtp.mailtrap.io', // mailtrap.io is only used as an example
   //   port: '2525',
-  //   secure: true,
+  //   secure: false,
   //   auth: {
   //     user: '',
   //     pass: ''
