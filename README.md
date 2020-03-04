@@ -120,7 +120,6 @@ this repo intends to be another compatible implementation (the more the merrier!
 
 **Does not support:**
 
-* Not published to `npm`, intended to be installed and run from git.
 * Using an external WebID on signup 
 * `acl:origin` checking or Trusted Apps (uses [`solid-permissions`](https://github.com/interop-alliance/solid-permissions)  
     instead of [`acl-check.js`](https://github.com/solid/acl-check) for access control)

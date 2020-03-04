@@ -225,15 +225,18 @@ function asserter (assert) {
 function mapsUrl (it, mapper, label, options, expected) {
   // Set up positive test
   if (!(expected instanceof Error)) {
-    it(`maps ${label}`, async () => {
-      const actual = await mapper.mapUrlToFile(options)
+    it(`maps ${label}`, () => {
+      const actual = mapper.mapUrlToFile(options)
       expect(actual).to.deep.equal(expected)
     })
   // Set up error test
   } else {
-    it(`does not map ${label}`, async () => {
-      const actual = mapper.mapUrlToFile(options)
-      await expect(actual).to.be.rejectedWith(expected.message)
+    it(`does not map ${label}`, () => {
+      try {
+        mapper.mapUrlToFile(options)
+      } catch (error) {
+        expect(error.message).to.equal(expected.message)
+      }
     })
   }
 }

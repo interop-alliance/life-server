@@ -6,7 +6,7 @@
 - **BREAKING**: Refactored configuration system. Config file is now
   a `.js` file (to enable comments, etc), and not JSON. Default config file
   is now `config.dev.js` instead of `config.json`.
-- Updated `commander` and `inquirer` packages to latest versions.
+- Updated `commander`, `node-mailer` and `inquirer` packages to latest versions.
 - **BREAKING**: Account recover email is now loaded from `storage.users` db,
   instead of from the account root `.acl` file.
 
