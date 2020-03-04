@@ -36,7 +36,7 @@ describe('AccountTemplate', () => {
         name: 'Alice Q.'
       }
       const template = new AccountTemplate({
-        substitutions, accountStore: storage.accountStore
+        substitutions, accountStorage: storage.accountStorage
       })
 
       await template.provisionAccountFrom({

@@ -8,8 +8,6 @@ chai.use(sinonChai)
 chai.use(require('dirty-chai'))
 chai.should()
 
-const rdf = require('rdflib')
-const ns = require('solid-namespace')(rdf)
 const SolidHost = require('../../lib/solid-host')
 const { AccountManager, isValidUsername } = require('../../lib/account-mgmt/account-manager')
 const UserAccount = require('../../lib/account-mgmt/user-account')
@@ -28,7 +26,7 @@ describe('AccountManager', () => {
       host.multiuser = true
       const config = {
         host,
-        accountStore: {},
+        storage: {},
         authMethod: 'oidc',
         emailService: {},
         tokenService: {}
@@ -37,7 +35,7 @@ describe('AccountManager', () => {
       const mgr = AccountManager.from(config)
       expect(mgr.host).to.equal(config.host)
       expect(mgr.authMethod).to.equal(config.authMethod)
-      expect(mgr.accountStore).to.equal(config.accountStore)
+      expect(mgr.storage).to.equal(config.storage)
       expect(mgr.multiuser).to.equal(host.multiuser)
       expect(mgr.emailService).to.equal(config.emailService)
       expect(mgr.tokenService).to.equal(config.tokenService)
@@ -205,21 +203,17 @@ describe('AccountManager', () => {
 
   describe('loadAccountRecoveryEmail()', () => {
     it('parses and returns the agent mailto from the root acl', async () => {
-      const userAccount = UserAccount.from({ username: 'alice' })
-
-      const rootAclGraph = rdf.graph()
-      rootAclGraph.add(
-        rdf.namedNode('https://alice.example.com/.acl#owner'),
-        ns.acl('agent'),
-        rdf.namedNode('mailto:alice@example.com')
-      )
+      const userAccount = UserAccount.from({
+        username: 'alice', email: 'alice@example.com'
+      })
       const host = SolidHost.from({
         serverUri: 'https://example.com',
         multiuser: true
       })
       const options = testAccountManagerOptions(host)
-      options.accountStore.loadParsedGraph = sinon.stub().resolves(rootAclGraph)
       const accountManager = AccountManager.from(options)
+
+      accountManager.storage.users.backend.get = sinon.stub().resolves(userAccount)
 
       const recoveryEmail = await accountManager.loadAccountRecoveryEmail(userAccount)
       expect(recoveryEmail).to.equal('alice@example.com')
@@ -228,15 +222,13 @@ describe('AccountManager', () => {
     it('should return undefined when agent mailto is missing', async () => {
       const userAccount = UserAccount.from({ username: 'alice' })
 
-      const emptyGraph = rdf.graph()
-
       const host = SolidHost.from({
         serverUri: 'https://example.com',
         multiuser: true
       })
       const options = testAccountManagerOptions(host)
-      options.accountStore.loadParsedGraph = sinon.stub().resolves(emptyGraph)
       const accountManager = AccountManager.from(options)
+      accountManager.storage.users.backend.get = sinon.stub().resolves({})
 
       const recoveryEmail = await accountManager.loadAccountRecoveryEmail(userAccount)
       expect(recoveryEmail).to.be.undefined()
@@ -282,7 +274,8 @@ describe('AccountManager', () => {
 
       const token = accountManager.generateDeleteToken(userAccount)
 
-      const tokenValue = accountManager.tokenService.verify('delete-account', token)
+      const tokenValue = accountManager.tokenService
+        .verify('delete-account', token)
 
       expect(tokenValue.webId).to.equal(aliceWebId)
       expect(tokenValue).to.have.property('exp')

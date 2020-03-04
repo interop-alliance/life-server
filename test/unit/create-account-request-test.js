@@ -142,7 +142,7 @@ describe('CreateOidcAccountRequest', () => {
       const userStore = {}
       const req = HttpMocks.createRequest({
         app: {
-          locals: { authMethod, oidc: { users: userStore }, accountManager }
+          locals: { authMethod, storage: { users: userStore }, accountManager }
         },
         body: aliceData,
         session
@@ -169,7 +169,7 @@ describe('CreateOidcAccountRequest', () => {
       }
       const createUserSpy = sinon.spy(userStore, 'createUser')
       const req = HttpMocks.createRequest({
-        app: { locals: { authMethod, oidc: { users: userStore }, accountManager } },
+        app: { locals: { authMethod, storage: { users: userStore }, accountManager } },
         body: aliceData,
         session
       })

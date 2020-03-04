@@ -56,7 +56,7 @@
     "@solid/oidc-rs": "^0.4.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
-    "bootstrap": "^3.4.1",
+    "bootstrap": "^4.4.1",
     "busboy": "^0.3.1",
     "camelize": "^1.0.0",
     "commander": "^4.1.1",
@@ -74,7 +74,7 @@
     "nano": "^8.1.0",
     "negotiator": "^0.6.2",
     "node-fetch": "^2.6.0",
-    "nodemailer": "^3.1.8",
+    "nodemailer": "^6.4.3",
     "oidc-op-express": "^0.0.3",
     "pino": "^5.16.0",
     "rdflib": "interop-alliance/rdflib-lite#rc2.0.0",
@@ -93,12 +93,12 @@
     "dirty-chai": "^2.0.1",
     "localstorage-memory": "^1.0.3",
     "mocha": "^7.0.1",
-    "nock": "^11.8.2",
+    "nock": "^12.0.1",
     "node-mocks-http": "^1.8.1",
     "nyc": "^15.0.0",
     "oidc-web": "^0.4.1",
-    "sinon": "^8.1.1",
-    "sinon-chai": "^3.4.0",
+    "sinon": "^9.0.0",
+    "sinon-chai": "^3.5.0",
     "standard": "^14.3.1",
     "supertest": "^4.0.2",
     "turtle-validator": "^1.0.2",
@@ -114,6 +114,10 @@
     "mocha": "NODE_TLS_REJECT_UNAUTHORIZED=0 mocha",
     "clean": "rm -rf config/templates config/views",
     "reset": "rm -rf .db data && npm run clean"
+  },
+  "mocha": {
+    "recursive": true,
+    "timeout": 100000
   },
   "nyc": {
     "reporter": [

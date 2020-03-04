@@ -8,8 +8,11 @@ chai.use(dirtyChai)
 const expect = chai.expect
 chai.should()
 
-const { UserCredentialStore } = require('../../lib/authentication/user-credential-store')
+// const { UserCredentialStore } = require('../../lib/authentication/user-credential-store')
+const { testStorage } = require('../utils')
 const dbPath = path.resolve(__dirname, '../db')
+const host = { serverUri: 'https://localhost:8443' }
+const storage = testStorage(host, dbPath)
 
 describe('UserCredentialStore (integration)', () => {
   beforeEach(() => {
@@ -22,11 +25,7 @@ describe('UserCredentialStore (integration)', () => {
 
   describe('createUser()', () => {
     it('should create a user record and relevant index entries', async () => {
-      const options = {
-        backendType: 'files',
-        path: dbPath
-      }
-      const store = UserCredentialStore.from(options)
+      const store = storage.users
 
       const user = {
         id: 'alice.example.com',
@@ -49,11 +48,7 @@ describe('UserCredentialStore (integration)', () => {
 
   describe('updatePassword()', () => {
     it('should update the user record with the provided password', async () => {
-      const options = {
-        backendType: 'files',
-        path: dbPath
-      }
-      const store = UserCredentialStore.from(options)
+      const store = storage.users
 
       const user = {
         id: 'alice.example.com'
@@ -71,12 +66,7 @@ describe('UserCredentialStore (integration)', () => {
 
   describe('findUser()', () => {
     it('loads a previously saved user', () => {
-      const options = {
-        backendType: 'files',
-        path: dbPath,
-        saltRounds: 2
-      }
-      const store = UserCredentialStore.from(options)
+      const store = storage.users
 
       const user = {
         id: 'alice.example.com',
@@ -97,12 +87,7 @@ describe('UserCredentialStore (integration)', () => {
 
   describe('hashing and matching passwords', () => {
     it('returns the user object when password matches', () => {
-      const options = {
-        backendType: 'files',
-        path: dbPath,
-        saltRounds: 2
-      }
-      const store = UserCredentialStore.from(options)
+      const store = storage.users
 
       const plaintextPassword = '12345'
       const user = { id: 'alice.example.com' }
@@ -121,12 +106,7 @@ describe('UserCredentialStore (integration)', () => {
     })
 
     it('returns null when password does not match', () => {
-      const options = {
-        backendType: 'files',
-        path: dbPath,
-        saltRounds: 2
-      }
-      const store = UserCredentialStore.from(options)
+      const store = storage.users
 
       const user = {
         id: 'alice.example.com',
@@ -142,12 +122,7 @@ describe('UserCredentialStore (integration)', () => {
   })
   describe('deleteUser()', () => {
     it('deletes a previously saved user', () => {
-      const options = {
-        backendType: 'files',
-        path: dbPath,
-        saltRounds: 2
-      }
-      const store = UserCredentialStore.from(options)
+      const store = storage.users
 
       const user = {
         id: 'alice.example.com',

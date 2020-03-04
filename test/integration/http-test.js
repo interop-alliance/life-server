@@ -1,8 +1,8 @@
 const supertest = require('supertest')
-const fs = require('fs')
+const fs = require('fs-extra')
 const li = require('li')
-const ldnode = require('../../index')
-const rm = require('./../utils').rm
+const lfs = require('../../index')
+const { rm } = require('./../utils')
 const path = require('path')
 const chai = require('chai')
 const { assert, expect } = chai
@@ -14,7 +14,7 @@ const { ACL_SUFFIX, META_SUFFIX } = require('../../lib/defaults')
 let ldpServer, server
 
 before(async () => {
-  ldpServer = await ldnode.createServer({
+  ldpServer = await lfs.createServer({
     root: path.join(__dirname, '../resources'),
     skipWelcomePage: true,
     webid: false

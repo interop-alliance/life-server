@@ -1,7 +1,6 @@
-const Solid = require('../../index')
+const server = require('../../index')
 const path = require('path')
 const fs = require('fs-extra')
-const { UserCredentialStore } = require('../../lib/authentication/user-credential-store')
 const UserAccount = require('../../lib/account-mgmt/user-account')
 const { OIDCWebClient } = require('oidc-web')
 
@@ -16,7 +15,7 @@ global.window = {
   location: { href: currentLocation }
 }
 
-const { cleanDir, startServer } = require('../utils')
+const { cleanDir, startServer, testStorage } = require('../utils')
 
 const supertest = require('supertest')
 const nock = require('nock')
@@ -35,12 +34,10 @@ describe('Authentication API (OIDC)', () => {
   const configPath = path.join(__dirname, '../resources/config')
   const aliceDbPath = path.join(__dirname,
     '../resources/accounts-scenario/alice/db')
-  const userStorePath = path.join(aliceDbPath, 'oidc/users')
-  const aliceCredentialStore = UserCredentialStore.from({
-    backendType: 'files',
-    path: userStorePath,
-    saltRounds: 1
-  })
+
+  const aliceHost = { serverUri: aliceServerUri }
+  const storage = testStorage(aliceHost, aliceDbPath)
+  const aliceCredentialStore = storage.users
 
   const bobServerUri = 'https://localhost:7001'
   const bobDbPath = path.join(__dirname,
@@ -62,7 +59,7 @@ describe('Authentication API (OIDC)', () => {
   let bobPod
 
   before(async () => {
-    alicePod = await Solid.createServer(
+    alicePod = await server.createServer(
       Object.assign({
         root: aliceRootPath,
         serverUri: aliceServerUri,
@@ -71,7 +68,7 @@ describe('Authentication API (OIDC)', () => {
 
     await startServer(alicePod, 7000)
 
-    bobPod = await Solid.createServer(
+    bobPod = await server.createServer(
       Object.assign({
         root: bobRootPath,
         serverUri: bobServerUri,
@@ -88,7 +85,7 @@ describe('Authentication API (OIDC)', () => {
   after(() => {
     alicePod.close()
     bobPod.close()
-    fs.removeSync(path.join(aliceDbPath, 'oidc/users'))
+    fs.removeSync(path.join(aliceDbPath, 'users'))
     fs.removeSync(path.join(aliceDbPath, 'oidc/rp'))
     fs.removeSync(path.join(bobDbPath, 'oidc/rp/clients'))
     cleanDir(aliceRootPath)
@@ -162,7 +159,9 @@ describe('Authentication API (OIDC)', () => {
       let response, cookie
 
       before(done => {
-        const aliceAccount = UserAccount.from({ webId: aliceWebId })
+        const aliceAccount = UserAccount.from({
+          webId: aliceWebId, username: 'alice'
+        })
 
         aliceCredentialStore.createUser(aliceAccount, alicePassword)
         alice.post('/login/password')
@@ -171,6 +170,10 @@ describe('Authentication API (OIDC)', () => {
           .send({ password: alicePassword })
           .end((err, res) => {
             response = res
+            const error = err | response.error
+            if (error) {
+              return done(error)
+            }
             cookie = response.headers['set-cookie'][0]
             done(err)
           })
@@ -309,8 +312,6 @@ describe('Authentication API (OIDC)', () => {
           // Submitting select-provider form redirects to Alice's pod's /authorize
           const authorizeUri = res.header.location
           expect(authorizeUri.startsWith(aliceServerUri + '/authorize'))
-
-          console.log('REDIRECTED TO:', authorizeUri)
 
           // Follow the redirect to /authorize
           const authorizePath = authorizeUri.replace(aliceServerUri, '') // (new URL(authorizeUri)).pathname
