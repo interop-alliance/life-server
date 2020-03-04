@@ -22,7 +22,7 @@
           </a>
         </td>
         <td>
-          {{this.fsStats.size}}
+          {{this.serverMeta.size}}
         </td>
         <td>
           {{#unless this.target.isAcl}}
@@ -41,7 +41,7 @@
   onReady(init)
 
   function onReady(fn) {
-    if (document.readyState != 'loading'){
+    if (document.readyState !== 'loading'){
       fn();
     } else {
       document.addEventListener('DOMContentLoaded', fn);
