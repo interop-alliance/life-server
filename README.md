@@ -195,7 +195,7 @@ The easiest way to setup `life-server` is by running the `init` wizard.
 This will create a `config.dev.js` in your current folder:
 
 ```
-./bin/solid init
+./bin/server init
 ```
 
 Going with the defaults is fine, but note that you will need the paths
@@ -206,13 +206,13 @@ Going with the defaults is fine, but note that you will need the paths
 To run your server (once you've generated a config file):
 
 ```
-./bin/solid start
+./bin/server start
 ```
 
 or when using a self-signed certificate:
 
 ```
-./bin/solid-test start
+./bin/server-test start
 ```
 
 After startup, the server is available at the configured server URL (by default,

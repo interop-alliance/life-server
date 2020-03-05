@@ -9,7 +9,7 @@ chai.should()
 const HttpMocks = require('node-mocks-http')
 
 const { AccountManager } = require('../../lib/account-mgmt/account-manager')
-const SolidHost = require('../../lib/solid-host')
+const ServerHost = require('../../lib/server-host')
 const defaults = require('../../lib/defaults')
 const { CreateAccountRequest } = require('../../lib/account-mgmt/create-account-request')
 const { testAccountManagerOptions } = require('../utils')
@@ -19,7 +19,7 @@ describe('CreateAccountRequest', () => {
   let session, res
 
   beforeEach(() => {
-    host = SolidHost.from({
+    host = ServerHost.from({
       serverUri: 'https://example.com'
     })
     options = testAccountManagerOptions(host)
@@ -125,7 +125,7 @@ describe('CreateOidcAccountRequest', () => {
   let session, res
 
   beforeEach(() => {
-    host = SolidHost.from({
+    host = ServerHost.from({
       serverUri: 'https://example.com'
     })
     options = testAccountManagerOptions(host)

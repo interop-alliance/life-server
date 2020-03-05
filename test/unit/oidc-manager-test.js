@@ -13,9 +13,9 @@ chai.use(sinonChai)
 chai.should()
 
 const { OidcManager } = require('../../lib/authentication/oidc-manager')
-const SolidHost = require('../../lib/solid-host')
+const ServerHost = require('../../lib/server-host')
 const { testStorage } = require('../utils')
-const host = SolidHost.from({ serverUri: 'https://localhost:8443' })
+const host = ServerHost.from({ serverUri: 'https://localhost:8443' })
 
 describe('OidcManager', () => {
   afterEach(() => {

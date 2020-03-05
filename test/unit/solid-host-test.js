@@ -3,17 +3,17 @@ const chai = require('chai')
 const { expect } = chai
 chai.use(require('dirty-chai'))
 
-const SolidHost = require('../../lib/solid-host')
+const ServerHost = require('../../lib/server-host')
 const defaults = require('../../lib/defaults')
 
-describe('SolidHost', () => {
+describe('ServerHost', () => {
   describe('from()', () => {
     it('should init with port, serverUri and hostname', () => {
       const config = {
         port: 3000,
         serverUri: 'https://localhost:3000'
       }
-      const host = SolidHost.from(config)
+      const host = ServerHost.from(config)
 
       expect(host.port).to.equal(3000)
       expect(host.serverUri).to.equal('https://localhost:3000')
@@ -21,7 +21,7 @@ describe('SolidHost', () => {
     })
 
     it('should init to default port and serverUri values', () => {
-      const host = SolidHost.from({})
+      const host = ServerHost.from({})
       expect(host.port).to.equal(defaults.port)
       expect(host.serverUri).to.equal(defaults.serverUri)
     })
@@ -32,13 +32,13 @@ describe('SolidHost', () => {
       const config = {
         serverUri: 'https://test.local'
       }
-      const host = SolidHost.from(config)
+      const host = ServerHost.from(config)
 
       expect(host.accountUriFor('alice')).to.equal('https://alice.test.local')
     })
 
     it('should throw an error if no account name is passed in', () => {
-      const host = SolidHost.from()
+      const host = ServerHost.from()
       expect(() => { host.accountUriFor() }).to.throw(TypeError)
     })
   })
@@ -46,7 +46,7 @@ describe('SolidHost', () => {
   describe('allowsSessionFor()', () => {
     let host
     before(() => {
-      host = SolidHost.from({
+      host = ServerHost.from({
         serverUri: 'https://test.local'
       })
     })
@@ -78,7 +78,7 @@ describe('SolidHost', () => {
 
   describe('cookieDomain getter', () => {
     it('should return null for single-part domains (localhost)', () => {
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         serverUri: 'https://localhost:8443'
       })
 
@@ -86,7 +86,7 @@ describe('SolidHost', () => {
     })
 
     it('should return a cookie domain for multi-part domains', () => {
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         serverUri: 'https://example.com:8443'
       })
 
@@ -96,7 +96,7 @@ describe('SolidHost', () => {
 
   describe('authEndpoint getter', () => {
     it('should return an /authorize url object', () => {
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         serverUri: 'https://localhost:8443'
       })
 
@@ -109,7 +109,7 @@ describe('SolidHost', () => {
 
   describe('parseTargetUrl()', () => {
     it('should extract a fully-qualified url from an Express request', () => {
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         serverUri: 'https://example.com'
       })
 

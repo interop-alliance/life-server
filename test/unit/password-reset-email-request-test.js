@@ -13,7 +13,7 @@ const HttpMocks = require('node-mocks-http')
 
 const PasswordResetEmailRequest = require('../../lib/account-mgmt/password-reset-email-request')
 const { AccountManager } = require('../../lib/account-mgmt/account-manager')
-const SolidHost = require('../../lib/solid-host')
+const ServerHost = require('../../lib/server-host')
 const { testAccountManagerOptions } = require('../utils')
 
 describe('PasswordResetEmailRequest', () => {
@@ -85,7 +85,7 @@ describe('PasswordResetEmailRequest', () => {
       const returnToUrl = 'https://example.com/resource'
       const username = 'alice'
 
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         serverUri: 'https://example.com',
         multiuser: true
       })
@@ -112,7 +112,7 @@ describe('PasswordResetEmailRequest', () => {
 
   describe('validate()', () => {
     it('should throw an error if username is missing in multi-user mode', () => {
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         serverUri: 'https://example.com',
         multiuser: true
       })
@@ -124,7 +124,7 @@ describe('PasswordResetEmailRequest', () => {
     })
 
     it('should not throw an error if username is missing in single user mode', () => {
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         serverUri: 'https://example.com',
         multiuser: false
       })
@@ -138,7 +138,7 @@ describe('PasswordResetEmailRequest', () => {
 
   describe('handlePost()', () => {
     it('should handle the post request', () => {
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         serverUri: 'https://example.com',
         multiuser: true
       })
@@ -170,7 +170,7 @@ describe('PasswordResetEmailRequest', () => {
 
   describe('loadUser()', () => {
     it('should return a UserAccount instance based on username', () => {
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         serverUri: 'https://example.com',
         multiuser: true
       })
@@ -188,7 +188,7 @@ describe('PasswordResetEmailRequest', () => {
     })
 
     it('should throw an error if the user does not exist', done => {
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         serverUri: 'https://example.com',
         multiuser: true
       })

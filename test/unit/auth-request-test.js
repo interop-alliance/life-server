@@ -10,7 +10,7 @@ chai.should()
 const { URL } = require('url')
 
 const AuthRequest = require('../../lib/authentication/auth-request')
-const SolidHost = require('../../lib/solid-host')
+const ServerHost = require('../../lib/server-host')
 const UserAccount = require('../../lib/account-mgmt/user-account')
 
 describe('AuthRequest', () => {
@@ -27,7 +27,7 @@ describe('AuthRequest', () => {
     return body
   }
 
-  const host = SolidHost.from({ serverUri: 'https://localhost:8443' })
+  const host = ServerHost.from({ serverUri: 'https://localhost:8443' })
 
   describe('extractAuthParams()', () => {
     it('should initialize the auth url query object from params', () => {

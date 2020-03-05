@@ -9,7 +9,7 @@ const expect = chai.expect
 chai.should()
 
 const { OidcManager } = require('../../lib/authentication/oidc-manager')
-const SolidHost = require('../../lib/solid-host')
+const ServerHost = require('../../lib/server-host')
 const { testStorage } = require('../utils')
 
 const dbPath = path.resolve(__dirname, '../resources/temp/db/oidc')
@@ -29,7 +29,7 @@ describe('OidcManager (integration tests)', () => {
   describe('from()', () => {
     it('should result in an oidc instance', () => {
       const serverUri = 'https://localhost:8443'
-      const host = SolidHost.from({ serverUri })
+      const host = ServerHost.from({ serverUri })
 
       const argv = { host }
       const storage = testStorage(host)
@@ -47,7 +47,7 @@ describe('OidcManager (integration tests)', () => {
   describe('initialize()', () => {
     it.skip('should initialize stores and provider config', async () => {
       const serverUri = 'https://localhost:8443'
-      const host = SolidHost.from({ serverUri })
+      const host = ServerHost.from({ serverUri })
 
       const argv = { host }
       const storage = testStorage(host)
@@ -65,7 +65,7 @@ describe('OidcManager (integration tests)', () => {
   })
 
   describe('loadProviderConfig()', () => {
-    const host = SolidHost.from({ serverUri })
+    const host = ServerHost.from({ serverUri })
 
     it('it should return minimal config if no saved config present', async () => {
       const config = {

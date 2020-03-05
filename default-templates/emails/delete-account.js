@@ -15,14 +15,14 @@
  */
 function render (data) {
   return {
-    subject: 'Delete Solid-account request',
+    subject: 'Delete Life Server account request',
 
     /**
      * Text version
      */
     text: `Hi,
 
-We received a request to delete your Solid account, ${data.webId}
+We received a request to delete your Life Server account, ${data.webId}
 
 To delete your account, click on the following link:
 
@@ -35,7 +35,7 @@ If you did not mean to delete your account, ignore this email.`,
      */
     html: `<p>Hi,</p>
 
-<p>We received a request to delete your Solid account, ${data.webId}</p>
+<p>We received a request to delete your Life Server account, ${data.webId}</p>
 
 <p>To delete your account, click on the following link:</p>
 

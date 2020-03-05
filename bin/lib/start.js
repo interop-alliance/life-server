@@ -44,7 +44,7 @@ module.exports = (program) => {
       } catch (error) {
         if (error.code === 'MODULE_NOT_FOUND') {
           console.log('ERROR', `Config file is not found at ${options.config}.`,
-            'Run "npm run solid init" if you have not done so already.')
+            'Run "npm run server init" if you have not done so already.')
         } else {
           console.error(error)
         }

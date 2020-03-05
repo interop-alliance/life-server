@@ -30,7 +30,7 @@ describe('Email Service', function () {
     })
 
     it('should init a sender address if explicitly passed in', () => {
-      const sender = 'Solid Server <solid@databox.me>'
+      const sender = 'Life Server <lfs@example.com>'
       const config = { host: 'smtp.gmail.com', auth: {}, sender }
 
       const emailService = new EmailService(templatePath, config)
@@ -38,18 +38,18 @@ describe('Email Service', function () {
     })
 
     it('should construct a default sender if not passed in', () => {
-      const config = { host: 'databox.me', auth: {} }
+      const config = { host: 'example.com', auth: {} }
 
       const emailService = new EmailService(templatePath, config)
 
-      expect(emailService.sender).to.equal('no-reply@databox.me')
+      expect(emailService.sender).to.equal('no-reply@example.com')
     })
   })
 
   describe('sendMail()', () => {
     it('passes through the sendMail call to the initialized mailer', () => {
       const sendMail = sinon.stub().returns(Promise.resolve())
-      const config = { host: 'databox.me', auth: {} }
+      const config = { host: 'example.com', auth: {} }
       const emailService = new EmailService(templatePath, config)
 
       emailService.mailer.sendMail = sendMail
@@ -63,7 +63,7 @@ describe('Email Service', function () {
     })
 
     it('uses the provided from:, if present', () => {
-      const config = { host: 'databox.me', auth: {} }
+      const config = { host: 'example.com', auth: {} }
       const emailService = new EmailService(templatePath, config)
       const email = { subject: 'Test', from: 'alice@example.com' }
 
@@ -76,7 +76,7 @@ describe('Email Service', function () {
     })
 
     it('uses the default sender if a from: is not provided', () => {
-      const config = { host: 'databox.me', auth: {}, sender: 'solid@example.com' }
+      const config = { host: 'example', auth: {}, sender: 'lfs@example.com' }
       const emailService = new EmailService(templatePath, config)
       const email = { subject: 'Test', from: null }
 
@@ -91,7 +91,7 @@ describe('Email Service', function () {
 
   describe('templatePathFor()', () => {
     it('should compose filename based on base path and template name', () => {
-      const config = { host: 'databox.me', auth: {} }
+      const config = { host: 'example.com', auth: {} }
       const templatePath = '../../config/email-templates'
       const emailService = new EmailService(templatePath, config)
 
@@ -103,7 +103,7 @@ describe('Email Service', function () {
 
   describe('readTemplate()', () => {
     it('should read a template if it exists', () => {
-      const config = { host: 'databox.me', auth: {} }
+      const config = { host: 'example.com', auth: {} }
       const emailService = new EmailService(templatePath, config)
 
       const template = emailService.readTemplate('welcome')
@@ -112,7 +112,7 @@ describe('Email Service', function () {
     })
 
     it('should throw an error if a template does not exist', () => {
-      const config = { host: 'databox.me', auth: {} }
+      const config = { host: 'example.com', auth: {} }
       const emailService = new EmailService(templatePath, config)
 
       expect(() => { emailService.readTemplate('invalid-template') })
@@ -122,7 +122,7 @@ describe('Email Service', function () {
 
   describe('sendWithTemplate()', () => {
     it('should reject with error if template does not exist', done => {
-      const config = { host: 'databox.me', auth: {} }
+      const config = { host: 'example.com', auth: {} }
       const emailService = new EmailService(templatePath, config)
 
       const data = {}
@@ -136,7 +136,7 @@ describe('Email Service', function () {
     })
 
     it('should render an email from template and send it', () => {
-      const config = { host: 'databox.me', auth: {} }
+      const config = { host: 'example.com', auth: {} }
       const emailService = new EmailService(templatePath, config)
 
       emailService.sendMail = (email) => { return Promise.resolve(email) }

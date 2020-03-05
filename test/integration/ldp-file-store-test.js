@@ -5,7 +5,7 @@ chai.should()
 // const rdf = require('rdflib')
 // const ns = require('solid-namespace')(rdf)
 const path = require('path')
-const SolidHost = require('../../lib/solid-host')
+const ServerHost = require('../../lib/server-host')
 const LegacyResourceMapper = require('../../lib/data-storage/ldp-backend-fs/legacy-resource-mapper')
 const { LdpFileStore } = require('../../lib/data-storage/ldp-backend-fs/ldp-file-store')
 
@@ -20,7 +20,7 @@ const SERVER_URI = 'https://example.com'
 
 describe('LdpFileStore', () => {
   const rootDir = path.join(__dirname, '../resources/')
-  const host = SolidHost.from({
+  const host = ServerHost.from({
     serverUri: SERVER_URI,
     root: rootDir
   })

@@ -9,7 +9,7 @@ chai.use(sinonChai)
 chai.use(require('dirty-chai'))
 chai.should()
 
-const SolidHost = require('../../lib/solid-host')
+const ServerHost = require('../../lib/server-host')
 const { AccountManager } = require('../../lib/account-mgmt/account-manager')
 const EmailService = require('../../lib/email-service')
 const { testAccountManagerOptions } = require('../utils')
@@ -19,7 +19,7 @@ const templatePath = path.join(__dirname, '../../default-templates/emails')
 let host, accountManager, emailService
 
 beforeEach(() => {
-  const emailConfig = { auth: {}, sender: 'solid@example.com' }
+  const emailConfig = { auth: {}, sender: 'lfs@example.com' }
   emailService = new EmailService(templatePath, emailConfig)
 
   const mgrConfig = {
@@ -27,7 +27,7 @@ beforeEach(() => {
     authMethod: 'oidc'
   }
 
-  host = SolidHost.from({
+  host = ServerHost.from({
     serverUri: 'https://example.com',
     multiuser: true
   })

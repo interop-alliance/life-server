@@ -106,7 +106,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "solid": "node ./bin/solid",
+    "server": "node ./bin/server",
     "standard": "standard '{bin,examples,lib,test}/**/*.js'",
     "validate": "node ./test/validate-turtle.js",
     "test": "npm run standard && npm run validate && npm run nyc",
@@ -137,7 +137,7 @@
     ]
   },
   "bin": {
-    "solid": "./bin/solid"
+    "server": "./bin/server"
   },
   "engines": {
     "node": ">=10.0"

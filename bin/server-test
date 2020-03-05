@@ -9,5 +9,5 @@ if [ "$COMMAND" == "start" ]; then
   export NODE_TLS_REJECT_UNAUTHORIZED=0
 fi
 
-# exec `dirname "$0"`/solid $COMMAND $ADD_FLAGS $@
-exec `dirname "$0"`/solid $COMMAND $@
+# exec `dirname "$0"`/server $COMMAND $ADD_FLAGS $@
+exec `dirname "$0"`/server $COMMAND $@

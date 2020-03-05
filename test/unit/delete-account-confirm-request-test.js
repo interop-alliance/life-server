@@ -12,7 +12,7 @@ chai.should()
 const HttpMocks = require('node-mocks-http')
 
 const DeleteAccountConfirmRequest = require('../../lib/account-mgmt/delete-account-confirm-request')
-const SolidHost = require('../../lib/solid-host')
+const ServerHost = require('../../lib/server-host')
 
 describe('DeleteAccountConfirmRequest', () => {
   sinon.spy(DeleteAccountConfirmRequest.prototype, 'error')
@@ -107,7 +107,7 @@ describe('DeleteAccountConfirmRequest', () => {
       sinon.spy(DeleteAccountConfirmRequest, 'handlePost')
 
       const token = '12345'
-      const host = SolidHost.from({ serverUri: 'https://example.com' })
+      const host = ServerHost.from({ serverUri: 'https://example.com' })
       const alice = {
         webId: 'https://alice.example.com/#me'
       }

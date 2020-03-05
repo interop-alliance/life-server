@@ -9,7 +9,7 @@ chai.should()
 
 const { PasswordAuthenticator } = require('../../lib/authentication/authenticator')
 
-const SolidHost = require('../../lib/solid-host')
+const ServerHost = require('../../lib/server-host')
 const { AccountManager } = require('../../lib/account-mgmt/account-manager')
 const { testAccountManagerOptions } = require('../utils')
 
@@ -18,7 +18,7 @@ const mockUserCredentialStore = {
   matchPassword: (user, password) => { return Promise.resolve(user) }
 }
 
-const host = SolidHost.from({
+const host = ServerHost.from({
   serverUri: 'https://localhost:8443'
 })
 const options = testAccountManagerOptions(host)
@@ -142,7 +142,7 @@ describe('PasswordAuthenticator', () => {
     })
 
     describe('in Multi User mode', () => {
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         serverUri: 'https://example.com',
         multiuser: true
       })
@@ -191,7 +191,7 @@ describe('PasswordAuthenticator', () => {
     })
 
     describe('in Single User mode', () => {
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         serverUri: 'https://localhost:8443',
         multiuser: false
       })

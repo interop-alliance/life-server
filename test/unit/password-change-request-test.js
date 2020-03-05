@@ -12,7 +12,7 @@ chai.should()
 const HttpMocks = require('node-mocks-http')
 
 const PasswordChangeRequest = require('../../lib/account-mgmt/password-change-request')
-const SolidHost = require('../../lib/solid-host')
+const ServerHost = require('../../lib/server-host')
 
 describe('PasswordChangeRequest', () => {
   sinon.spy(PasswordChangeRequest.prototype, 'error')
@@ -119,7 +119,7 @@ describe('PasswordChangeRequest', () => {
       const returnToUrl = 'https://example.com/resource'
       const token = '12345'
       const newPassword = 'swordfish'
-      const host = SolidHost.from({ serverUri: 'https://example.com' })
+      const host = ServerHost.from({ serverUri: 'https://example.com' })
       const alice = {
         webId: 'https://alice.example.com/#me'
       }

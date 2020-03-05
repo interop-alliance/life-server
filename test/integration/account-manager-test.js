@@ -7,7 +7,7 @@ const expect = chai.expect
 chai.use(require('dirty-chai'))
 chai.should()
 
-const SolidHost = require('../../lib/solid-host')
+const ServerHost = require('../../lib/server-host')
 const { AccountManager } = require('../../lib/account-mgmt/account-manager')
 const { testAccountManagerOptions } = require('../utils')
 
@@ -17,7 +17,7 @@ const accountTemplatePath = path.join(__dirname, '../../default-templates/new-ac
 let host
 
 beforeEach(() => {
-  host = SolidHost.from({ serverUri: 'https://example.com' })
+  host = ServerHost.from({ serverUri: 'https://example.com' })
   fs.removeSync(path.join(__dirname, '../resources/accounts/alice.localhost'))
 })
 
@@ -28,7 +28,7 @@ afterEach(() => {
 describe('AccountManager', () => {
   describe('accountExists()', () => {
     describe('in multi user mode', () => {
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         root: testAccountsDir,
         serverUri: 'https://localhost',
         multiuser: true

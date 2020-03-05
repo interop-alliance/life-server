@@ -11,7 +11,7 @@ const HttpMocks = require('node-mocks-http')
 const AuthRequest = require('../../lib/authentication/auth-request')
 const { LoginRequest } = require('../../lib/authentication/login-request')
 
-const SolidHost = require('../../lib/solid-host')
+const ServerHost = require('../../lib/server-host')
 const { AccountManager } = require('../../lib/account-mgmt/account-manager')
 const { testAccountManagerOptions } = require('../utils')
 
@@ -21,7 +21,7 @@ const mockUserCredentialStore = {
 }
 
 const authMethod = 'oidc'
-const host = SolidHost.from({
+const host = ServerHost.from({
   serverUri: 'https://localhost:8443'
 })
 const options = testAccountManagerOptions(host, { authMethod })

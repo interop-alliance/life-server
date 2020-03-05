@@ -8,7 +8,7 @@ chai.use(sinonChai)
 chai.use(require('dirty-chai'))
 chai.should()
 
-const SolidHost = require('../../lib/solid-host')
+const ServerHost = require('../../lib/server-host')
 const { AccountManager, isValidUsername } = require('../../lib/account-mgmt/account-manager')
 const UserAccount = require('../../lib/account-mgmt/user-account')
 const TokenService = require('../../lib/account-mgmt/token-service')
@@ -17,7 +17,7 @@ const { testAccountManagerOptions } = require('../utils')
 var host
 
 beforeEach(() => {
-  host = SolidHost.from({ serverUri: 'https://example.com' })
+  host = ServerHost.from({ serverUri: 'https://example.com' })
 })
 
 describe('AccountManager', () => {
@@ -49,7 +49,7 @@ describe('AccountManager', () => {
 
   describe('accountUriFor', () => {
     it('should compose account uri for an account in multi user mode', () => {
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         serverUri: 'https://localhost',
         multiuser: true
       })
@@ -61,7 +61,7 @@ describe('AccountManager', () => {
     })
 
     it('should compose account uri for an account in single user mode', () => {
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         serverUri: 'https://localhost',
         multiuser: false
       })
@@ -75,7 +75,7 @@ describe('AccountManager', () => {
 
   describe('accountWebIdFor()', () => {
     it('should compose a web id uri for an account in multi user mode', () => {
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         serverUri: 'https://localhost',
         multiuser: true
       })
@@ -86,7 +86,7 @@ describe('AccountManager', () => {
     })
 
     it('should compose a web id uri for an account in single user mode', () => {
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         serverUri: 'https://localhost',
         multiuser: false
       })
@@ -102,7 +102,7 @@ describe('AccountManager', () => {
       let options, accountManager, host
 
       beforeEach(() => {
-        host = SolidHost.from({
+        host = ServerHost.from({
           serverUri: 'https://example.com',
           multiuser: true
         })
@@ -153,7 +153,7 @@ describe('AccountManager', () => {
       let options, accountManager, host
 
       beforeEach(() => {
-        host = SolidHost.from({
+        host = ServerHost.from({
           serverUri: 'https://example.com',
           multiuser: false
         })
@@ -171,7 +171,7 @@ describe('AccountManager', () => {
 
   describe('rootAclFor()', () => {
     it('should return the server root .acl in single user mode', () => {
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         serverUri: 'https://example.com',
         multiuser: false
       })
@@ -186,7 +186,7 @@ describe('AccountManager', () => {
     })
 
     it('should return the profile root .acl in multi user mode', () => {
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         serverUri: 'https://example.com',
         multiuser: true
       })
@@ -206,7 +206,7 @@ describe('AccountManager', () => {
       const userAccount = UserAccount.from({
         username: 'alice', email: 'alice@example.com'
       })
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         serverUri: 'https://example.com',
         multiuser: true
       })
@@ -222,7 +222,7 @@ describe('AccountManager', () => {
     it('should return undefined when agent mailto is missing', async () => {
       const userAccount = UserAccount.from({ username: 'alice' })
 
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         serverUri: 'https://example.com',
         multiuser: true
       })
@@ -238,7 +238,7 @@ describe('AccountManager', () => {
   describe('passwordResetUrl()', () => {
     it('should return a token reset validation url', () => {
       const tokenService = new TokenService()
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         serverUri: 'https://example.com',
         multiuser: true
       })
@@ -260,7 +260,7 @@ describe('AccountManager', () => {
   describe('generateDeleteToken()', () => {
     it('should generate and store an expiring delete token', () => {
       const tokenService = new TokenService()
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         serverUri: 'https://example.com',
         multiuser: true
       })
@@ -285,7 +285,7 @@ describe('AccountManager', () => {
   describe('generateResetToken()', () => {
     it('should generate and store an expiring reset token', () => {
       const tokenService = new TokenService()
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         serverUri: 'https://example.com'
       })
       const options = testAccountManagerOptions(host, { tokenService })
@@ -323,7 +323,7 @@ describe('AccountManager', () => {
       }
       const returnToUrl = 'https://example.com/resource'
 
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         serverUri: 'https://example.com'
       })
       const options = testAccountManagerOptions(host, { tokenService, emailService })
@@ -351,7 +351,7 @@ describe('AccountManager', () => {
         email: 'alice@example.com'
       }
       const returnToUrl = 'https://example.com/resource'
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         serverUri: 'https://example.com'
       })
       const options = testAccountManagerOptions(host)
@@ -371,7 +371,7 @@ describe('AccountManager', () => {
       }
       const returnToUrl = 'https://example.com/resource'
       const emailService = {}
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         serverUri: 'https://example.com'
       })
       const options = testAccountManagerOptions(host, { emailService })
@@ -402,7 +402,7 @@ describe('AccountManager', () => {
         email: 'alice@example.com'
       }
 
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         serverUri: 'https://example.com'
       })
       const options = testAccountManagerOptions(host, { tokenService, emailService })
@@ -429,7 +429,7 @@ describe('AccountManager', () => {
         webId: aliceWebId,
         email: 'alice@example.com'
       }
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         serverUri: 'https://example.com'
       })
       const options = testAccountManagerOptions(host)
@@ -448,7 +448,7 @@ describe('AccountManager', () => {
         webId: aliceWebId
       }
       const emailService = {}
-      const host = SolidHost.from({
+      const host = ServerHost.from({
         serverUri: 'https://example.com'
       })
       const options = testAccountManagerOptions(host, { emailService })

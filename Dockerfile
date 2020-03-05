@@ -54,4 +54,4 @@ RUN openssl req \
 
 EXPOSE 8443
 ENV NODE_TLS_REJECT_UNAUTHORIZED=0
-CMD ["node", "./bin/solid", "start"]
+CMD ["node", "./bin/server", "start"]

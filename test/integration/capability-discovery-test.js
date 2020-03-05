@@ -1,4 +1,4 @@
-const Solid = require('../../index')
+const server = require('../../index')
 const path = require('path')
 const { cleanDir, startServer } = require('../utils')
 const supertest = require('supertest')
@@ -26,7 +26,7 @@ describe('API', () => {
   let alicePod
 
   before(async () => {
-    alicePod = await Solid.createServer(
+    alicePod = await server.createServer(
       Object.assign({
         root: aliceRootPath,
         serverUri: aliceServerUri,
