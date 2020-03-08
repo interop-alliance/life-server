@@ -165,8 +165,8 @@ npm install
 **Local/Development:** Installing the server for local development and testing
 will require an SSL certificate. You can generate a self-signed certificate
 yourself (see [Generating a self-signed SSL certificate](docs/ssl-certificates.md)
-in `docs/`), but remember to launch the server using `./bin/solid-test` rather
-than `./bin/solid`.
+in `docs/`), but remember to launch the server using `./bin/server-test` rather
+than `./bin/server`.
 
 **Production:** Installing `life-server` in a production environment will
 require a valid SSL certificate (self-signed certs will not work). In addition,

@@ -44,15 +44,27 @@ describe('CreateAccountRequest', () => {
     })
   })
 
-  describe('fromParams()', () => {
-    it('should create subclass depending on authMethod', () => {
-      const aliceData = { username: 'alice', password: '12345' }
+  describe('fromIncoming()', () => {
+    it('should create an instance with the given config', () => {
+      const aliceData = { username: 'alice', password: '123' }
+
+      const userStore = {}
       const req = HttpMocks.createRequest({
-        app: { locals: { accountManager, oidc: {} } }, body: aliceData, session
+        app: {
+          locals: { storage: { users: userStore }, accountManager }
+        },
+        body: aliceData,
+        session
       })
-      req.app.locals.authMethod = 'oidc'
-      const request = CreateAccountRequest.fromParams(req, res, accountManager)
-      expect(request).to.exist()
+
+      const request = CreateAccountRequest.fromIncoming(req, res)
+
+      expect(request.accountManager).to.equal(accountManager)
+      expect(request.userAccount.username).to.equal('alice')
+      expect(request.session).to.equal(session)
+      expect(request.response).to.equal(res)
+      expect(request.password).to.equal(aliceData.password)
+      expect(request.userStore).to.equal(userStore)
     })
   })
 
@@ -64,7 +76,7 @@ describe('CreateAccountRequest', () => {
       }
       const req = HttpMocks.createRequest({ app: { locals }, body: aliceData })
 
-      const request = CreateAccountRequest.fromParams(req, res)
+      const request = CreateAccountRequest.fromIncoming(req, res)
 
       accountManager.accountExists = sinon.stub().returns(Promise.resolve(true))
 
@@ -98,7 +110,7 @@ describe('CreateAccountRequest', () => {
         }
 
         const req = HttpMocks.createRequest({ app: { locals }, body: aliceData })
-        const request = CreateAccountRequest.fromParams(req, res)
+        const request = CreateAccountRequest.fromIncoming(req, res)
 
         return request.createAccount()
           .then(() => {
@@ -117,47 +129,6 @@ describe('CreateAccountRequest', () => {
         })
     })
   })
-})
-
-describe('CreateOidcAccountRequest', () => {
-  const authMethod = 'oidc'
-  let host, options
-  let session, res
-
-  beforeEach(() => {
-    host = ServerHost.from({
-      serverUri: 'https://example.com'
-    })
-    options = testAccountManagerOptions(host)
-
-    session = {}
-    res = HttpMocks.createResponse()
-  })
-
-  describe('fromParams()', () => {
-    it('should create an instance with the given config', () => {
-      const accountManager = AccountManager.from(options)
-      const aliceData = { username: 'alice', password: '123' }
-
-      const userStore = {}
-      const req = HttpMocks.createRequest({
-        app: {
-          locals: { authMethod, storage: { users: userStore }, accountManager }
-        },
-        body: aliceData,
-        session
-      })
-
-      const request = CreateAccountRequest.fromParams(req, res)
-
-      expect(request.accountManager).to.equal(accountManager)
-      expect(request.userAccount.username).to.equal('alice')
-      expect(request.session).to.equal(session)
-      expect(request.response).to.equal(res)
-      expect(request.password).to.equal(aliceData.password)
-      expect(request.userStore).to.equal(userStore)
-    })
-  })
 
   describe('saveCredentialsFor()', () => {
     it('should create a new user in the user store', async () => {
@@ -169,12 +140,12 @@ describe('CreateOidcAccountRequest', () => {
       }
       const createUserSpy = sinon.spy(userStore, 'createUser')
       const req = HttpMocks.createRequest({
-        app: { locals: { authMethod, storage: { users: userStore }, accountManager } },
+        app: { locals: { storage: { users: userStore }, accountManager } },
         body: aliceData,
         session
       })
 
-      const request = CreateAccountRequest.fromParams(req, res)
+      const request = CreateAccountRequest.fromIncoming(req, res)
       const userAccount = request.userAccount
 
       await request.saveCredentialsFor(userAccount)
@@ -187,13 +158,13 @@ describe('CreateOidcAccountRequest', () => {
       const accountManager = AccountManager.from(options)
       const aliceData = { username: 'alice', password: '12345' }
       const req = HttpMocks.createRequest({
-        app: { locals: { authMethod, oidc: {}, accountManager } },
+        app: { locals: { oidc: {}, accountManager } },
         body: aliceData,
         session
       })
       const alice = accountManager.userAccountFrom(aliceData)
 
-      const request = CreateAccountRequest.fromParams(req, res)
+      const request = CreateAccountRequest.fromIncoming(req, res)
 
       const result = request.sendResponse(alice)
       expect(request.response.statusCode).to.equal(302)
