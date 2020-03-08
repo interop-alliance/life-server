@@ -12,11 +12,8 @@ chai.should()
 const HttpMocks = require('node-mocks-http')
 
 const DeleteAccountConfirmRequest = require('../../lib/account-mgmt/delete-account-confirm-request')
-const ServerHost = require('../../lib/server-host')
 
 describe('DeleteAccountConfirmRequest', () => {
-  sinon.spy(DeleteAccountConfirmRequest.prototype, 'error')
-
   describe('constructor()', () => {
     it('should initialize a request instance from options', () => {
       const res = HttpMocks.createResponse()
@@ -40,7 +37,7 @@ describe('DeleteAccountConfirmRequest', () => {
     })
   })
 
-  describe('fromParams()', () => {
+  describe('fromIncoming()', () => {
     it('should return a request instance from options', () => {
       const token = '12345'
       const accountManager = {}
@@ -52,7 +49,7 @@ describe('DeleteAccountConfirmRequest', () => {
       }
       const res = HttpMocks.createResponse()
 
-      const request = DeleteAccountConfirmRequest.fromParams(req, res)
+      const request = DeleteAccountConfirmRequest.fromIncoming(req, res)
 
       expect(request.response).to.equal(res)
       expect(request.token).to.equal(token)
@@ -61,13 +58,13 @@ describe('DeleteAccountConfirmRequest', () => {
     })
   })
 
-  describe('get()', () => {
+  describe('handleGet()', () => {
     const token = '12345'
     const userStore = {}
     const res = HttpMocks.createResponse()
     sinon.spy(res, 'render')
 
-    it('should create an instance and render a delete account form', () => {
+    it('should create an instance, render a delete account form', async () => {
       const accountManager = {
         validateDeleteToken: sinon.stub().resolves(true)
       }
@@ -76,16 +73,17 @@ describe('DeleteAccountConfirmRequest', () => {
         query: { token }
       }
 
-      return DeleteAccountConfirmRequest.get(req, res)
-        .then(() => {
-          expect(accountManager.validateDeleteToken)
-            .to.have.been.called()
-          expect(res.render).to.have.been.calledWith('account/delete-confirm',
-            { token, validToken: true })
-        })
+      const request = DeleteAccountConfirmRequest.fromIncoming(req, res)
+      request.error = (error) => { throw error }
+      await request.handleGet()
+
+      expect(accountManager.validateDeleteToken)
+        .to.have.been.called()
+      expect(res.render).to.have.been.calledWith('account/delete-confirm',
+        { token, validToken: true })
     })
 
-    it('should display an error message on an invalid token', () => {
+    it('should display an error message on an invalid token', async () => {
       const accountManager = {
         validateDeleteToken: sinon.stub().throws()
       }
@@ -94,48 +92,17 @@ describe('DeleteAccountConfirmRequest', () => {
         query: { token }
       }
 
-      return DeleteAccountConfirmRequest.get(req, res)
-        .then(() => {
-          expect(DeleteAccountConfirmRequest.prototype.error)
-            .to.have.been.called()
-        })
-    })
-  })
+      const request = DeleteAccountConfirmRequest.fromIncoming(req, res)
+      request.error = sinon.stub()
 
-  describe('post()', () => {
-    it('creates a request instance and invokes handlePost()', () => {
-      sinon.spy(DeleteAccountConfirmRequest, 'handlePost')
+      await request.handleGet()
 
-      const token = '12345'
-      const host = ServerHost.from({ serverUri: 'https://example.com' })
-      const alice = {
-        webId: 'https://alice.example.com/#me'
-      }
-      const storedToken = { webId: alice.webId }
-      const accountManager = {
-        host,
-        userAccountFrom: sinon.stub().resolves(alice),
-        validateDeleteToken: sinon.stub().resolves(storedToken)
-      }
-
-      accountManager.accountExists = sinon.stub().resolves(true)
-      accountManager.loadAccountRecoveryEmail = sinon.stub().resolves('alice@example.com')
-
-      const req = {
-        app: { locals: { accountManager, oidc: { users: {} } } },
-        body: { token }
-      }
-      const res = HttpMocks.createResponse()
-
-      return DeleteAccountConfirmRequest.post(req, res)
-        .then(() => {
-          expect(DeleteAccountConfirmRequest.handlePost).to.have.been.called()
-        })
+      expect(request.error).to.have.been.called()
     })
   })
 
   describe('handlePost()', () => {
-    it('should display error message if validation error encountered', () => {
+    it('should display error if validation error encountered', async () => {
       const token = '12345'
       const userStore = {}
       const res = HttpMocks.createResponse()
@@ -147,13 +114,12 @@ describe('DeleteAccountConfirmRequest', () => {
         query: { token }
       }
 
-      const request = DeleteAccountConfirmRequest.fromParams(req, res)
+      const request = DeleteAccountConfirmRequest.fromIncoming(req, res)
+      request.error = sinon.stub()
 
-      return DeleteAccountConfirmRequest.handlePost(request)
-        .then(() => {
-          expect(DeleteAccountConfirmRequest.prototype.error)
-            .to.have.been.called()
-        })
+      await request.handlePost()
+
+      expect(request.error).to.have.been.called()
     })
   })
 
