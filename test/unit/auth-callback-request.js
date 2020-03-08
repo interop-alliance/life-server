@@ -44,7 +44,7 @@ describe('AuthCallbackRequest', () => {
     })
   })
 
-  describe('fromParams()', () => {
+  describe('fromIncoming()', () => {
     it('should initialize an AuthCallbackRequest instance from request params', () => {
       const AuthCallbackRequest = require('../../lib/authentication/handlers/auth-callback-request')
 
@@ -67,7 +67,7 @@ describe('AuthCallbackRequest', () => {
       }
       const res = HttpMocks.createResponse()
 
-      const request = AuthCallbackRequest.fromParams(req, res)
+      const request = AuthCallbackRequest.fromIncoming(req, res)
 
       expect(request.issuer).to.equal('https://example.com')
       expect(request.serverUri).to.equal('https://example.com')
