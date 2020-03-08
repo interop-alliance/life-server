@@ -16,7 +16,17 @@ const { AccountManager } = require('../../lib/account-mgmt/account-manager')
 const ServerHost = require('../../lib/server-host')
 const { testAccountManagerOptions } = require('../utils')
 
+let host, accountManager
+
 describe('PasswordResetEmailRequest', () => {
+  beforeEach(() => {
+    host = ServerHost.from({
+      serverUri: 'https://example.com',
+      multiuser: true
+    })
+    accountManager = AccountManager.from(testAccountManagerOptions(host))
+  })
+
   describe('constructor()', () => {
     it('should initialize a request instance from options', () => {
       const res = HttpMocks.createResponse()
@@ -35,7 +45,7 @@ describe('PasswordResetEmailRequest', () => {
     })
   })
 
-  describe('fromParams()', () => {
+  describe('fromIncoming()', () => {
     it('should return a request instance from options', () => {
       const returnToUrl = 'https://example.com/resource'
       const username = 'alice'
@@ -48,7 +58,7 @@ describe('PasswordResetEmailRequest', () => {
       }
       const res = HttpMocks.createResponse()
 
-      const request = PasswordResetEmailRequest.fromParams(req, res)
+      const request = PasswordResetEmailRequest.fromIncoming(req, res)
 
       expect(request.accountManager).to.equal(accountManager)
       expect(request.returnToUrl).to.equal(returnToUrl)
@@ -57,8 +67,8 @@ describe('PasswordResetEmailRequest', () => {
     })
   })
 
-  describe('get()', () => {
-    it('should create an instance and render a reset password form', () => {
+  describe('handleGet()', () => {
+    it('should render a reset password form', async () => {
       const returnToUrl = 'https://example.com/resource'
       const username = 'alice'
       const accountManager = { multiuser: true }
@@ -71,79 +81,17 @@ describe('PasswordResetEmailRequest', () => {
       const res = HttpMocks.createResponse()
       res.render = sinon.stub()
 
-      PasswordResetEmailRequest.get(req, res)
+      const request = PasswordResetEmailRequest.fromIncoming(req, res)
+
+      await request.handleGet()
 
       expect(res.render).to.have.been.calledWith('auth/reset-password',
         { returnToUrl, multiuser: true, title: 'Reset Password' })
     })
   })
 
-  describe('post()', () => {
-    it('creates a request instance and invokes handlePost()', () => {
-      sinon.spy(PasswordResetEmailRequest, 'handlePost')
-
-      const returnToUrl = 'https://example.com/resource'
-      const username = 'alice'
-
-      const host = ServerHost.from({
-        serverUri: 'https://example.com',
-        multiuser: true
-      })
-      const options = testAccountManagerOptions(host)
-      const accountManager = AccountManager.from(options)
-
-      accountManager.accountExists = sinon.stub().resolves(true)
-      accountManager.loadAccountRecoveryEmail = sinon.stub().resolves('alice@example.com')
-      accountManager.sendPasswordResetEmail = sinon.stub().resolves()
-
-      const req = {
-        app: { locals: { accountManager } },
-        query: { returnToUrl },
-        body: { username }
-      }
-      const res = HttpMocks.createResponse()
-
-      PasswordResetEmailRequest.post(req, res)
-        .then(() => {
-          expect(PasswordResetEmailRequest.handlePost).to.have.been.called()
-        })
-    })
-  })
-
-  describe('validate()', () => {
-    it('should throw an error if username is missing in multi-user mode', () => {
-      const host = ServerHost.from({
-        serverUri: 'https://example.com',
-        multiuser: true
-      })
-      const accountManager = AccountManager.from(testAccountManagerOptions(host))
-
-      const request = new PasswordResetEmailRequest({ accountManager })
-
-      expect(() => request.validate()).to.throw(/Username required/)
-    })
-
-    it('should not throw an error if username is missing in single user mode', () => {
-      const host = ServerHost.from({
-        serverUri: 'https://example.com',
-        multiuser: false
-      })
-      const accountManager = AccountManager.from(testAccountManagerOptions(host))
-
-      const request = new PasswordResetEmailRequest({ accountManager })
-
-      expect(() => request.validate()).to.not.throw()
-    })
-  })
-
   describe('handlePost()', () => {
-    it('should handle the post request', () => {
-      const host = ServerHost.from({
-        serverUri: 'https://example.com',
-        multiuser: true
-      })
-      const accountManager = AccountManager.from(testAccountManagerOptions(host))
-
+    it('should handle the post request', async () => {
       accountManager.loadAccountRecoveryEmail = sinon.stub().resolves('alice@example.com')
       accountManager.sendPasswordResetEmail = sinon.stub().resolves()
       accountManager.accountExists = sinon.stub().resolves(true)
@@ -158,41 +106,44 @@ describe('PasswordResetEmailRequest', () => {
 
       sinon.spy(request, 'error')
 
-      return PasswordResetEmailRequest.handlePost(request)
-        .then(() => {
-          expect(accountManager.loadAccountRecoveryEmail).to.have.been.called()
-          expect(accountManager.sendPasswordResetEmail).to.have.been.called()
-          expect(response.render).to.have.been.calledWith('auth/reset-link-sent')
-          expect(request.error).to.not.have.been.called()
-        })
+      await request.handlePost()
+      expect(accountManager.loadAccountRecoveryEmail).to.have.been.called()
+      expect(accountManager.sendPasswordResetEmail).to.have.been.called()
+      expect(response.render).to.have.been.calledWith('auth/reset-link-sent')
+      expect(request.error).to.not.have.been.called()
+    })
+  })
+
+  describe('validate()', () => {
+    it('should throw an error if username is missing in multi-user mode', () => {
+      const request = new PasswordResetEmailRequest({ accountManager })
+
+      expect(() => request.validate()).to.throw(/Username required/)
+    })
+
+    it('should not throw an error if username is missing in single user mode', () => {
+      accountManager.host.multiuser = false
+
+      const request = new PasswordResetEmailRequest({ accountManager })
+
+      expect(() => request.validate()).to.not.throw()
     })
   })
 
   describe('loadUser()', () => {
-    it('should return a UserAccount instance based on username', () => {
-      const host = ServerHost.from({
-        serverUri: 'https://example.com',
-        multiuser: true
-      })
-      const accountManager = AccountManager.from(testAccountManagerOptions(host))
+    it('should return a UserAccount instance based on username', async () => {
       accountManager.accountExists = sinon.stub().resolves(true)
       const username = 'alice'
 
       const options = { accountManager, username }
       const request = new PasswordResetEmailRequest(options)
 
-      return request.loadUser()
-        .then(account => {
-          expect(account.webId).to.equal('https://alice.example.com/web#id')
-        })
+      const account = await request.loadUser()
+
+      expect(account.webId).to.equal('https://alice.example.com/web#id')
     })
 
     it('should throw an error if the user does not exist', done => {
-      const host = ServerHost.from({
-        serverUri: 'https://example.com',
-        multiuser: true
-      })
-      const accountManager = AccountManager.from(testAccountManagerOptions(host))
       accountManager.accountExists = sinon.stub().resolves(false)
       const username = 'alice'
 
