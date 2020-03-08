@@ -16,7 +16,17 @@ const { AccountManager } = require('../../lib/account-mgmt/account-manager')
 const ServerHost = require('../../lib/server-host')
 const { testAccountManagerOptions } = require('../utils')
 
+let host, accountManager
+
 describe('DeleteAccountRequest', () => {
+  beforeEach(() => {
+    host = ServerHost.from({
+      serverUri: 'https://example.com',
+      multiuser: true
+    })
+    accountManager = AccountManager.from(testAccountManagerOptions(host))
+  })
+
   describe('constructor()', () => {
     it('should initialize a request instance from options', () => {
       const res = HttpMocks.createResponse()
@@ -33,7 +43,7 @@ describe('DeleteAccountRequest', () => {
     })
   })
 
-  describe('fromParams()', () => {
+  describe('fromIncoming()', () => {
     it('should return a request instance from options', () => {
       const username = 'alice'
       const accountManager = {}
@@ -44,7 +54,7 @@ describe('DeleteAccountRequest', () => {
       }
       const res = HttpMocks.createResponse()
 
-      const request = DeleteAccountRequest.fromParams(req, res)
+      const request = DeleteAccountRequest.fromIncoming(req, res)
 
       expect(request.accountManager).to.equal(accountManager)
       expect(request.username).to.equal(username)
@@ -52,8 +62,8 @@ describe('DeleteAccountRequest', () => {
     })
   })
 
-  describe('get()', () => {
-    it('should create an instance and render a delete account form', () => {
+  describe('handleGet()', () => {
+    it('should render a delete account form', async () => {
       const username = 'alice'
       const accountManager = { multiuser: true }
 
@@ -64,77 +74,16 @@ describe('DeleteAccountRequest', () => {
       const res = HttpMocks.createResponse()
       res.render = sinon.stub()
 
-      DeleteAccountRequest.get(req, res)
+      const request = DeleteAccountRequest.fromIncoming(req, res)
+      await request.handleGet()
 
       expect(res.render).to.have.been.calledWith('account/delete',
         { error: undefined, multiuser: true })
     })
   })
 
-  describe('post()', () => {
-    it('creates a request instance and invokes handlePost()', () => {
-      sinon.spy(DeleteAccountRequest, 'handlePost')
-
-      const username = 'alice'
-      const host = ServerHost.from({
-        serverUri: 'https://example.com',
-        multiuser: true
-      })
-      const options = testAccountManagerOptions(host)
-      const accountManager = AccountManager.from(options)
-      accountManager.accountExists = sinon.stub().resolves(true)
-      accountManager.loadAccountRecoveryEmail = sinon.stub().resolves('alice@example.com')
-      accountManager.sendDeleteLink = sinon.stub().resolves()
-
-      const req = {
-        app: { locals: { accountManager } },
-        body: { username }
-      }
-      const res = HttpMocks.createResponse()
-
-      DeleteAccountRequest.post(req, res)
-        .then(() => {
-          expect(DeleteAccountRequest.handlePost).to.have.been.called()
-        })
-    })
-  })
-
-  describe('validate()', () => {
-    it('should throw an error if username is missing in multi-user mode', () => {
-      const host = ServerHost.from({
-        serverUri: 'https://example.com',
-        multiuser: true
-      })
-      const options = testAccountManagerOptions(host)
-      const accountManager = AccountManager.from(options)
-
-      const request = new DeleteAccountRequest({ accountManager })
-
-      expect(() => request.validate()).to.throw(/Username required/)
-    })
-
-    it('should not throw an error if username is missing in single user mode', () => {
-      const host = ServerHost.from({
-        serverUri: 'https://example.com',
-        multiuser: false
-      })
-      const options = testAccountManagerOptions(host)
-      const accountManager = AccountManager.from(options)
-
-      const request = new DeleteAccountRequest({ accountManager })
-
-      expect(() => request.validate()).to.not.throw()
-    })
-  })
-
   describe('handlePost()', () => {
-    it('should handle the post request', () => {
-      const host = ServerHost.from({
-        serverUri: 'https://example.com',
-        multiuser: true
-      })
-      const accountManager = AccountManager.from(testAccountManagerOptions(host))
-
+    it('should handle the post request', async () => {
       accountManager.loadAccountRecoveryEmail = sinon.stub().resolves('alice@example.com')
       accountManager.sendDeleteAccountEmail = sinon.stub().resolves()
       accountManager.accountExists = sinon.stub().resolves(true)
@@ -148,40 +97,42 @@ describe('DeleteAccountRequest', () => {
 
       sinon.spy(request, 'error')
 
-      return DeleteAccountRequest.handlePost(request)
-        .then(() => {
-          expect(accountManager.loadAccountRecoveryEmail).to.have.been.called()
-          expect(response.render).to.have.been.calledWith('account/delete-link-sent')
-          expect(request.error).to.not.have.been.called()
-        })
+      await request.handlePost()
+
+      expect(accountManager.loadAccountRecoveryEmail).to.have.been.called()
+      expect(response.render).to.have.been.calledWith('account/delete-link-sent')
+      expect(request.error).to.not.have.been.called()
+    })
+  })
+
+  describe('validate()', () => {
+    it('should throw an error if username is missing in multi-user mode', () => {
+      const request = new DeleteAccountRequest({ accountManager })
+
+      expect(() => request.validate()).to.throw(/Username required/)
+    })
+
+    it('should not throw an error if username is missing in single user mode', () => {
+      accountManager.host.multiuser = false
+      const request = new DeleteAccountRequest({ accountManager })
+
+      expect(() => request.validate()).to.not.throw()
     })
   })
 
   describe('loadUser()', () => {
-    it('should return a UserAccount instance based on username', () => {
-      const host = ServerHost.from({
-        serverUri: 'https://example.com',
-        multiuser: true
-      })
-      const accountManager = AccountManager.from(testAccountManagerOptions(host))
+    it('should return a UserAccount instance based on username', async () => {
       accountManager.accountExists = sinon.stub().resolves(true)
       const username = 'alice'
 
       const options = { accountManager, username }
       const request = new DeleteAccountRequest(options)
 
-      return request.loadUser()
-        .then(account => {
-          expect(account.webId).to.equal('https://alice.example.com/web#id')
-        })
+      const account = await request.loadUser()
+      expect(account.webId).to.equal('https://alice.example.com/web#id')
     })
 
     it('should throw an error if the user does not exist', done => {
-      const host = ServerHost.from({
-        serverUri: 'https://example.com',
-        multiuser: true
-      })
-      const accountManager = AccountManager.from(testAccountManagerOptions(host))
       accountManager.accountExists = sinon.stub().resolves(false)
       const username = 'alice'
 

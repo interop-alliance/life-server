@@ -9,7 +9,7 @@ const HttpMocks = require('node-mocks-http')
 const LogoutRequest = require('../../lib/authentication/handlers/logout-request')
 
 describe('LogoutRequest', () => {
-  it('should clear user session properties', () => {
+  it('should clear user session properties', async () => {
     const req = {
       session: {
         userId: 'https://alice.example.com/#me',
@@ -19,22 +19,21 @@ describe('LogoutRequest', () => {
       }
     }
     const res = HttpMocks.createResponse()
+    const request = LogoutRequest.fromIncoming(req, res)
 
-    return LogoutRequest.handle(req, res)
-      .then(() => {
-        const session = req.session
-        expect(session.userId).to.be.empty()
-      })
+    await request.handleGet()
+
+    const session = req.session
+    expect(session.userId).to.be.empty()
   })
 
-  it('should redirect to /goodbye', () => {
+  it('should redirect to /goodbye', async () => {
     const req = { session: {} }
     const res = HttpMocks.createResponse()
+    const request = LogoutRequest.fromIncoming(req, res)
 
-    return LogoutRequest.handle(req, res)
-      .then(() => {
-        expect(res.statusCode).to.equal(302)
-        expect(res._getRedirectUrl()).to.equal('/goodbye')
-      })
+    await request.handleGet()
+    expect(res.statusCode).to.equal(302)
+    expect(res._getRedirectUrl()).to.equal('/goodbye')
   })
 })

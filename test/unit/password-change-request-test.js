@@ -12,11 +12,8 @@ chai.should()
 const HttpMocks = require('node-mocks-http')
 
 const PasswordChangeRequest = require('../../lib/account-mgmt/password-change-request')
-const ServerHost = require('../../lib/server-host')
 
 describe('PasswordChangeRequest', () => {
-  sinon.spy(PasswordChangeRequest.prototype, 'error')
-
   describe('constructor()', () => {
     it('should initialize a request instance from options', () => {
       const res = HttpMocks.createResponse()
@@ -44,7 +41,7 @@ describe('PasswordChangeRequest', () => {
     })
   })
 
-  describe('fromParams()', () => {
+  describe('fromIncoming()', () => {
     it('should return a request instance from options', () => {
       const returnToUrl = 'https://example.com/resource'
       const token = '12345'
@@ -59,7 +56,7 @@ describe('PasswordChangeRequest', () => {
       }
       const res = HttpMocks.createResponse()
 
-      const request = PasswordChangeRequest.fromParams(req, res)
+      const request = PasswordChangeRequest.fromIncoming(req, res)
 
       expect(request.returnToUrl).to.equal(returnToUrl)
       expect(request.response).to.equal(res)
@@ -70,14 +67,14 @@ describe('PasswordChangeRequest', () => {
     })
   })
 
-  describe('get()', () => {
+  describe('handleGet()', () => {
     const returnToUrl = 'https://example.com/resource'
     const token = '12345'
     const userStore = {}
     const res = HttpMocks.createResponse()
     sinon.spy(res, 'render')
 
-    it('should create an instance and render a change password form', () => {
+    it('should render a change password form', async () => {
       const accountManager = {
         validateResetToken: sinon.stub().resolves(true)
       }
@@ -86,16 +83,17 @@ describe('PasswordChangeRequest', () => {
         query: { returnToUrl, token }
       }
 
-      return PasswordChangeRequest.get(req, res)
-        .then(() => {
-          expect(accountManager.validateResetToken)
-            .to.have.been.called()
-          expect(res.render).to.have.been.calledWith('auth/change-password',
-            { returnToUrl, token, validToken: true, title: 'Change Password' })
-        })
+      const request = PasswordChangeRequest.fromIncoming(req, res)
+
+      await request.handleGet()
+
+      expect(accountManager.validateResetToken)
+        .to.have.been.called()
+      expect(res.render).to.have.been.calledWith('auth/change-password',
+        { returnToUrl, token, validToken: true, title: 'Change Password' })
     })
 
-    it('should display an error message on an invalid token', () => {
+    it('should display an error message on an invalid token', async () => {
       const accountManager = {
         validateResetToken: sinon.stub().throws()
       }
@@ -104,57 +102,47 @@ describe('PasswordChangeRequest', () => {
         query: { returnToUrl, token }
       }
 
-      return PasswordChangeRequest.get(req, res)
-        .then(() => {
-          expect(PasswordChangeRequest.prototype.error)
-            .to.have.been.called()
-        })
-    })
-  })
+      const request = PasswordChangeRequest.fromIncoming(req, res)
+      request.error = sinon.stub()
 
-  describe('post()', () => {
-    it('creates a request instance and invokes handlePost()', () => {
-      sinon.spy(PasswordChangeRequest, 'handlePost')
+      await request.handleGet()
 
-      const returnToUrl = 'https://example.com/resource'
-      const token = '12345'
-      const newPassword = 'swordfish'
-      const host = ServerHost.from({ serverUri: 'https://example.com' })
-      const alice = {
-        webId: 'https://alice.example.com/#me'
-      }
-      const storedToken = { webId: alice.webId }
-      const accountStorage = {
-        findUser: sinon.stub().resolves(alice),
-        updatePassword: sinon.stub()
-      }
-      const accountManager = {
-        host,
-        storage: { accountStorage },
-        userAccountFrom: sinon.stub().resolves(alice),
-        validateResetToken: sinon.stub().resolves(storedToken)
-      }
-
-      accountManager.accountExists = sinon.stub().resolves(true)
-      accountManager.loadAccountRecoveryEmail = sinon.stub().resolves('alice@example.com')
-      accountManager.sendPasswordResetEmail = sinon.stub().resolves()
-
-      const req = {
-        app: { locals: { accountManager } },
-        query: { returnToUrl },
-        body: { token, newPassword }
-      }
-      const res = HttpMocks.createResponse()
-
-      return PasswordChangeRequest.post(req, res)
-        .then(() => {
-          expect(PasswordChangeRequest.handlePost).to.have.been.called()
-        })
+      expect(request.error).to.have.been.called()
     })
   })
 
   describe('handlePost()', () => {
-    it('should display error message if validation error encountered', () => {
+    it('should change password on valid token', async () => {
+      const returnToUrl = 'https://example.com/resource'
+      const token = '12345'
+      const newPassword = 'swordfish'
+      const userStore = {}
+      const res = HttpMocks.createResponse()
+      const accountManager = {
+        validateResetToken: sinon.stub().throws()
+      }
+      const req = {
+        app: { locals: { accountManager, oidc: { users: userStore } } },
+        query: { returnToUrl, token },
+        body: { newPassword }
+      }
+      const tokenContents = {}
+
+      const request = PasswordChangeRequest.fromIncoming(req, res)
+      request.validateToken = sinon.stub().returns(tokenContents)
+      request.changePassword = sinon.stub().resolves()
+      request.renderSuccess = sinon.stub()
+      request.error = sinon.stub()
+
+      await request.handlePost()
+
+      expect(request.error).to.not.have.been.called()
+      expect(request.validateToken).to.have.been.called()
+      expect(request.changePassword).to.have.been.called()
+      expect(request.renderSuccess).to.have.been.called()
+    })
+
+    it('should display error if validation error encountered', async () => {
       const returnToUrl = 'https://example.com/resource'
       const token = '12345'
       const userStore = {}
@@ -167,13 +155,12 @@ describe('PasswordChangeRequest', () => {
         query: { returnToUrl, token }
       }
 
-      const request = PasswordChangeRequest.fromParams(req, res)
+      const request = PasswordChangeRequest.fromIncoming(req, res)
+      request.error = sinon.stub()
 
-      return PasswordChangeRequest.handlePost(request)
-        .then(() => {
-          expect(PasswordChangeRequest.prototype.error)
-            .to.have.been.called()
-        })
+      await request.handlePost()
+
+      expect(request.error).to.have.been.called()
     })
   })
 
