@@ -1,4 +1,4 @@
-const Solid = require('../../index')
+const lfs = require('../../index')
 const path = require('path')
 const fs = require('fs-extra')
 
@@ -20,7 +20,7 @@ const dbPath = path.join(__dirname, '../resources/temp/tx-request/db')
 let server
 
 before(async () => {
-  server = await Solid.createServer({
+  server = await lfs.createServer({
     root: rootPath,
     configPath,
     sslKey: path.join(__dirname, '../keys/key.pem'),
