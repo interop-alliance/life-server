@@ -22,17 +22,7 @@ module.exports = [
     validate: validUri
   },
   {
-    name: 'webid',
-    message: 'Enable WebID authentication and access control (uses HTTPS)',
-    default: true
-  },
-  {
-    name: 'mount',
-    message: "Serve on a specific URL path (default: '/')",
-    default: '/'
-  },
-  {
-    name: 'config',
+    name: 'configFile',
     message: "Path to the config file (default: './config.dev.js')",
     default: './config.dev.js'
   },
