@@ -9,8 +9,17 @@
     {{/if}}
     <div class="row">
       <div class="col-md-6">
-        <label for="username">Username:</label>
+        <label for="username">Display Name:</label>
+        <p>Something to display in the nav bar, to indicate you're logged in etc.</p>
         <input type="text" class="form-control" name="username" id="username" placeholder="alice" />
+      </div>
+      <div class="col-md-6">&nbsp;</div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <label for="email">Recovery Email:</label>
+        <p>Your email will only used for account recovery.</p>
+        <input type="email" class="form-control" name="email" id="email" />
       </div>
       <div class="col-md-6">&nbsp;</div>
     </div>
@@ -21,28 +30,13 @@
       </div>
       <div class="col-md-6">&nbsp;</div>
     </div>
-    <div class="row">
-      <div class="col-md-6">
-        <label for="name">Name:</label>
-        <input type="text" class="form-control" name="name" id="name" />
-      </div>
-      <div class="col-md-6">&nbsp;</div>
-    </div>
-    <div class="row">
-      <div class="col-md-6">
-        <label for="email">Email:</label>
-        <p>Your email will only used for account recovery</p>
-        <input type="email" class="form-control" name="email" id="email" />
-      </div>
-      <div class="col-md-6">&nbsp;</div>
-    </div>
     <input type="hidden" name="returnToUrl" value="{{returnToUrl}}" />
   </div>
 
   <div class="form-group">
     <div class="row">
       <div class="col-md-2">
-        <button type="submit" class="btn btn-primary" id="register">Register</button>
+        <button type="submit" class="btn btn-primary" id="register">Register ></button>
 
         {{> auth/auth-hidden-fields}}
       </div>
