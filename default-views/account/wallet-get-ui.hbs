@@ -1,0 +1,68 @@
+<div class="container">
+  <h4>Wallet Get</h4>
+</div>
+<div class="container">
+  get()
+</div>
+
+<script>
+  /**
+   * Globals:
+   *   WALLET_LOCATION, MEDIATOR - wallet.hbs layout
+   *
+   *  * credentialHandlerPolyfill - from credential-handler-polyfill.min.js.
+   *      This provides the get() and store() Credential Handler API calls.
+   *
+   *  * WebCredentialHandler - from web-credential-handler.min.js.
+   *      Utility/convenience library for the CHAPI polyfill, useful for wallet
+   *      implementors.
+   */
+  async function handleGetEvent() {
+    const event = await WebCredentialHandler.receiveCredentialEvent();
+
+    console.log('Wallet processing get() event:', event);
+
+    // document.getElementById('requestOrigin').innerHTML = event.credentialRequestOrigin;
+
+    const vp = event.credentialRequestOptions.web.VerifiablePresentation;
+    const query = Array.isArray(vp.query) ? vp.query[0] : vp.query;
+
+    if(!query.type === 'QueryByExample') {
+      throw new Error('Only QueryByExample requests are supported in demo wallet.');
+    }
+
+    // const requestReason = query.credentialQuery.reason;
+    // document.getElementById('requestReason').innerHTML = requestReason;
+
+    // refreshUserArea({
+    //   shareButton: {
+    //     text: 'Share',
+    //     sourceEvent: event
+    //   }
+    // });
+
+    // const requestOptions = event.credentialRequestOptions || {web:{}};
+    // document.getElementById('queryContents').innerHTML = JSON.stringify(requestOptions.web, null, 2);
+
+    // Respond button
+    // document.getElementById('respondBtn').addEventListener('click', () => {
+    //   const data = JSON.parse(document.getElementById('responseText').value);
+    //
+    //   event.respondWith(Promise.resolve({dataType: 'VerifiablePresentation', data}));
+    // });
+
+    // Cancel button
+    // document.getElementById('cancelBtn').addEventListener('click', () => {
+    //   event.respondWith(Promise.resolve({dataType: 'Response', data: 'error'}))
+    // });
+  }
+
+  onDocumentReady(() => {
+    // document.getElementById('loginButton').addEventListener('click', login);
+    // document.getElementById('logoutButton').addEventListener('click', logout);
+  })
+
+  credentialHandlerPolyfill
+    .loadOnce(MEDIATOR)
+    .then(handleGetEvent);
+</script>

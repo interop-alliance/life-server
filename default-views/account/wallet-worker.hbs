@@ -1,0 +1,26 @@
+<script>
+  async function activateWalletEventHandler() {
+    try {
+      await credentialHandlerPolyfill.loadOnce(MEDIATOR);
+    } catch(e) {
+      console.error('Error in loadOnce:', e);
+    }
+
+    console.log('Worker Polyfill loaded, mediator:', MEDIATOR);
+
+    return WebCredentialHandler.activateHandler({
+      mediatorOrigin: MEDIATOR,
+      async get(event) {
+        console.log('WCH: Received get() event:', event);
+        return {type: 'redirect', url: WALLET_LOCATION + '/api/wallet/get'};
+      },
+      async store(event) {
+        console.log('WCH: Received store() event:', event);
+        return {type: 'redirect', url: WALLET_LOCATION + '/api/wallet/store'};
+      }
+    })
+  }
+
+  console.log('worker.html: Activating handler, WALLET_LOCATION:', WALLET_LOCATION);
+  activateWalletEventHandler();
+</script>
