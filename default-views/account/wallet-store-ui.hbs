@@ -1,0 +1,79 @@
+<div class="container">
+  <h4>Wallet Store</h4>
+</div>
+<div class="container">
+  store()
+</div>
+
+<script>
+  /**
+   * Globals:
+   *   WALLET_LOCATION, MEDIATOR - wallet.hbs layout
+   *
+   *  * credentialHandlerPolyfill - from credential-handler-polyfill.min.js.
+   *      This provides the get() and store() Credential Handler API calls.
+   *
+   *  * WebCredentialHandler - from web-credential-handler.min.js.
+   *      Utility/convenience library for the CHAPI polyfill, useful for wallet
+   *      implementors.
+   */
+
+  async function handleStoreEvent() {
+    const event = await WebCredentialHandler.receiveCredentialEvent();
+    console.log('Store Credential Event:', event.type, event);
+
+    const credential = event.credential;
+
+    // document.getElementById('requestOrigin').innerHTML = event.credentialRequestOrigin;
+    // document.getElementById('hintKey').innerHTML = credential.hintKey || '';
+    // document.getElementById('credentialContents').innerHTML = JSON.stringify(credential.data, null, 2);
+
+    // Display the credential details, for confirmation
+    const vp = credential.data;
+    const vc = Array.isArray(vp.verifiableCredential)
+      ? vp.verifiableCredential[0]
+      : vp.verifiableCredential;
+    // document.getElementById('credentialType').innerHTML = getCredentialType(vc);
+    // document.getElementById('credentialIssuer').innerHTML = vc.issuer;
+
+    // Set up the event handlers for the buttons
+    // document.getElementById('cancelButton').addEventListener('click', () => {
+    //   returnToUser(event, null); // Do nothing, close the CHAPI window
+    // });
+    //
+    // document.getElementById('confirmButton').addEventListener('click', () => {
+    //   document.getElementById('userArea').classList.remove('hide');
+    //   document.getElementById('confirm').classList.add('hide');
+    //
+    //   storeInWallet(credential.data); // in mock-user-management.js
+    //   refreshUserArea();
+    // });
+
+    // document.getElementById('doneButton').addEventListener('click', () => {
+    //   returnToUser(event, vp);
+    // });
+  }
+
+  /**
+   * @param storeEvent
+   * @param {VerifiablePresentation|null} data - Return (to client application)
+   *   exactly what was stored, or a `null` if canceled by the user.
+   */
+  function returnToUser(storeEvent, data) {
+    storeEvent.respondWith(new Promise(resolve => {
+      return data
+        ? resolve({dataType: 'VerifiablePresentation', data})
+        : resolve(null);
+    }))
+  }
+
+  onDocumentReady(() => {
+    // document.getElementById('loginButton').addEventListener('click', login);
+    // document.getElementById('logoutButton').addEventListener('click', logout);
+    // refreshUserArea();
+  })
+
+  credentialHandlerPolyfill
+    .loadOnce(MEDIATOR)
+    .then(handleStoreEvent);
+</script>
