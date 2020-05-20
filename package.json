@@ -64,6 +64,7 @@
     "cors": "^2.8.5",
     "crypto-ld": "digitalbazaar/crypto-ld#extract-key-pairs",
     "crypto-random-string": "^3.2.0",
+    "did-cli": "digitalbazaar/did-cli#v0.7.x",
     "ed25519-key-pair": "digitalbazaar/ed25519-key-pair#initial",
     "express": "^4.17.1",
     "express-handlebars": "^4.0.4",

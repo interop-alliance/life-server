@@ -23,6 +23,7 @@ function loadInitServer (program) {
 
         await initServer(config)
       } catch (error) {
+        console.error(error)
         if (error.code === 'MODULE_NOT_FOUND') {
           console.log('ERROR', `Config file is not found at ${options.config}.`,
             'Run "npm run server init" if you have not done so already.')
@@ -64,7 +65,36 @@ function loadInit (program) {
     })
 }
 
+function didParamsFrom (config) {
+  let url, serverFolder
+  const keyStorage = path.resolve(config.dbPath, 'server')
+  if (config.multiuser) {
+    url = config.serverUri + '/.well-known/did.json'
+    serverFolder = path.resolve(config.root, '.well-known')
+  } else {
+    url = config.serverUri + '/server/did.json'
+    serverFolder = path.resolve(config.root, 'server')
+  }
+
+  const didFilename = path.resolve(serverFolder, 'did.json')
+
+  return { keyStorage, url, serverFolder, didFilename }
+}
+
+const publicAcl = `
+@prefix acl: <http://www.w3.org/ns/auth/acl#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+
+<#public>
+    a acl:Authorization;
+    acl:agentClass foaf:Agent;
+    acl:accessTo <./>;
+    acl:defaultForNew <./>;
+    acl:mode acl:Read.
+`
+
 async function initServer (config) {
+  const { keyStore, exportKeys } = require('did-cli/lib/storage')
   const Ed25519KeyPair = require('ed25519-key-pair')
   const { CryptoLD } = require('crypto-ld')
   const cryptoLd = new CryptoLD()
@@ -75,9 +105,27 @@ async function initServer (config) {
   const didWeb = new DidWebResolver({ cryptoLd })
 
   console.log('Initializing server, config:', config)
+
+  const { keyStorage, url, serverFolder, didFilename } = didParamsFrom(config)
+  const { didDocument, didKeys } = await didWeb.generate({ url })
+  console.log(`DID generated: "${didDocument.id}".`);
+
+  // write did document
+  console.log('Writing acl:', path.resolve(serverFolder, '.acl'))
+  await fs.ensureDir(serverFolder)
+  await fs.writeFile(path.resolve(serverFolder, '.acl'), publicAcl)
+  await fs.writeFile(didFilename, JSON.stringify(didDocument, null, 2))
+  console.log(`Server DID Document written to "${didFilename}".`)
+
+  // export keys
+  await fs.ensureDir(keyStorage)
+  await keyStore({ dir: keyStorage })
+    .put(didDocument.id, await exportKeys(didKeys))
+  console.log(`Keys written to "${keyStorage}".`)
 }
 
 module.exports = {
+  initServer,
   loadInit,
   loadInitServer
 }
