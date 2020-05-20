@@ -1,0 +1,11 @@
+{
+  "icons": [
+    {
+      "sizes": "96x96",
+      "src": "/common/img/favicon-96x96.png",
+      "type": "image/png"
+    }
+  ],
+  "name": "Life Server Wallet",
+  "short_name": "Life Server Wallet"
+}
