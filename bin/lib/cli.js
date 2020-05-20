@@ -1,5 +1,5 @@
 const program = require('commander')
-const loadInit = require('./init')
+const { loadInit, loadInitServer } = require('./init')
 const loadStart = require('./start')
 const { spawnSync } = require('child_process')
 const path = require('path')
@@ -9,6 +9,7 @@ module.exports = function startCli () {
     .version(getVersion())
 
   loadInit(program)
+  loadInitServer(program)
   loadStart(program)
 
   program.parse(process.argv)
