@@ -18,6 +18,8 @@
 
 </div>
 <script>
+  const workerUrl = WALLET_LOCATION + '/api/wallet/worker';
+
   const testCredential = {
     "@context": [
       "https://www.w3.org/2018/credentials/v1",
@@ -76,6 +78,29 @@
     // document.getElementById('storeResults').innerHTML = JSON.stringify(result.data, null, 2);
   }
 
+  async function registerWalletWithBrowser() {
+    try {
+      await credentialHandlerPolyfill.loadOnce(MEDIATOR);
+    } catch(e) {
+      console.error('Error in loadOnce:', e);
+    }
+
+    console.log('Polyfill loaded.');
+
+    console.log('Installing wallet worker handler at:', workerUrl);
+
+    const registration = await WebCredentialHandler.installHandler({url: workerUrl});
+
+    await registration.credentialManager.hints.set(
+      'test', {
+        name: 'TestUser',
+        enabledTypes: ['VerifiablePresentation', 'VerifiableCredential', 'AlumniCredential']
+        // enabledTypes: ['VerifiablePresentation']
+      });
+
+    console.log('Wallet registered.');
+  }
+
   onDocumentReady(() => {
     document.getElementById('receiveButton').addEventListener('click', onClickReceive);
     console.log('Document ready.')
@@ -84,5 +109,7 @@
   credentialHandlerPolyfill
     .loadOnce(MEDIATOR)
     .then(console.log('Polyfill loaded.'))
-    .catch(e => console.error('Error loading polyfill:', e));
+    .catch(e => console.error('Error loading polyfill:', e))
+    .then(registerWalletWithBrowser())
+    .catch(e => console.error('Error in registerWalletWithBrowser:', e))
 </script>

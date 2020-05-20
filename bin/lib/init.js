@@ -108,7 +108,7 @@ async function initServer (config) {
 
   const { keyStorage, url, serverFolder, didFilename } = didParamsFrom(config)
   const { didDocument, didKeys } = await didWeb.generate({ url })
-  console.log(`DID generated: "${didDocument.id}".`);
+  console.log(`DID generated: "${didDocument.id}".`)
 
   // write did document
   console.log('Writing acl:', path.resolve(serverFolder, '.acl'))
