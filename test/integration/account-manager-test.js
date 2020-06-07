@@ -123,6 +123,13 @@ describe('AccountManager', () => {
       const didDoc = JSON.parse(await fs.readFile(didDocPath, 'utf8'))
 
       expect(didDoc.id).to.equal('did:web:alice.example.com')
+
+      const didKeysPath = path.join(testAccountsDir, 'alice.example.com',
+        'vault', 'keys', `${didDoc.id}.keys.json`)
+      const keys = JSON.parse(await fs.readFile(didKeysPath, 'utf8'))
+      for (const keyId of Object.keys(keys)) {
+        expect(keys[keyId].type).to.equal('Ed25519VerificationKey2018')
+      }
     })
   })
 })

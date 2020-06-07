@@ -94,8 +94,8 @@ const publicAcl = `
 `
 
 async function initServer (config) {
-  const { keyStore, exportKeys } = require('did-cli/lib/storage')
   const { generateDid } = require('../../lib/dids')
+  const { storeDidKeys } = require('../../lib/storage-manager')
 
   console.log('Initializing server, config:', config)
 
@@ -111,9 +111,7 @@ async function initServer (config) {
   console.log(`Server DID Document written to "${didFilename}".`)
 
   // export keys
-  await fs.ensureDir(keyStorage)
-  await keyStore({ dir: keyStorage })
-    .put(didDocument.id, await exportKeys(didKeys))
+  await storeDidKeys({ didKeys, did: didDocument.id, dir: keyStorage })
   console.log(`Keys written to "${keyStorage}".`)
 }
 
