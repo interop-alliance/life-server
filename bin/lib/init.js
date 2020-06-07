@@ -95,19 +95,12 @@ const publicAcl = `
 
 async function initServer (config) {
   const { keyStore, exportKeys } = require('did-cli/lib/storage')
-  const Ed25519KeyPair = require('ed25519-key-pair')
-  const { CryptoLD } = require('crypto-ld')
-  const cryptoLd = new CryptoLD()
-  cryptoLd.use(Ed25519KeyPair)
-
-  const { DidWebResolver } = require('@interop/did-web-resolver')
-
-  const didWeb = new DidWebResolver({ cryptoLd })
+  const { generateDid } = require('../../lib/dids')
 
   console.log('Initializing server, config:', config)
 
   const { keyStorage, url, serverFolder, didFilename } = didParamsFrom(config)
-  const { didDocument, didKeys } = await didWeb.generate({ url })
+  const { didDocument, didKeys } = await generateDid({ url })
   console.log(`DID generated: "${didDocument.id}".`)
 
   // write did document
