@@ -45,6 +45,8 @@ priorities will be: Developer QoL (Quality of Life) over User QoL over DevOps Qo
 
 ### Roadmap
 
+**Updated:** June 2020.
+
 This is an experimental server focusing on interop exploration and rapid feature 
 iteration ("move fast and break things", to use a tired cliché).
 
@@ -89,6 +91,18 @@ projects and specs.
 
 * [x] Fix/update Dockerfile (to enable **[Life Server to be hosted on 
   PermanentCloud](https://permanent.cloud/apps/life-server)**)
+* [ ] Interop with DIDs and Verifiable Credentials
+    * [x] Implement 
+      [Credential Handler API Wallet](https://github.com/digitalbazaar/credential-handler-polyfill)
+      registration when user creates an account.
+    * [x] Generate a [`did:web`](https://github.com/w3c-ccg/did-method-web) DID
+      and corresponding keys for the Server itself, during installation.
+    * [x] Generate a [`did:web`](https://github.com/w3c-ccg/did-method-web) DID
+      and corresponding keys for each user on account registration.
+    * [ ] (in progress) Implement DIDAuth for wallet, hook it up to Login page.
+    * [ ] Support the
+        [`did:key`](https://github.com/digitalbazaar/did-method-key-js) and 
+        [Veres One](https://github.com/w3c-ccg/didm-veres-one) DID methods.
 * [ ] Implement an in-Memory based LDP backend, to go alongside the FS backend.
 * [ ] Integrate or implement Static OIDC Client Registration functionality,
     to make interfacing with server-side Solid apps easier.
@@ -102,13 +116,9 @@ projects and specs.
     [CouchDB](http://docs.couchdb.org/en/latest/intro/)
     (for synchronizing of graphs and documents to mobile and offline-first 
     clients).
-* [ ] Explore interop with DIDs and Verifiable Credentials
-    * Support the [`did:web`](https://github.com/w3c-ccg/did-method-web), 
-        [`did:key`](https://github.com/digitalbazaar/did-method-key-js) and 
-        [Veres One](https://github.com/w3c-ccg/didm-veres-one) DID methods.
-* [ ] Explore using an [Encrypted Data Vault](https://github.com/WebOfTrustInfo/rwot9-prague/blob/master/draft-documents/encrypted-data-vaults.md)
+* [ ] Explore using an [Encrypted Data Vault](https://github.com/decentralized-identity/secure-data-store)
     as a storage backend. This would require some basic Key Management capability,
-    possible based on the [Web KMS spec](https://github.com/msporny/webkms).
+    possible based on the [Web KMS spec](http://w3c-ccg.github.io/webkms/).
 * [ ] Interop with the Fediverse by implementing [ActivityPub](https://activitypub.rocks/)
     protocol.
 
