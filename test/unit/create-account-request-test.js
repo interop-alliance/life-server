@@ -130,29 +130,6 @@ describe('CreateAccountRequest', () => {
     })
   })
 
-  describe('saveCredentialsFor()', () => {
-    it('should create a new user in the user store', async () => {
-      const accountManager = AccountManager.from(options)
-      const password = '12345'
-      const aliceData = { username: 'alice', password }
-      const userStore = {
-        createUser: (userAccount, password) => { return Promise.resolve() }
-      }
-      const createUserSpy = sinon.spy(userStore, 'createUser')
-      const req = HttpMocks.createRequest({
-        app: { locals: { storage: { users: userStore }, accountManager } },
-        body: aliceData,
-        session
-      })
-
-      const request = CreateAccountRequest.fromIncoming(req, res)
-      const userAccount = request.userAccount
-
-      await request.saveCredentialsFor(userAccount)
-      expect(createUserSpy).to.have.been.calledWith(userAccount, password)
-    })
-  })
-
   describe.skip('sendResponse()', () => {
     it('should respond with a 302 Redirect', () => {
       const accountManager = AccountManager.from(options)
@@ -162,7 +139,7 @@ describe('CreateAccountRequest', () => {
         body: aliceData,
         session
       })
-      const alice = accountManager.userAccountFrom(aliceData)
+      // const alice = accountManager.userAccountFrom(aliceData)
 
       const request = CreateAccountRequest.fromIncoming(req, res)
 

@@ -486,4 +486,24 @@ describe('AccountManager', () => {
       expect(validUsernames.length).to.equal(0)
     })
   })
+
+  describe('saveCredentialsFor()', () => {
+    it('should create a new user in the user store', async () => {
+      const options = testAccountManagerOptions(host)
+      const accountManager = AccountManager.from(options)
+      const password = '12345'
+      const userAccount = UserAccount.from({
+        username: 'alice',
+        webId: 'https://alice.example.com'
+      })
+      accountManager.storage.users = {
+        createUser: (userAccount, password) => { return Promise.resolve() }
+      }
+      const createUserSpy = sinon.spy(accountManager.storage.users,
+        'createUser')
+
+      await accountManager.saveCredentialsFor({ userAccount, password })
+      expect(createUserSpy).to.have.been.calledWith(userAccount, password)
+    })
+  })
 })

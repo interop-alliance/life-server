@@ -18,91 +18,56 @@
 
 </div>
 <script>
-  const workerUrl = WALLET_LOCATION + '/api/wallet/worker';
-
-  const testCredential = {
-    "@context": [
-      "https://www.w3.org/2018/credentials/v1",
-      "https://www.w3.org/2018/credentials/examples/v1"
-    ],
-    "type": "VerifiablePresentation",
-    "verifiableCredential": [{
-      "@context": [
-        "https://www.w3.org/2018/credentials/v1",
-        "https://www.w3.org/2018/credentials/examples/v1"
-      ],
-      "id": "http://example.edu/credentials/1872",
-      "type": ["VerifiableCredential", "UniversityDegreeCredential"],
-      "issuer": "https://example.edu/issuers/565049",
-      "issuanceDate": "2010-01-01T19:73:24Z",
-      "credentialSubject": {
-        "id": "did:example:ebfeb1f712ebc6f1c276e12ec21",
-        "alumniOf": {
-          "id": "did:example:c276e12ec21ebfeb1f712ebc6f1",
-          "name": {
-            "value": "Example University",
-            "lang": "en"
-          }
-        }
-      },
-      "proof": {
-        "type": "RsaSignature2018",
-        "created": "2017-06-18T21:19:10Z",
-        "proofPurpose": "assertionMethod",
-        "verificationMethod": "https://example.edu/issuers/keys/1",
-        "jws": "eyJhbGciOiJSUzI1NiIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..TCYt5XsITJX1CxPCT8yAV-TVkIEq_PbChOMqsLfRoPsnsgw5WEuts01mq-pQy7UJiN5mgRxD-WUcX16dUEMGlv50aqzpqh4Qktb3rk-BuQy72IFLOqV0G_zS245-kronKb78cPN25DGlcTwLtjPAYuNzVBAh4vGHSrQyHUdBBPM"
-      }
-    }]
-  };
+  const workerUrl = WALLET_LOCATION + '/api/wallet/worker'
 
   async function onClickReceive() {
     // Construct the WebCredential wrapper around the credential to be stored
-    const credentialType = 'VerifiablePresentation';
-    const webCredentialWrapper = new WebCredential(credentialType, testCredential);
+    const credentialType = 'VerifiablePresentation'
+    const webCredentialWrapper = new WebCredential(credentialType, testCredential)
 
-    document.getElementById('storeResults').innerText = 'Storing credential...';
+    document.getElementById('storeResults').innerText = 'Storing credential...'
 
     // Use Credential Handler API to store
-    const result = await navigator.credentials.store(webCredentialWrapper);
+    const result = await navigator.credentials.store(webCredentialWrapper)
 
-    // document.getElementById('resultsPanel').classList.remove('hide');
-    // document.getElementById('storeResults').innerText = JSON.stringify(result, null, 2);
+    // document.getElementById('resultsPanel').classList.remove('hide')
+    // document.getElementById('storeResults').innerText = JSON.stringify(result, null, 2)
 
-    console.log('Result of receiving via store() request:', result);
+    console.log('Result of receiving via store() request:', result)
     //
     // if(!result) {
-    //   document.getElementById('storeResults').innerHTML = 'null result';
-    //   return;
+    //   document.getElementById('storeResults').innerHTML = 'null result'
+    //   return
     // }
 
-    // document.getElementById('storeResults').innerHTML = JSON.stringify(result.data, null, 2);
+    // document.getElementById('storeResults').innerHTML = JSON.stringify(result.data, null, 2)
   }
 
   async function registerWalletWithBrowser() {
     try {
-      await credentialHandlerPolyfill.loadOnce(MEDIATOR);
+      await credentialHandlerPolyfill.loadOnce(MEDIATOR)
     } catch(e) {
-      console.error('Error in loadOnce:', e);
+      console.error('Error in loadOnce:', e)
     }
 
-    console.log('Polyfill loaded.');
+    console.log('Polyfill loaded.')
 
-    console.log('Installing wallet worker handler at:', workerUrl);
+    console.log('Installing wallet worker handler at:', workerUrl)
 
-    const registration = await WebCredentialHandler.installHandler({url: workerUrl});
+    const registration = await WebCredentialHandler.installHandler({url: workerUrl})
 
     await registration.credentialManager.hints.set(
       'test', {
         name: 'TestUser',
         enabledTypes: ['VerifiablePresentation', 'VerifiableCredential', 'AlumniCredential']
         // enabledTypes: ['VerifiablePresentation']
-      });
+      })
 
-    console.log('Wallet registered.');
+    console.log('Wallet registered.')
   }
 
   onDocumentReady(() => {
-    document.getElementById('receiveButton').addEventListener('click', onClickReceive);
+    document.getElementById('receiveButton').addEventListener('click', onClickReceive)
     console.log('Document ready.')
   })
 
