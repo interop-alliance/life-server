@@ -5,43 +5,18 @@
   <p>
     After you click 'Allow', your wallet is ready to use across applications.
   </p>
-
-  <p>When you click the Store button, a Verifiable Credential will
-    be issued and sent to your digital wallet for storage.
-  </p>
-
-  <code id="storeResults"></code>
-
-  <a class="waves-effect waves-light btn" id="receiveButton">Store My Login Credentials</a>
 </div>
 <div class="container">
-
+  <form method="post" action="/api/wallet/new">
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary" id="finishButton">
+        Finish Registration
+      </button>
+    </div>
+  </form>
 </div>
 <script>
   const workerUrl = WALLET_LOCATION + '/api/wallet/worker'
-
-  async function onClickReceive() {
-    // Construct the WebCredential wrapper around the credential to be stored
-    const credentialType = 'VerifiablePresentation'
-    const webCredentialWrapper = new WebCredential(credentialType, testCredential)
-
-    document.getElementById('storeResults').innerText = 'Storing credential...'
-
-    // Use Credential Handler API to store
-    const result = await navigator.credentials.store(webCredentialWrapper)
-
-    // document.getElementById('resultsPanel').classList.remove('hide')
-    // document.getElementById('storeResults').innerText = JSON.stringify(result, null, 2)
-
-    console.log('Result of receiving via store() request:', result)
-    //
-    // if(!result) {
-    //   document.getElementById('storeResults').innerHTML = 'null result'
-    //   return
-    // }
-
-    // document.getElementById('storeResults').innerHTML = JSON.stringify(result.data, null, 2)
-  }
 
   async function registerWalletWithBrowser() {
     try {
@@ -59,17 +34,11 @@
     await registration.credentialManager.hints.set(
       'test', {
         name: 'TestUser',
-        enabledTypes: ['VerifiablePresentation', 'VerifiableCredential', 'AlumniCredential']
-        // enabledTypes: ['VerifiablePresentation']
+        enabledTypes: ['VerifiablePresentation', 'VerifiableCredential']
       })
 
     console.log('Wallet registered.')
   }
-
-  onDocumentReady(() => {
-    document.getElementById('receiveButton').addEventListener('click', onClickReceive)
-    console.log('Document ready.')
-  })
 
   credentialHandlerPolyfill
     .loadOnce(MEDIATOR)
