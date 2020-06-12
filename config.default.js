@@ -1,10 +1,21 @@
 module.exports = {
   configPath: '.',
-  configFile: 'config.dev.js',
+  configFile: 'config.default.js',
 
   // External server uri
-  serverUri: 'https://localhost:8443',
-  port: '8443',
+  serverUri: 'https://localhost:7070',
+  port: '7070',
+
+  // Single-user configuration
+  multiuser: false,
+  root: './data/singleuser/', // User data directory
+
+  // Multi-user configuration
+  // multiuser: true,
+  // root: './data/multiuser/',
+
+  // Location of user database and authentication related config dbs
+  dbPath: './data/db/',
 
   // Mount server on this url path (soon to be deprecated)
   mount: '/',
@@ -16,21 +27,10 @@ module.exports = {
   // force authentication to always use this username
   // forceUser: 'https://localhost:8443/web#id',
 
-  // Location of user database and authentication related config dbs
-  dbPath: './.db/',
-
   // Location of the SSL certificate private key and certificate chain
   // These do not get generated automatically, you must create them yourself
-  sslKey: './privkey.pem',
-  sslCert: './fullchain.pem',
-
-  // Single-user configuration
-  multiuser: false,
-  root: './data/singleuser/', // User data directory
-
-  // Multi-user configuration
-  // multiuser: true,
-  // root: './data/',
+  sslKey: './config/localhost.privkey.pem',
+  sslCert: './config/localhost.fullchain.pem',
 
   // Optional email settings (these enable the sending of 'account created'
   // and account recovery emails
@@ -45,7 +45,7 @@ module.exports = {
   // },
 
   server: {
-    // A name for your server (not required, but will be presented on your server's front page)
+    // A name for your server (not required)
     name: '',
     // A description of your server (not required)
     description: '',

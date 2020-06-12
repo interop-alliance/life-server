@@ -3,7 +3,7 @@
 const path = require('path')
 const { createServer } = require('../../')
 
-const DEFAULT_CONFIG_FILE = './config.dev.js'
+const DEFAULT_CONFIG_FILE = './config.default.js'
 
 module.exports = (program) => {
   program
@@ -44,7 +44,7 @@ module.exports = (program) => {
       } catch (error) {
         if (error.code === 'MODULE_NOT_FOUND') {
           console.log('ERROR', `Config file is not found at ${options.config}.`,
-            'Run "npm run server init" if you have not done so already.')
+            'Run "npm run init" if you have not done so already.')
         } else {
           console.error(error)
         }

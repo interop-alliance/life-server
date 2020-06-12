@@ -107,6 +107,7 @@
   },
   "main": "index.js",
   "scripts": {
+    "init": "./bin/server init",
     "start": "./bin/server-test start",
     "standard": "standard '{bin,examples,lib,test}/**/*.js'",
     "validate": "node ./test/validate-turtle.js",
