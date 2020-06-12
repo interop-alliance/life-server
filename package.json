@@ -91,6 +91,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
+    "cross-env": "^7.0.2",
     "dirty-chai": "^2.0.1",
     "localstorage-memory": "^1.0.3",
     "mocha": "^7.1.2",
@@ -107,13 +108,13 @@
   },
   "main": "index.js",
   "scripts": {
-    "init": "./bin/server init",
-    "start": "./bin/server-test start",
+    "init": "cross-env bin/server init",
+    "start": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 node bin/server start",
     "standard": "standard '{bin,examples,lib,test}/**/*.js'",
     "validate": "node ./test/validate-turtle.js",
     "test": "npm run standard && npm run validate && npm run nyc",
-    "nyc": "NODE_TLS_REJECT_UNAUTHORIZED=0 nyc --reporter=html mocha",
-    "mocha": "NODE_TLS_REJECT_UNAUTHORIZED=0 mocha",
+    "nyc": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 nyc --reporter=html mocha",
+    "mocha": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 mocha",
     "clean": "rm -rf config/templates config/views",
     "reset": "rm -rf .db data && npm run clean"
   },
