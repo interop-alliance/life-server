@@ -31,9 +31,9 @@ describe('Authentication API (OIDC)', () => {
 
   const aliceServerUri = 'https://localhost:7000'
   const aliceWebId = 'https://localhost:7000/web#id'
-  const configPath = path.join(__dirname, '../resources/config')
+  const configPath = path.join(__dirname, '..', 'resources', 'config')
   const aliceDbPath = path.join(__dirname,
-    '../resources/accounts-scenario/alice/db')
+    '..', 'resources', 'accounts-scenario', 'alice', 'db')
 
   const aliceHost = { serverUri: aliceServerUri }
   const storage = testStorage(aliceHost, aliceDbPath)
@@ -41,21 +41,23 @@ describe('Authentication API (OIDC)', () => {
 
   const bobServerUri = 'https://localhost:7001'
   const bobDbPath = path.join(__dirname,
-    '../resources/accounts-scenario/bob/db')
+    '..', 'resources', 'accounts-scenario', 'bob', 'db')
 
   const serverConfig = {
-    sslKey: path.join(__dirname, '../keys/key.pem'),
-    sslCert: path.join(__dirname, '../keys/cert.pem'),
+    sslKey: path.join(__dirname, '..', 'keys', 'key.pem'),
+    sslCert: path.join(__dirname, '..', 'keys', 'cert.pem'),
     webid: true,
     multiuser: false,
     skipWelcomePage: true,
     configPath
   }
 
-  const aliceRootPath = path.join(__dirname, '../resources/accounts-scenario/alice')
+  const aliceRootPath = path.join(__dirname, '..', 'resources', 'accounts-scenario',
+    'alice')
   let alicePod
 
-  const bobRootPath = path.join(__dirname, '../resources/accounts-scenario/bob')
+  const bobRootPath = path.join(__dirname, '..', 'resources', 'accounts-scenario',
+    'bob')
   let bobPod
 
   before(async () => {
@@ -86,8 +88,8 @@ describe('Authentication API (OIDC)', () => {
     alicePod.close()
     bobPod.close()
     fs.removeSync(path.join(aliceDbPath, 'users'))
-    fs.removeSync(path.join(aliceDbPath, 'oidc/rp'))
-    fs.removeSync(path.join(bobDbPath, 'oidc/rp/clients'))
+    fs.removeSync(path.join(aliceDbPath, 'oidc', 'rp'))
+    fs.removeSync(path.join(bobDbPath, 'oidc', 'rp', 'clients'))
     cleanDir(aliceRootPath)
     cleanDir(bobRootPath)
   })
@@ -152,7 +154,7 @@ describe('Authentication API (OIDC)', () => {
     })
 
     afterEach(() => {
-      fs.removeSync(path.join(aliceDbPath, 'users/users'))
+      fs.removeSync(path.join(aliceDbPath, 'users', 'users'))
     })
 
     describe('after performing a correct login', () => {
@@ -353,7 +355,7 @@ describe('Authentication API (OIDC)', () => {
     })
 
     after(() => {
-      fs.removeSync(path.join(aliceDbPath, 'users/users'))
+      fs.removeSync(path.join(aliceDbPath, 'users', 'users'))
       // fs.removeSync(path.join(aliceDbPath, 'oidc/op/tokens'))
 
       // const clientId = auth.currentClient.registration['client_id']

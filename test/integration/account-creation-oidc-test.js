@@ -14,17 +14,17 @@ describe('AccountManager (OIDC account creation tests)', () => {
   const host = 'localhost:3457'
 
   let server
-  const rootPath = path.join(__dirname, '../resources/accounts/')
-  const configPath = path.join(__dirname, '../resources/config')
-  const dbPath = path.join(__dirname, '../resources/accounts/db')
+  const rootPath = path.join(__dirname, '..', 'resources', 'accounts')
+  const configPath = path.join(__dirname, '..', 'resources', 'config')
+  const dbPath = path.join(__dirname, '..', 'resources', 'accounts', 'db')
 
   before(async () => {
     await checkDnsSettings()
     server = await ldnode.createServer({
       root: rootPath,
       configPath,
-      sslKey: path.join(__dirname, '../keys/key.pem'),
-      sslCert: path.join(__dirname, '../keys/cert.pem'),
+      sslKey: path.join(__dirname, '..', 'keys', 'key.pem'),
+      sslCert: path.join(__dirname, '..', 'keys', 'cert.pem'),
       webid: true,
       multiuser: true,
       skipWelcomePage: true,
@@ -105,14 +105,14 @@ describe('AccountManager (OIDC account creation tests)', () => {
         .expect(302)
 
       const domain = host.split(':')[0]
-      const card = read(path.join('accounts/nicola.' + domain,
+      const card = read(path.join('accounts', 'nicola.' + domain,
         'web'))
-      const cardAcl = read(path.join('accounts/nicola.' + domain,
+      const cardAcl = read(path.join('accounts', 'nicola.' + domain,
         'web.acl'))
-      const prefs = read(path.join('accounts/nicola.' + domain,
+      const prefs = read(path.join('accounts', 'nicola.' + domain,
         'settings/prefs.ttl'))
-      const rootMeta = read(path.join('accounts/nicola.' + domain, '.meta'))
-      const rootMetaAcl = read(path.join('accounts/nicola.' + domain,
+      const rootMeta = read(path.join('accounts', 'nicola.' + domain, '.meta'))
+      const rootMetaAcl = read(path.join('accounts', 'nicola.' + domain,
         '.meta.acl'))
 
       if (!(domain && card && cardAcl && prefs && rootMeta && rootMetaAcl)) {
@@ -168,10 +168,10 @@ describe('Single User signup page', () => {
   const serverUri = 'https://localhost:7457'
   const port = 7457
   let ldp
-  const rootDir = path.join(__dirname, '../resources/accounts/single-user/')
-  const configPath = path.join(__dirname, '../resources/config')
+  const rootDir = path.join(__dirname, '..', 'resources', 'accounts', 'single-user')
+  const configPath = path.join(__dirname, '..', 'resources', 'config')
   const server = supertest(serverUri)
-  const dbPath = path.join(__dirname, '../resources/temp/7457/db')
+  const dbPath = path.join(__dirname, '..', 'resources', 'temp', '7457', 'db')
 
   before(async () => {
     ldp = await ldnode.createServer({
@@ -179,8 +179,8 @@ describe('Single User signup page', () => {
       root: rootDir,
       configPath,
       dbPath,
-      sslKey: path.join(__dirname, '../keys/key.pem'),
-      sslCert: path.join(__dirname, '../keys/cert.pem'),
+      sslKey: path.join(__dirname, '..', 'keys', 'key.pem'),
+      sslCert: path.join(__dirname, '..', 'keys', 'cert.pem'),
       webid: true,
       multiuser: false,
       skipWelcomePage: true,

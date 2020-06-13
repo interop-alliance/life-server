@@ -8,14 +8,15 @@ describe('API', () => {
   let alice
 
   const aliceServerUri = 'https://localhost:5000'
-  const configPath = path.join(__dirname, '../resources/config')
+  const configPath = path.join(__dirname, '..', 'resources', 'config')
   const aliceDbPath = path.join(__dirname,
-    '../resources/accounts-scenario/alice/db')
-  const aliceRootPath = path.join(__dirname, '../resources/accounts-scenario/alice')
+    '..', 'resources', 'accounts-scenario', 'alice', 'db')
+  const aliceRootPath = path.join(__dirname, '..', 'resources',
+    'accounts-scenario', 'alice')
 
   const serverConfig = {
-    sslKey: path.join(__dirname, '../keys/key.pem'),
-    sslCert: path.join(__dirname, '../keys/cert.pem'),
+    sslKey: path.join(__dirname, '..', 'keys', 'key.pem'),
+    sslCert: path.join(__dirname, '..', 'keys', 'cert.pem'),
     auth: 'oidc',
     webid: true,
     multiuser: false,

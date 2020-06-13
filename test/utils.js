@@ -24,11 +24,11 @@ function testAccountManagerOptions (host, options = {}) {
 }
 
 function rm (file) {
-  return fs.removeSync(path.join(__dirname, '/resources/' + file))
+  return fs.removeSync(path.join(__dirname, 'resources', file))
 }
 
 function cleanDir (dirPath) {
-  fs.removeSync(path.join(dirPath, '.well-known/.acl'))
+  fs.removeSync(path.join(dirPath, '.well-known', '.acl'))
   fs.removeSync(path.join(dirPath, 'favicon.ico'))
   fs.removeSync(path.join(dirPath, 'favicon.ico.acl'))
   fs.removeSync(path.join(dirPath, 'index.html'))
@@ -38,17 +38,17 @@ function cleanDir (dirPath) {
 }
 
 function write (text, file) {
-  return fs.writeFileSync(path.join(__dirname, '/resources/' + file), text)
+  return fs.writeFileSync(path.join(__dirname, 'resources', file), text)
 }
 
 function cp (src, dest) {
   return fs.copySync(
-    path.join(__dirname, '/resources/' + src),
-    path.join(__dirname, '/resources/' + dest))
+    path.join(__dirname, 'resources', src),
+    path.join(__dirname, 'resources', dest))
 }
 
 function read (file) {
-  return fs.readFileSync(path.join(__dirname, '/resources/' + file), {
+  return fs.readFileSync(path.join(__dirname, 'resources', file), {
     encoding: 'utf8'
   })
 }

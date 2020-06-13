@@ -13,9 +13,9 @@ const request = require('supertest')
 const port = 8881
 const serverUri = 'https://localhost:' + port
 
-const configPath = path.join(__dirname, '../resources/config')
-const rootPath = path.join(__dirname, '../resources/temp/tx-request/')
-const dbPath = path.join(__dirname, '../resources/temp/tx-request/db')
+const configPath = path.join(__dirname, '..', 'resources', 'config')
+const rootPath = path.join(__dirname, '..', 'resources', 'temp', 'tx-request')
+const dbPath = path.join(__dirname, '..', 'resources', 'temp', 'tx-request', 'db')
 
 let server
 
@@ -23,8 +23,8 @@ before(async () => {
   server = await lfs.createServer({
     root: rootPath,
     configPath,
-    sslKey: path.join(__dirname, '../keys/key.pem'),
-    sslCert: path.join(__dirname, '../keys/cert.pem'),
+    sslKey: path.join(__dirname, '..', 'keys', 'key.pem'),
+    sslCert: path.join(__dirname, '..', 'keys', 'cert.pem'),
     webid: true,
     multiuser: false,
     skipWelcomePage: true,

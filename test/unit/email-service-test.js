@@ -8,7 +8,7 @@ chai.use(sinonChai)
 chai.use(require('dirty-chai'))
 chai.should()
 
-const templatePath = path.join(__dirname, '../../default-templates/emails')
+const templatePath = path.join(__dirname, '..', '..', 'default-templates', 'emails')
 
 describe('Email Service', function () {
   describe('EmailService constructor', () => {

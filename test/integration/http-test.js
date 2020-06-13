@@ -15,7 +15,7 @@ let ldpServer, server
 
 before(async () => {
   ldpServer = await lfs.createServer({
-    root: path.join(__dirname, '../resources'),
+    root: path.join(__dirname, '..', 'resources'),
     skipWelcomePage: true,
     webid: false
   })
@@ -198,8 +198,8 @@ describe('HTTP APIs', function () {
             return done(err)
           }
 
-          var size = fs.statSync(path.join(__dirname,
-            '../resources/sampleContainer/solid.png')).size
+          var size = fs.statSync(path.join(__dirname, '..', 'resources',
+            'sampleContainer', 'solid.png')).size
           if (res.body.length !== size) {
             return done(new Error('files are not of the same size'))
           }
@@ -393,7 +393,7 @@ describe('HTTP APIs', function () {
 
   describe('PUT API', function () {
     var putRequestBody = fs.readFileSync(path.join(__dirname,
-      '../resources/sampleContainer/put1.ttl'), {
+      '..', 'resources', 'sampleContainer', 'put1.ttl'), {
       encoding: 'utf8'
     })
     it('should create new resource', function (done) {
@@ -413,7 +413,7 @@ describe('HTTP APIs', function () {
 
     describe('PUT and containers', () => {
       const containerMeta = fs.readFileSync(path.join(__dirname,
-        '../resources/sampleContainer/post2.ttl'),
+        '..', 'resources', 'sampleContainer', 'post2.ttl'),
       { encoding: 'utf8' })
 
       after(() => {
@@ -424,7 +424,8 @@ describe('HTTP APIs', function () {
         return server.put('/foo/two/')
           .expect(201)
           .then(() => {
-            const stats = fs.statSync(path.join(__dirname, '../resources/foo/two/'))
+            const stats = fs.statSync(path.join(__dirname, '..', 'resources',
+              'foo', 'two'))
 
             assert(stats.isDirectory(), 'Cannot read container just created')
           })
@@ -436,7 +437,8 @@ describe('HTTP APIs', function () {
           .set('link', '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"')
           .expect(201)
           .then(() => {
-            const stats = fs.statSync(path.join(__dirname, '../resources/foo/three/'))
+            const stats = fs.statSync(path.join(__dirname, '..', 'resources',
+              'foo', 'three'))
 
             assert(stats.isDirectory(), 'Cannot read container just created')
           })
@@ -450,7 +452,8 @@ describe('HTTP APIs', function () {
           .send(containerMeta)
           .expect(201)
           .then(() => {
-            const metaFilePath = path.join(__dirname, '../resources/foo/four/' + META_SUFFIX)
+            const metaFilePath = path.join(__dirname, '..', 'resources',
+              'foo', 'four' + META_SUFFIX)
             const meta = fs.readFileSync(metaFilePath, 'utf8')
 
             assert.equal(meta, containerMeta)
@@ -472,7 +475,8 @@ describe('HTTP APIs', function () {
               .expect(204)
           })
           .then(() => {
-            const metaFilePath = path.join(__dirname, '../resources/foo/five/' + META_SUFFIX)
+            const metaFilePath = path.join(__dirname, '..', 'resources',
+              'foo', 'five' + META_SUFFIX)
             const meta = fs.readFileSync(metaFilePath, 'utf8')
 
             assert.equal(meta, newMeta)
@@ -536,11 +540,11 @@ describe('HTTP APIs', function () {
     })
 
     var postRequest1Body = fs.readFileSync(path.join(__dirname,
-      '../resources/sampleContainer/put1.ttl'), {
+      '..', 'resources', 'sampleContainer', 'put1.ttl'), {
       encoding: 'utf8'
     })
     var postRequest2Body = fs.readFileSync(path.join(__dirname,
-      '../resources/sampleContainer/post2.ttl'), {
+      '..', 'resources', 'sampleContainer', 'post2.ttl'), {
       encoding: 'utf8'
     })
     it('should create new resource', function (done) {
@@ -610,7 +614,8 @@ describe('HTTP APIs', function () {
         .expect(201)
         .end(function (err) {
           if (err) return done(err)
-          var stats = fs.statSync(path.join(__dirname, '../resources/post-tests/loans/'))
+          var stats = fs.statSync(path.join(__dirname, '..', 'resources',
+            'post-tests', 'loans'))
           if (!stats.isDirectory()) {
             return done(new Error('Cannot read container just created'))
           }
@@ -636,7 +641,8 @@ describe('HTTP APIs', function () {
           try {
             assert(res.headers.location.endsWith(expectedDirName),
               'Uri container names should be encoded')
-            const createdDir = fs.statSync(path.join(__dirname, '../resources', expectedDirName))
+            const createdDir = fs.statSync(path.join(__dirname, '..',
+              'resources', expectedDirName))
             assert(createdDir.isDirectory(), 'Container should have been created')
           } catch (err) {
             return done(err)
@@ -725,7 +731,8 @@ describe('HTTP APIs', function () {
           try {
             assert.equal(res.headers.location, expectedDirName,
               'Uri container names should be encoded')
-            const createdDir = fs.statSync(path.join(__dirname, 'resources', expectedDirName))
+            const createdDir = fs.statSync(path.join(__dirname, '..',
+              'resources', expectedDirName))
             assert(createdDir.isDirectory(), 'Container should have been created')
           } catch (err) {
             return done(err)
@@ -754,19 +761,20 @@ describe('HTTP APIs', function () {
     it('should create as many files as the ones passed in multipart',
       function (done) {
         server.post('/sampleContainer/')
-          .attach('timbl', path.join(__dirname, '../resources/timbl.jpg'))
-          .attach('nicola', path.join(__dirname, '../resources/nicola.jpg'))
+          .attach('timbl', path.join(__dirname, '..', 'resources', 'timbl.jpg'))
+          .attach('nicola', path.join(__dirname, '..', 'resources', 'nicola.jpg'))
           .expect(201)
           .end(function (err) {
             if (err) return done(err)
 
             var sizeNicola = fs.statSync(path.join(__dirname,
-              '../resources/nicola.jpg')).size
-            var sizeTim = fs.statSync(path.join(__dirname, '../resources/timbl.jpg')).size
+              '..', 'resources', 'nicola.jpg')).size
+            var sizeTim = fs.statSync(path.join(__dirname, '..', 'resources',
+              'timbl.jpg')).size
             var sizeNicolaLocal = fs.statSync(path.join(__dirname,
-              '../resources/sampleContainer/nicola.jpg')).size
+              '..', 'resources', 'sampleContainer', 'nicola.jpg')).size
             var sizeTimLocal = fs.statSync(path.join(__dirname,
-              '../resources/sampleContainer/timbl.jpg')).size
+              '..', 'resources', 'sampleContainer', 'timbl.jpg')).size
 
             if (sizeNicola === sizeNicolaLocal && sizeTim === sizeTimLocal) {
               return done()
