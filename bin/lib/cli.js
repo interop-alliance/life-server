@@ -26,7 +26,7 @@ function getVersion () {
     return version
   } catch (e) {
     // Obtain version from package.json
-    const { version } = require(path.join(__dirname, '../../package.json'))
+    const { version } = require(path.join(__dirname, '..', '..', 'package.json'))
     return version
   }
 }

@@ -12,7 +12,7 @@ const { OidcManager } = require('../../lib/authentication/oidc-manager')
 const ServerHost = require('../../lib/server-host')
 const { testStorage } = require('../utils')
 
-const dbPath = path.resolve(__dirname, '../resources/temp/db/oidc')
+const dbPath = path.resolve(__dirname, '..', 'resources', 'temp', 'db', 'oidc')
 const serverUri = 'https://example.com'
 
 describe('OidcManager (integration tests)', () => {

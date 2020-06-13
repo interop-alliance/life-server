@@ -15,9 +15,9 @@ describe('HTTP COPY API', function () {
 
   before(async () => {
     ldp = await solidServer.createServer({
-      root: path.join(__dirname, '../resources/accounts/localhost/'),
-      sslKey: path.join(__dirname, '../keys/key.pem'),
-      sslCert: path.join(__dirname, '../keys/cert.pem'),
+      root: path.join(__dirname, '..', 'resources', 'accounts', 'localhost'),
+      sslKey: path.join(__dirname, '..', 'keys', 'key.pem'),
+      sslCert: path.join(__dirname, '..', 'keys', 'cert.pem'),
       webid: false,
       skipWelcomePage: true,
       serverUri: address
@@ -33,12 +33,12 @@ describe('HTTP COPY API', function () {
 
   var userCredentials = {
     user1: {
-      cert: fs.readFileSync(path.join(__dirname, '../keys/user1-cert.pem')),
-      key: fs.readFileSync(path.join(__dirname, '../keys/user1-key.pem'))
+      cert: fs.readFileSync(path.join(__dirname, '..', 'keys', 'user1-cert.pem')),
+      key: fs.readFileSync(path.join(__dirname, '..', 'keys', 'user1-key.pem'))
     },
     user2: {
-      cert: fs.readFileSync(path.join(__dirname, '../keys/user2-cert.pem')),
-      key: fs.readFileSync(path.join(__dirname, '../keys/user2-key.pem'))
+      cert: fs.readFileSync(path.join(__dirname, '..', 'keys', 'user2-cert.pem')),
+      key: fs.readFileSync(path.join(__dirname, '..', 'keys', 'user2-key.pem'))
     }
   }
 

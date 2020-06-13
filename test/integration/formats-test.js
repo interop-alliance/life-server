@@ -8,7 +8,7 @@ describe('formats', () => {
 
   before(async () => {
     ldp = await ldnode.createServer({
-      root: path.join(__dirname, '../resources'),
+      root: path.join(__dirname, '..', 'resources'),
       skipWelcomePage: true,
       webid: false
     })

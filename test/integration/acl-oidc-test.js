@@ -10,7 +10,7 @@ const ldnode = require('../../index')
 
 const port = 7777
 const serverUri = 'https://localhost:7777'
-const rootPath = path.join(__dirname, '../resources/accounts-acl')
+const rootPath = path.join(__dirname, '..', 'resources', 'accounts-acl')
 const dbPath = path.join(rootPath, 'db')
 const oidcProviderPath = path.join(dbPath, 'oidc', 'op', 'provider',
   'https%3A%2F%2Flocalhost%3A7777.json')
@@ -47,8 +47,8 @@ const argv = {
   dbPath,
   port,
   configPath,
-  sslKey: path.join(__dirname, '../keys/key.pem'),
-  sslCert: path.join(__dirname, '../keys/cert.pem'),
+  sslKey: path.join(__dirname, '..', 'keys', 'key.pem'),
+  sslCert: path.join(__dirname, '..', 'keys', 'cert.pem'),
   webid: true,
   multiuser: true,
   skipWelcomePage: true
@@ -348,7 +348,8 @@ describe('ACL with WebID+OIDC over HTTP', () => {
   })
 
   describe('Public Read-only', function () {
-    var body = fs.readFileSync(path.join(rootPath, 'tim.localhost/read-acl/.acl'))
+    var body = fs.readFileSync(path.join(rootPath, 'tim.localhost',
+      'read-acl', '.acl'))
     it('user1 should be able to access ACL file', function (done) {
       var options = createOptions('/read-acl/.acl', 'user1')
       request.head(options, function (error, response, body) {

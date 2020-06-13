@@ -19,7 +19,7 @@ const { LdpFileStore } = require('../../lib/data-storage/ldp-backend-fs/ldp-file
 const SERVER_URI = 'https://example.com'
 
 describe('LdpFileStore', () => {
-  const rootDir = path.join(__dirname, '../resources/')
+  const rootDir = path.join(__dirname, '..', 'resources')
   const host = ServerHost.from({
     serverUri: SERVER_URI,
     root: rootDir

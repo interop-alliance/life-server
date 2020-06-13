@@ -14,7 +14,7 @@ describe.skip('PATCH through application/sparql-update', function () {
 
   before(async () => {
     ldp = await ldnode({
-      root: path.join(__dirname, '../resources/sampleContainer'),
+      root: path.join(__dirname, '..', 'resources', 'sampleContainer'),
       mount: '/test',
       skipWelcomePage: true,
       webid: false

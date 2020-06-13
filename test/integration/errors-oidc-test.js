@@ -7,9 +7,9 @@ const expect = require('chai').expect
 
 describe('OIDC error handling', function () {
   const serverUri = 'https://localhost:3457'
-  const rootPath = path.join(__dirname, '../resources/accounts/errortests')
-  const configPath = path.join(__dirname, '../resources/config')
-  const dbPath = path.join(__dirname, '../resources/accounts/db')
+  const rootPath = path.join(__dirname, '..', 'resources', 'accounts', 'errortests')
+  const configPath = path.join(__dirname, '..', 'resources', 'config')
+  const dbPath = path.join(__dirname, '..', 'resources', 'accounts', 'db')
 
   let ldp
 
@@ -17,8 +17,8 @@ describe('OIDC error handling', function () {
     ldp = await ldnode.createServer({
       root: rootPath,
       configPath,
-      sslKey: path.join(__dirname, '../keys/key.pem'),
-      sslCert: path.join(__dirname, '../keys/cert.pem'),
+      sslKey: path.join(__dirname, '..', 'keys', 'key.pem'),
+      sslCert: path.join(__dirname, '..', 'keys', 'cert.pem'),
       auth: 'oidc',
       webid: true,
       multiuser: false,

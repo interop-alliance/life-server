@@ -10,8 +10,9 @@ const ServerHost = require('../../lib/server-host')
 const { AccountTemplate } = require('../../lib/account-mgmt/account-template')
 const { testStorage } = require('../utils')
 
-const templatePath = path.join(__dirname, '../../default-templates/new-account')
-const accountPath = path.join(__dirname, '../resources/new-account')
+const templatePath = path.join(__dirname, '..', '..', 'default-templates',
+  'new-account')
+const accountPath = path.join(__dirname, '..', 'resources', 'new-account')
 
 const host = ServerHost.from({
   serverUri: 'https://example.com',
@@ -43,7 +44,7 @@ describe('AccountTemplate', () => {
         templatePath, accountUrl: 'https://example.com'
       })
 
-      const profile = fs.readFileSync(path.join(accountPath, '/web'), 'utf8')
+      const profile = fs.readFileSync(path.join(accountPath, 'web'), 'utf8')
       expect(profile).to.include('"Alice Q."')
 
       const rootAcl = fs.readFileSync(path.join(accountPath, '.acl'), 'utf8')

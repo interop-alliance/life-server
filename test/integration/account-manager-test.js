@@ -11,18 +11,19 @@ const ServerHost = require('../../lib/server-host')
 const { AccountManager } = require('../../lib/account-mgmt/account-manager')
 const { testAccountManagerOptions } = require('../utils')
 
-const testAccountsDir = path.join(__dirname, '../resources/accounts')
-const accountTemplatePath = path.join(__dirname, '../../default-templates/new-account')
+const testAccountsDir = path.join(__dirname, '..', 'resources', 'accounts')
+const accountTemplatePath = path.join(__dirname, '..', '..',
+  'default-templates', 'new-account')
 
 let host
 
 beforeEach(() => {
   host = ServerHost.from({ serverUri: 'https://example.com' })
-  fs.removeSync(path.join(__dirname, '../resources/accounts/alice.localhost'))
+  fs.removeSync(path.join(__dirname, '..', 'resources', 'accounts', 'alice.localhost'))
 })
 
 afterEach(() => {
-  fs.removeSync(path.join(__dirname, '../resources/accounts/alice.example.com'))
+  fs.removeSync(path.join(__dirname, '..', 'resources', 'accounts', 'alice.example.com'))
 })
 
 describe('AccountManager', () => {
@@ -95,12 +96,12 @@ describe('AccountManager', () => {
       }
       const userAccount = accountManager.userAccountFrom(userData)
 
-      const accountDir = path.join(testAccountsDir, '/alice.example.com')
+      const accountDir = path.join(testAccountsDir, 'alice.example.com')
 
       await accountManager.provisionAccountStorage(userAccount)
       const found = await accountManager.accountExists('alice')
       expect(found).to.be.true()
-      const profile = fs.readFileSync(path.join(accountDir, '/web'), 'utf8')
+      const profile = fs.readFileSync(path.join(accountDir, 'web'), 'utf8')
       expect(profile).to.include('"Alice Q."')
 
       const rootAcl = fs.readFileSync(path.join(accountDir, '.acl'), 'utf8')

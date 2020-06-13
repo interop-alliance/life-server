@@ -10,8 +10,8 @@ const { read, rm, backup, restore } = require('../utils')
 // Server settings
 const port = 7777
 const serverUri = `https://tim.localhost:${port}`
-const root = path.join(__dirname, '../resources/patch')
-const configPath = path.join(__dirname, '../resources/config')
+const root = path.join(__dirname, '..', 'resources', 'patch')
+const configPath = path.join(__dirname, '..', 'resources', 'config')
 const serverOptions = {
   root,
   configPath,
@@ -19,8 +19,8 @@ const serverOptions = {
   multiuser: false,
   skipWelcomePage: true,
   webid: true,
-  sslKey: path.join(__dirname, '../keys/key.pem'),
-  sslCert: path.join(__dirname, '../keys/cert.pem'),
+  sslKey: path.join(__dirname, '..', 'keys', 'key.pem'),
+  sslCert: path.join(__dirname, '..', 'keys', 'cert.pem'),
   forceUser: `${serverUri}/web#id`
 }
 

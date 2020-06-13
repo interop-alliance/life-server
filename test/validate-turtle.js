@@ -11,7 +11,7 @@ const substitutions = {
   name: 'Test test'
 }
 
-const files = recursiveFiles(path.join(__dirname, '../default-templates/'))
+const files = recursiveFiles(path.join(__dirname, '..', 'default-templates'))
 
 for (const file of files) {
   const data = fs.readFileSync(file, 'utf8')

@@ -14,7 +14,7 @@ const { AccountManager } = require('../../lib/account-mgmt/account-manager')
 const EmailService = require('../../lib/email-service')
 const { testAccountManagerOptions } = require('../utils')
 
-const templatePath = path.join(__dirname, '../../default-templates/emails')
+const templatePath = path.join(__dirname, '..', '..', 'default-templates', 'emails')
 
 let host, accountManager, emailService
 
