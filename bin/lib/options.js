@@ -12,13 +12,13 @@ module.exports = [
   },
   {
     name: 'port',
-    message: 'SSL port to run on. (Default: 8443)',
-    default: '8443'
+    message: 'SSL port to run on. (Default: 7070)',
+    default: '7070'
   },
   {
     name: 'serverUri',
     message: 'Server uri (with protocol, hostname and port)',
-    default: 'https://localhost:8443',
+    default: 'https://localhost:7070',
     validate: validUri
   },
   {

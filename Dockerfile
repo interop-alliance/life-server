@@ -21,6 +21,7 @@ RUN npm install
 
 # add directories
 COPY bin bin
+COPY config config
 COPY common common
 COPY default-templates default-templates
 COPY default-views default-views
@@ -42,16 +43,16 @@ RUN mkdir data
 
 # Include default configuration
 COPY config.default.js config.dev.js
-RUN openssl req \
-    -new \
-    -newkey rsa:4096 \
-    -days 365 \
-    -nodes \
-    -x509 \
-    -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=localhost" \
-    -keyout privkey.pem \
-    -out fullchain.pem
+#RUN openssl req \
+#    -new \
+#    -newkey rsa:4096 \
+#    -days 365 \
+#    -nodes \
+#    -x509 \
+#    -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=localhost" \
+#    -keyout privkey.pem \
+#    -out fullchain.pem
 
-EXPOSE 8443
+EXPOSE 7070
 ENV NODE_TLS_REJECT_UNAUTHORIZED=0
 CMD ["node", "./bin/server", "start"]

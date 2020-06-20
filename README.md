@@ -82,6 +82,7 @@ Bonus/If-time:
 
 * [x] Update `node-mailer` package to latest version
 * [x] Update `inquirer` and `commander` packages to latest version
+* [x] Make all tests pass on Windows 10
 
 #### Roadmap Phase Two
 
@@ -146,21 +147,14 @@ doc.
 
 ## Install
 
-### Pre-requisites: Node.js v10
+### Pre-requisites: Node.js v12+
 
-* Linux or Mac OS X
-* Node 10
-* [Optional] OpenSSL (for certificate generation)
-
-**Operating System:** Linux and Mac OS X. Windows is currently not supported
-for this project.
+* Linux, Mac OS X, or Windows 10
+* Node 12+
 
 To run the Life Server server, you will first need to install
-Node.js version 10 or higher. (The developers recommend using
-[`nvm`](https://github.com/creationix/nvm) to install Node.)
-
-(Optional) If you intend to create a self-signed certificate (for local testing),
-you will also need OpenSSL.
+Node.js. (The developers recommend using [`nvm`](https://github.com/creationix/nvm) 
+to install Node.)
 
 ### Install `life-server` from Github
 
@@ -169,19 +163,6 @@ git clone https://github.com/interop-alliance/life-server.git
 cd life-server
 npm install
 ```
-
-### Prepare the SSL certificate
-
-**Local/Development:** Installing the server for local development and testing
-will require an SSL certificate. You can generate a self-signed certificate
-yourself (see [Generating a self-signed SSL certificate](docs/ssl-certificates.md)
-in `docs/`), but remember to launch the server using `./bin/server-test` rather
-than `./bin/server`.
-
-**Production:** Installing `life-server` in a production environment will
-require a valid SSL certificate (self-signed certs will not work). In addition,
-if you're running the server in Multi User mode, you will need a
-[Wildcard Certificate](https://en.wikipedia.org/wiki/Wildcard_certificate).
 
 ### Edit `/etc/hosts` (development/testing only)
 
@@ -199,34 +180,36 @@ Edit your `/etc/hosts` file, and append:
 127.0.0.1 nicola.localhost
 ```
 
-### Generate a config file
+### (Optional) Prepare the SSL/TLS certificate
 
-The easiest way to setup `life-server` is by running the `init` wizard.
+**Local/Development:** `life-server` includes a default `localhost` self-signed
+TLS certificate in the `config/` folder. Advanced users may want to create
+their own certificates for local testing.
+
+**Production:** Installing `life-server` in a production environment will
+require a valid TLS certificate (self-signed certs will not work). In addition,
+if you're running the server in Multi User mode, you will need a
+[Wildcard Certificate](https://en.wikipedia.org/wiki/Wildcard_certificate).
+
+### (Optional) Generate a config file
+
+The easiest way to customize `life-server` is by running the `init` wizard.
 This will create a `config.dev.js` in your current folder:
 
 ```
 ./bin/server init
 ```
 
-Going with the defaults is fine, but note that you will need the paths
-(relative paths are ok) to your SSL key and certificate.
-
 ## Usage
 
-To run your server (once you've generated a config file):
+To run your server:
 
 ```
 ./bin/server start
 ```
 
-or when using a self-signed certificate:
-
-```
-./bin/server-test start
-```
-
 After startup, the server is available at the configured server URL (by default,
-`https://localhost:8443`).
+`https://localhost:7070`).
 
 ## Usage with Docker
 
@@ -235,22 +218,22 @@ You can run life-server from our [prebuilt docker image](https://hub.docker.com/
 Run latest build from master branch
 
 ```
-docker run -p 8443:8443 interopalliance/life-server:master
+docker run -p 7070:7070 interopalliance/life-server:master
 ```
 
 Run a tagged release
 
 ```
-docker run -p 8443:8443 interopalliance/life-server:{gitTag}
-# e.g. docker run -p 8443:8443 interopalliance/life-server:v6.0.2
+docker run -p 7070:7070 interopalliance/life-server:{gitTag}
+# e.g. docker run -p 7070:7070 interopalliance/life-server:v6.0.2
 ```
 
-You can then access the application at https://localhost:8443.
+You can then access the application at https://localhost:7070.
 
 If you want to provide a custom config.js, mount it as a volume:
 
 ```
-docker run -p 8443:8443 -v $(pwd)/config.json:/usr/src/app/config.dev.js
+docker run -p 7070:7070 -v $(pwd)/config.json:/usr/src/app/config.dev.js
 ```
 
 ### Build your own Docker image
@@ -259,7 +242,7 @@ Clone the repository, then:
 
 ```
 docker build -t life-server .
-docker run -p 8443:8443 life-server
+docker run -p 7070:7070 life-server
 ```
 
 ## Security
@@ -270,7 +253,8 @@ Note: This is an experimental research server, not for production use.
 
 ## Contribute
 
-Life Server is only possible because of a large community of [Solid contributors](https://github.com/solid/node-solid-server/blob/master/CONTRIBUTORS.md).
+Life Server is only possible because of a large community of 
+[Solid contributors](https://github.com/solid/node-solid-server/blob/master/CONTRIBUTORS.md).
 A heartfelt thank you to everyone for all of your efforts!
 
 ## License

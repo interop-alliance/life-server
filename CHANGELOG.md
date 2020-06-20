@@ -2,6 +2,11 @@
 
 ## 8.0.0 - TBD
 
+### Added
+- Added feature flags, exposed on the `SolidHost` object as `host.features`.
+- Added optional DID provisioning and CHAPI wallet registration on signup.
+- All tests now pass on Windows 10!
+
 ### Changed
 - **BREAKING**: Refactored configuration system. Config file is now
   a `.js` file (to enable comments, etc), and not JSON. Default config file
@@ -9,6 +14,7 @@
 - Updated `commander`, `node-mailer` and `inquirer` packages to latest versions.
 - **BREAKING**: Account recover email is now loaded from `storage.users` db,
   instead of from the account root `.acl` file.
+- **BREAKING**: Default port is now `7070`.
 
 ## 7.0.0 - 2020-02-15
 
