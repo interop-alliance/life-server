@@ -18,6 +18,7 @@ describe('ServerHost', () => {
       expect(host.port).to.equal(3000)
       expect(host.serverUri).to.equal('https://localhost:3000')
       expect(host.hostname).to.equal('localhost')
+      expect(host.features).to.eql({})
     })
 
     it('should init to default port and serverUri values', () => {
