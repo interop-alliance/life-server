@@ -10,6 +10,7 @@ chai.should()
 const ServerHost = require('../../lib/server-host')
 const { AccountManager } = require('../../lib/account-mgmt/account-manager')
 const { testAccountManagerOptions } = require('../utils')
+const { escapeDidForFilename } = require('../../lib/storage-manager')
 
 const testAccountsDir = path.join(__dirname, '..', 'resources', 'accounts')
 const accountTemplatePath = path.join(__dirname, '..', '..',
@@ -126,7 +127,7 @@ describe('AccountManager', () => {
       expect(didDoc.id).to.equal('did:web:alice.example.com')
 
       const didKeysPath = path.join(testAccountsDir, 'alice.example.com',
-        'vault', 'keys', `${didDoc.id}.keys.json`)
+        'vault', 'keys', `${escapeDidForFilename({ did: didDoc.id })}.keys.json`)
       const keys = JSON.parse(await fs.readFile(didKeysPath, 'utf8'))
       for (const keyId of Object.keys(keys)) {
         expect(keys[keyId].type).to.equal('Ed25519VerificationKey2018')
