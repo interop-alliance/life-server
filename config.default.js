@@ -44,6 +44,17 @@ module.exports = {
   //   }
   // },
 
+  /**
+   * Feature Flags
+   */
+  features: {
+    // Register a wallet for new users, during account creation?
+    registerWalletOnSignup: false,
+
+    // Provision a DID and corresponding keys on account creation?
+    provisionDidOnSignup: false
+  },
+
   server: {
     // A name for your server (not required)
     name: '',
