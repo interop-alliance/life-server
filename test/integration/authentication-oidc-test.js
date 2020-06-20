@@ -466,7 +466,7 @@ describe('Authentication API (OIDC)', () => {
 
       expect(response.status).to.equal(200)
       const contents = await response.text()
-      expect(contents).to.equal('protected contents\n')
+      expect(contents.startsWith('protected contents')).to.be.true()
     })
 
     it('should not be able to reuse the bearer token for bob server on another server', async () => {

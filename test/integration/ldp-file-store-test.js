@@ -46,7 +46,7 @@ describe('LdpFileStore', () => {
     const url = SERVER_URI + '/fileExists.txt'
     const resource = await ldpStore.resource({ target: { url } })
     const contents = await ldpStore.readBlob({ resource })
-    expect(contents).to.equal('hello world\n')
+    expect(contents.startsWith('hello world')).to.be.true()
   })
 })
 
