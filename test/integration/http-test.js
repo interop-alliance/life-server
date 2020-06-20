@@ -569,7 +569,7 @@ describe('HTTP APIs', function () {
           .expect(201, done)
       })
     it('should fail return 404 if no parent container found', function (done) {
-      server.post('/hello.html/')
+      server.post('/non-existent-container/')
         .send(postRequest1Body)
         .set('content-type', 'text/turtle')
         .set('slug', 'post-test-target2')

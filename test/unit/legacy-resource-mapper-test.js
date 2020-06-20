@@ -2,6 +2,7 @@ const LegacyResourceMapper = require('../../lib/data-storage/ldp-backend-fs/lega
 const chai = require('chai')
 const { expect } = chai
 chai.use(require('chai-as-promised'))
+const path = require('path')
 
 const rootUrl = 'http://localhost/'
 const rootPath = '/var/www/folder/'
@@ -22,7 +23,7 @@ describe('LegacyResourceMapper', () => {
         createIfNotExists: true
       },
       {
-        path: `${rootPath}space/foo.html`,
+        path: path.normalize(path.join(rootPath, 'space', 'foo.html')),
         contentType: 'text/html'
       })
 
@@ -34,7 +35,7 @@ describe('LegacyResourceMapper', () => {
         createIfNotExists: true
       },
       {
-        path: `${rootPath}space/foo.html`,
+        path: path.normalize(path.join(rootPath, 'space', 'foo.html')),
         contentType: 'text/html'
       })
 
@@ -45,7 +46,7 @@ describe('LegacyResourceMapper', () => {
         createIfNotExists: true
       },
       {
-        path: `${rootPath}space/foo.jpeg`,
+        path: path.normalize(path.join(rootPath, 'space', 'foo.jpeg')),
         contentType: 'image/jpeg'
       })
 
@@ -56,7 +57,7 @@ describe('LegacyResourceMapper', () => {
         createIfNotExists: true
       },
       {
-        path: `${rootPath}space/foo.JPG`,
+        path: path.normalize(path.join(rootPath, 'space', 'foo.JPG')),
         contentType: 'image/jpeg'
       })
 
@@ -67,7 +68,7 @@ describe('LegacyResourceMapper', () => {
         createIfNotExists: true
       },
       {
-        path: `${rootPath}space/foo.jPeG`,
+        path: path.normalize(path.join(rootPath, 'space', 'foo.jPeG')),
         contentType: 'image/jpeg'
       })
 
@@ -78,7 +79,7 @@ describe('LegacyResourceMapper', () => {
         url: 'http://localhost/space/foo.html'
       },
       {
-        path: `${rootPath}space/foo.html`,
+        path: path.normalize(path.join(rootPath, 'space', 'foo.html')),
         contentType: 'text/html'
       })
 
@@ -87,7 +88,7 @@ describe('LegacyResourceMapper', () => {
         url: 'http://localhost/space/foo'
       },
       {
-        path: `${rootPath}space/foo`,
+        path: path.normalize(path.join(rootPath, 'space', 'foo')),
         contentType: 'text/turtle'
       })
 
@@ -96,7 +97,7 @@ describe('LegacyResourceMapper', () => {
         url: 'http://localhost/space/foo%20bar%20bar.html'
       },
       {
-        path: `${rootPath}space/foo bar bar.html`,
+        path: path.normalize(path.join(rootPath, 'space', 'foo bar bar.html')),
         contentType: 'text/html'
       })
 
@@ -107,56 +108,54 @@ describe('LegacyResourceMapper', () => {
         createIfNotExists: true
       },
       {
-        path: `${rootPath}space/foo bar bar.html`,
+        path: path.normalize(path.join(rootPath, 'space', 'foo bar bar.html')),
         contentType: 'text/html'
       })
 
     // Security cases
-
     itMapsUrl(mapper, 'a URL with a /.. path segment',
       {
         url: 'http://localhost/space/../bar'
       },
-      new Error('Disallowed /.. segment in URL'))
+      new Error(`Disallowed ${path.sep}.. segment in URL`))
 
     itMapsUrl(mapper, 'a URL with an encoded /.. path segment',
       {
         url: 'http://localhost/space%2F..%2Fbar'
       },
-      new Error('Disallowed /.. segment in URL'))
+      new Error(`Disallowed ${path.sep}.. segment in URL`))
 
     // File to URL mapping
-
     itMapsFile(mapper, 'an HTML file',
-      { path: `${rootPath}space/foo.html` },
+      { path: path.normalize(path.join(rootPath, 'space', 'foo.html')) },
       {
         url: 'http://localhost/space/foo.html',
         contentType: 'text/html'
       })
 
     itMapsFile(mapper, 'a Turtle file',
-      { path: `${rootPath}space/foo.ttl` },
+      { path: path.normalize(path.join(rootPath, 'space', 'foo.ttl')) },
       {
         url: 'http://localhost/space/foo.ttl',
         contentType: 'text/turtle'
       })
 
     itMapsFile(mapper, 'a file with an uppercase extension',
-      { path: `${rootPath}space/foo.HTML` },
+      { path: path.normalize(path.join(rootPath, 'space', 'foo.HTML')) },
       {
         url: 'http://localhost/space/foo.HTML',
         contentType: 'text/html'
       })
 
     itMapsFile(mapper, 'a file with a mixed-case extension',
-      { path: `${rootPath}space/foo.HtMl` },
+      { path: path.normalize(path.join(rootPath, 'space', 'foo.HtMl')) },
       {
         url: 'http://localhost/space/foo.HtMl',
         contentType: 'text/html'
       })
 
     itMapsFile(mapper, 'a file with disallowed IRI characters',
-      { path: `${rootPath}space/foo bar bar.html` },
+      { path: path.normalize(path.join(rootPath, 'space', 'foo bar bar.html')) },
       {
         url: 'http://localhost/space/foo%20bar%20bar.html',
         contentType: 'text/html'
@@ -173,7 +172,7 @@ describe('LegacyResourceMapper', () => {
         createIfNotExists: true
       },
       {
-        path: `${rootPath}example.org/space/foo.html`,
+        path: path.normalize(path.join(rootPath, 'example.org', 'space', 'foo.html')),
         contentType: 'text/html'
       })
 
@@ -184,13 +183,13 @@ describe('LegacyResourceMapper', () => {
         createIfNotExists: true
       },
       {
-        path: `${rootPath}example.org/space/foo.html`,
+        path: path.normalize(path.join(rootPath, 'example.org', 'space', 'foo.html')),
         contentType: 'text/html'
       })
 
     itMapsFile(mapper, 'a file on a host',
       {
-        path: `${rootPath}space/foo.html`,
+        path: path.normalize(path.join(rootPath, 'space', 'foo.html')),
         hostname: 'example.org'
       },
       {
@@ -205,7 +204,7 @@ describe('LegacyResourceMapper', () => {
 
     itMapsFile(mapper, 'a file on a host',
       {
-        path: `${rootPath}space/foo.html`,
+        path: path.normalize(path.join(rootPath, 'space', 'foo.html')),
         hostname: 'example.org'
       },
       {
