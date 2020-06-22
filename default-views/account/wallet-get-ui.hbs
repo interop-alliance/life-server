@@ -1,8 +1,14 @@
 <div class="container">
-  <h4>Wallet Get</h4>
-</div>
-<div class="container">
-  get()
+  <div class="card-panel hide" id="didAuthPanel">
+    <h4>Login Request</h4>
+
+    <p>
+      <strong>Source:</strong> <code id="requestSource"></code>
+    </p>
+
+    <a class="waves-effect waves-light btn" id="authButton">Allow</a>
+    <a class="waves-effect waves-light btn" id="cancelButton">Cancel</a>
+  </div>
 </div>
 
 <script>
@@ -17,52 +23,70 @@
    *      Utility/convenience library for the CHAPI polyfill, useful for wallet
    *      implementors.
    */
-  async function handleGetEvent() {
-    const event = await WebCredentialHandler.receiveCredentialEvent();
+  async function handleGetEvent () {
+    const event = await WebCredentialHandler.receiveCredentialEvent()
 
-    console.log('Wallet processing get() event:', event);
+    console.log('Wallet processing get() event:', event)
 
-    // document.getElementById('requestOrigin').innerHTML = event.credentialRequestOrigin;
+    // document.getElementById('requestOrigin').innerHTML = event.credentialRequestOrigin
 
-    const vp = event.credentialRequestOptions.web.VerifiablePresentation;
-    const query = Array.isArray(vp.query) ? vp.query[0] : vp.query;
+    const vp = event.credentialRequestOptions.web.VerifiablePresentation
+    const query = Array.isArray(vp.query) ? vp.query[0] : vp.query
 
-    if(!query.type === 'QueryByExample') {
-      throw new Error('Only QueryByExample requests are supported in demo wallet.');
+    if(!['QueryByExample', 'DIDAuth'].includes(query.type)) {
+      throw new Error(`Query type ${query.type} is not supported by this wallet.`)
     }
 
-    // const requestReason = query.credentialQuery.reason;
-    // document.getElementById('requestReason').innerHTML = requestReason;
+    const requestSource = event.credentialRequestOrigin
+    document.getElementById('requestSource').innerHTML = requestSource
+
+    if (query.type === 'DIDAuth') {
+      document.getElementById('didAuthPanel').classList.remove('hide')
+
+      // Communicate with server, get an auth VP response
+      const data = {}
+
+      // Authenticate/Login button
+      document.getElementById('authButton').addEventListener('click', () => {
+        // const data = JSON.parse(document.getElementById('responseText').value)
+        event.respondWith(Promise.resolve({dataType: 'VerifiablePresentation', data}))
+      })
+    }
+
+    // Cancel button
+    document.getElementById('cancelButton').addEventListener('click', () => {
+      event.respondWith(Promise.resolve({dataType: 'Response', data: 'error'}))
+    })
+
+    // const requestReason = query.credentialQuery.reason
+    // document.getElementById('requestReason').innerHTML = requestReason
 
     // refreshUserArea({
     //   shareButton: {
     //     text: 'Share',
     //     sourceEvent: event
     //   }
-    // });
+    // })
 
-    // const requestOptions = event.credentialRequestOptions || {web:{}};
-    // document.getElementById('queryContents').innerHTML = JSON.stringify(requestOptions.web, null, 2);
+    // const requestOptions = event.credentialRequestOptions || {web:{}}
+    // document.getElementById('queryContents').innerHTML = JSON.stringify(requestOptions.web, null, 2)
 
     // Respond button
     // document.getElementById('respondBtn').addEventListener('click', () => {
-    //   const data = JSON.parse(document.getElementById('responseText').value);
+    //   const data = JSON.parse(document.getElementById('responseText').value)
     //
-    //   event.respondWith(Promise.resolve({dataType: 'VerifiablePresentation', data}));
-    // });
-
-    // Cancel button
-    // document.getElementById('cancelBtn').addEventListener('click', () => {
-    //   event.respondWith(Promise.resolve({dataType: 'Response', data: 'error'}))
-    // });
+    //   event.respondWith(Promise.resolve({dataType: 'VerifiablePresentation', data}))
+    // })
   }
 
+  // async function handleAuthEvent (query) {}
+
   onDocumentReady(() => {
-    // document.getElementById('loginButton').addEventListener('click', login);
-    // document.getElementById('logoutButton').addEventListener('click', logout);
+    // document.getElementById('loginButton').addEventListener('click', login)
+    // document.getElementById('logoutButton').addEventListener('click', logout)
   })
 
   credentialHandlerPolyfill
     .loadOnce(MEDIATOR)
-    .then(handleGetEvent);
+    .then(handleGetEvent)
 </script>

@@ -53,6 +53,10 @@ module.exports = {
 
     // Register a wallet for new users, during account creation?
     registerWalletOnSignup: false,
+    // Deployment:
+    chapiMediator: 'https://authn.io/mediator',
+    // Local Development:
+    // chapiMediator: 'https://authorization.localhost:33443/mediator',
 
     // Provision a DID and corresponding keys on account creation?
     provisionDidOnSignup: false
