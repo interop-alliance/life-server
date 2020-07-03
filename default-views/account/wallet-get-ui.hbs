@@ -44,7 +44,8 @@
       document.getElementById('didAuthPanel').classList.remove('hide')
 
       // Communicate with server, get an auth VP response
-      const data = {}
+      const { domain, challenge } = vp
+      const data = await fetchDidAuthVp({ domain, challenge })
 
       // Authenticate/Login button
       document.getElementById('authButton').addEventListener('click', () => {
@@ -77,6 +78,24 @@
     //
     //   event.respondWith(Promise.resolve({dataType: 'VerifiablePresentation', data}))
     // })
+  }
+
+  async function fetchDidAuthVp ({ domain, challenge }) {
+    // @see https://transmute-industries.github.io/vc-http-api/#/Holder/provePresentation
+    const url = new URL('/api/prove/presentations', WALLET_LOCATION)
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ domain, challenge })
+      })
+      if (!response.ok) {
+        throw new Error(`Error fetching authn vp: ${response.status} ${response.statusText}`)
+      }
+    } catch (error) {
+      console.error(error)
+      return { error: error.message }
+    }
   }
 
   // async function handleAuthEvent (query) {}
