@@ -92,13 +92,12 @@
       if (!response.ok) {
         throw new Error(`Error fetching authn vp: ${response.status} ${response.statusText}`)
       }
+      return response.json()
     } catch (error) {
       console.error(error)
       return { error: error.message }
     }
   }
-
-  // async function handleAuthEvent (query) {}
 
   onDocumentReady(() => {
     // document.getElementById('loginButton').addEventListener('click', login)
