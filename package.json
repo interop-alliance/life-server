@@ -116,6 +116,7 @@
     "standard": "standard '{bin,examples,lib,test}/**/*.js'",
     "validate": "node ./test/validate-turtle.js",
     "test": "npm run standard && npm run validate && npm run nyc",
+    "test-bail": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 mocha -b",
     "nyc": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 nyc --reporter=html mocha",
     "mocha": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 mocha",
     "clean": "rm -rf config/templates config/views",
