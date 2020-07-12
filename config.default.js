@@ -48,6 +48,9 @@ module.exports = {
    * Feature Flags
    */
   features: {
+    // Is creation of new accounts enabled? Locks the /register endpoint
+    allowAccountCreation: true,
+
     // Register a wallet for new users, during account creation?
     registerWalletOnSignup: false,
 
