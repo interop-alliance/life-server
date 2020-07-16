@@ -12,6 +12,7 @@
 
   <script src="https://unpkg.com/credential-handler-polyfill@2.1.1/dist/credential-handler-polyfill.min.js"></script>
   <script src="https://unpkg.com/web-credential-handler@1.0.1/dist/web-credential-handler.min.js"></script>
+  <script src="/common/js/ready.js"></script>
 </head>
 <body>
 <script>
@@ -19,14 +20,6 @@
   const MEDIATOR = 'https://authorization.localhost:33443/mediator' + '?origin=' +
     encodeURIComponent(window.location.origin)
   const WALLET_LOCATION = '{{serverUri}}'
-
-  function onDocumentReady (fn) {
-    if(document.readyState !== 'loading') {
-      fn()
-    } else {
-      document.addEventListener('DOMContentLoaded', fn)
-    }
-  }
 </script>
 
 {{{body}}}
