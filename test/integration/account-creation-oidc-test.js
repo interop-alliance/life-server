@@ -42,12 +42,6 @@ describe('AccountManager (OIDC account creation tests)', () => {
     await fs.remove(path.join(dbPath, 'users'))
   })
 
-  // FIXME: Does this test even make sense?
-  it.skip('should expect a 404 on GET /accounts', async () => {
-    return supertest(serverUri).get('/api/accounts')
-      .expect(404) // actually throws a 401 Unauthorized
-  })
-
   describe('accessing accounts', () => {
     it('should be able to access public file of an account', async () => {
       return supertest('https://tim.' + host)
@@ -77,32 +71,37 @@ describe('AccountManager (OIDC account creation tests)', () => {
     it('should not create WebID if no username is given', async () => {
       return supertest('https://nicola.' + host)
         .post('/api/accounts/new')
-        .send('username=&password=12345')
+        .send({ password: '12345' })
+        .set('Accept', 'application/json')
         .expect(400)
     })
 
     it('should not create WebID if no password is given', async () => {
       return supertest('https://nicola.' + host)
         .post('/api/accounts/new')
-        .send('username=nicola&password=')
+        .send({ username: 'nicola' })
+        .set('Accept', 'application/json')
         .expect(400)
     })
 
     it('should not create a WebID if it already exists', async () => {
       const subdomain = supertest('https://nicola.' + host)
       await subdomain.post('/api/accounts/new')
-        .send('username=nicola&password=12345')
-        .expect(302)
+        .send({ username: 'nicola', password: '12345' })
+        .set('Accept', 'application/json')
+        .expect(200)
       return subdomain.post('/api/accounts/new')
-        .send('username=nicola&password=12345')
+        .send({ username: 'nicola', password: '12345' })
+        .set('Accept', 'application/json')
         .expect(400)
     })
 
     it('should create the default folders', async () => {
       const subdomain = supertest('https://nicola.' + host)
       await subdomain.post('/api/accounts/new')
-        .send('username=nicola&password=12345')
-        .expect(302)
+        .send({ username: 'nicola', password: '12345' })
+        .set('Accept', 'application/json')
+        .expect(200)
 
       const domain = host.split(':')[0]
       const card = read(path.join('accounts', 'nicola.' + domain,
@@ -123,8 +122,9 @@ describe('AccountManager (OIDC account creation tests)', () => {
     it('should link WebID to the root account', async () => {
       const subdomain = supertest('https://nicola.' + host)
       await subdomain.post('/api/accounts/new')
-        .send('username=nicola&password=12345')
-        .expect(302)
+        .send({ username: 'nicola', password: '12345' })
+        .set('Accept', 'application/json')
+        .expect(200)
 
       const data = await subdomain.get('/.meta')
         .expect(200)
