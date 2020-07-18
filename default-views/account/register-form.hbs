@@ -15,8 +15,8 @@
   <div class="row">
     <div class="input-field col s6">
       <i class="material-icons prefix">email</i>
-      <input type="email" name="email" id="email" placeholder="Email" />
       <label for="email">Recovery Email:</label>
+      <input type="email" name="email" id="email" placeholder="Email" />
     </div>
     <div class="input-field col s6">
       <p>Your email will only used for account recovery and other
@@ -27,8 +27,8 @@
   <div class="row">
     <div class="input-field col s6">
       <i class="material-icons prefix">account_circle</i>
-      <input placeholder="Username" id="username" name="username" type="text">
       <label for="username">Display Username:</label>
+      <input placeholder="Username" id="username" name="username" type="text">
     </div>
     <div class="input-field col s6">
       <p>Something to display in the nav bar, to indicate you're logged in.</p>
@@ -38,8 +38,8 @@
   <div class="row">
     <div class="input-field col s6">
       <i class="material-icons prefix">vpn_key</i>
-      <input id="password" id="password" name="password" type="password">
       <label for="password">Password:</label>
+      <input id="password" name="password" type="password">
     </div>
   </div>
 
@@ -47,7 +47,10 @@
 
   <div class="row">
     <div class="col s6 valign-wrapper">
-      <button type="submit" class="btn btn-primary" id="registerBtn">Register ></button>
+      <button type="submit" class="waves-effect waves-light btn-large green darken-3" id="registerBtn">
+        Register
+        <i class="material-icons right">send</i>
+      </button>
 
       <div class="loadingio-spinner-gear-kznxtisnhx hide" id="spinner"><div class="ldio-ny0qf724px9">
         <div><div></div><div></div><div></div><div></div><div></div><div></div></div>
@@ -57,17 +60,15 @@
     </div>
 
     <div class="col s6" id="loginSection">
-      <div>Already have an account?
-        <a class="btn btn-xs btn-default"
-           href="{{{loginUrl}}}">
-          Log In
-        </a>
-      </div>
+      <h5>Already have an account?</h5>
+      <a class="waves-effect waves-light btn-small green"
+         href="{{{loginUrl}}}">
+        Log In
+      </a>
     </div>
   </div>
 
 </form>
-<script src="/common/js/ready.js"></script>
 
 <script>
   function resetRegisterButton () {

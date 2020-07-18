@@ -1,44 +1,35 @@
+<script src="/common/js/ready.js"></script>
+
 <div class="container">
-  <h4>Login</h4>
+  <h2 class="header center">Login</h2>
 </div>
+
 <div class="container">
   {{#if error}}
     <div class="row">
-      <div class="col-md-12">
+      <div class="col s12">
         <p class="text-danger"><strong>{{error}}</strong></p>
       </div>
     </div>
   {{/if}}
+
   <div class="row">
-    <div class="col-md-5">
+    <div class="col s12">
       {{#if enablePassword}}
         {{> auth/login-username-password}}
       {{/if}}
     </div>
-    <div class="col-md-1"><br /></div>
-    <div class="col-md-6">
-    </div>
   </div>
-</div>
 
-<div class="container">
   <div class="row">
-    <div class="col-md-4">
-      <div>Don't have an account?
-        <a class="btn btn-xs btn-default"
-           href="{{{registerUrl}}}">
-          Register
-        </a>
-      </div>
-    </div>
+    <div class="col s1"></div>
 
-    <div class="col-md-6">
-      <div>Forgot password?
-        <a class="btn btn-xs btn-default"
-           href="/account/password/reset{{#if returnToUrl}}?returnToUrl={{{returnToUrl}}}{{/if}}">
-          Reset password
-        </a>
-      </div>
+    <div class="col s10">
+      <h5>Don't have an account?</h5>
+      <a class="waves-effect waves-light btn-small green"
+         href="{{{registerUrl}}}">
+        Register
+      </a>
     </div>
   </div>
 </div>
