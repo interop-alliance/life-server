@@ -291,38 +291,32 @@ describe('Authentication API (OIDC)', () => {
   describe('Two Pods + Browser Login workflow', () => {
     // Step 1: Alice tries to access bob.com/shared-with-alice.txt, and
     //   gets redirected to bob.com's Provider Discovery endpoint
-    it('401 Unauthorized -> redirect to provider discovery', (done) => {
-      bob.get('/shared-with-alice.txt')
+    it('401 Unauthorized -> redirect to provider discovery', async () => {
+      const res = await bob.get('/shared-with-alice.txt')
         .expect(401)
-        .end((err, res) => {
-          if (err) return done(err)
-          const redirectString = 'http-equiv="refresh" ' +
-            `content="0; url=${bobServerUri}/api/auth/select-provider`
-          expect(res.text).to.match(new RegExp(redirectString))
-          done()
-        })
+
+      const redirectString = 'http-equiv="refresh" ' +
+        `content="0; url=${bobServerUri}/api/auth/select-provider`
+      expect(res.text).to.match(new RegExp(redirectString))
     })
 
     // Step 2: Alice enters her pod's URI to Bob's Provider Discovery endpoint
-    it('Enter webId -> redirect to provider login', () => {
-      return bob.post('/api/auth/select-provider')
+    it('Enter webId -> redirect to provider login', async () => {
+      const res = await bob.post('/api/auth/select-provider')
         .send('webid=' + aliceServerUri)
         .expect(302)
-        .then(res => {
-          // Submitting select-provider form redirects to Alice's pod's /authorize
-          const authorizeUri = res.header.location
-          expect(authorizeUri.startsWith(aliceServerUri + '/authorize'))
 
-          // Follow the redirect to /authorize
-          const authorizePath = authorizeUri.replace(aliceServerUri, '') // (new URL(authorizeUri)).pathname
-          return alice.get(authorizePath)
-        })
-        .then(res => {
-          // Since alice not logged in to her pod, /authorize redirects to /login
-          const loginUri = res.header.location
+      // Submitting select-provider form redirects to Alice's pod's /authorize
+      const authorizeUri = res.header.location
+      expect(authorizeUri.startsWith(aliceServerUri + '/authorize'))
 
-          expect(loginUri.startsWith('/login'))
-        })
+      // Follow the redirect to /authorize
+      const authorizePath = authorizeUri.replace(aliceServerUri, '') // (new URL(authorizeUri)).pathname
+      const authorizeCallResult = await alice.get(authorizePath)
+
+      // Since alice not logged in to her pod, /authorize redirects to /login
+      const loginUri = authorizeCallResult.header.location
+      expect(loginUri.startsWith('/login'))
     })
   })
 
@@ -337,9 +331,8 @@ describe('Authentication API (OIDC)', () => {
       provider: aliceIdentityProvider
     })
 
-    let authorizationUri, loginUri, authParams, callbackUri
-    let loginFormFields = ''
-    let currentSession, bearerToken
+    let authorizationUri, loginUri, callbackUri
+    let sessionCookie, currentSession, bearerToken
 
     before(async () => {
       const aliceRpOptions = {
@@ -380,7 +373,10 @@ describe('Authentication API (OIDC)', () => {
 
     // Step 3: App redirects user to the authorization uri for login
     it('should redirect user to /authorize and /login', async () => {
-      const response = await fetch(authorizationUri, { redirect: 'manual' })
+      const response = await fetch(authorizationUri, {
+        redirect: 'manual'
+      })
+
       // Since user is not logged in, /authorize redirects to /login
       expect(response.status).to.equal(302)
 
@@ -388,42 +384,42 @@ describe('Authentication API (OIDC)', () => {
       expect(loginUri.toString().startsWith(aliceServerUri + '/login'))
         .to.be.true()
 
-      authParams = loginUri.searchParams
+      // authParams = loginUri.searchParams
     })
 
     // Step 4: Pod returns a /login page with appropriate hidden form fields
     it('should display the /login form', async () => {
-      const loginPage = await fetch(loginUri.toString())
-      const pageText = await loginPage.text()
-
-      // Login page should contain the relevant auth params as hidden fields
-      authParams.forEach((value, key) => {
-        const hiddenField = `<input type="hidden" name="${key}" id="${key}" value="${value}" />`
-
-        const fieldRegex = new RegExp(hiddenField)
-
-        expect(pageText).to.match(fieldRegex)
-
-        loginFormFields += `${key}=` + encodeURIComponent(value) + '&'
+      const response = await fetch(loginUri.toString(), {
+        headers: { cookie: sessionCookie }
       })
+      sessionCookie = response.headers.raw()['set-cookie']
+
+      console.log('Step 4, login to:', loginUri.toString())
+      const pageText = await response.text()
+
+      const loginFormRegex = new RegExp('<form id="loginPasswordForm"')
+
+      expect(pageText).to.match(loginFormRegex)
     })
 
     // Step 5: User submits their username & password via the /login form
     it('should login via the /login form', async () => {
-      loginFormFields += `username=${'alice'}&password=${alicePassword}`
-
       const loginResponse = await fetch(aliceServerUri + '/login/password', {
         method: 'POST',
-        body: loginFormFields,
+        body: JSON.stringify({
+          username: 'alice',
+          password: alicePassword
+        }),
         redirect: 'manual',
         headers: {
-          'content-type': 'application/x-www-form-urlencoded'
+          'content-type': 'application/json',
+          cookie: sessionCookie
         },
         credentials: 'include'
       })
-      expect(loginResponse.status).to.equal(302)
-      const postLoginUrl = loginResponse.headers.get('location')
-      const cookie = loginResponse.headers.get('set-cookie')
+      expect(loginResponse.status).to.equal(200)
+      const postLoginUrl = (await loginResponse.json()).redirect
+      // const cookie = loginResponse.headers.get('set-cookie')
 
       // Successful login gets redirected back to /authorize and then
       // back to app
@@ -433,7 +429,7 @@ describe('Authentication API (OIDC)', () => {
         .to.be.true('Post-login url must include auth query params')
 
       const postLoginResponse = await fetch(postLoginUrl, {
-        redirect: 'manual', headers: { cookie }
+        redirect: 'manual', headers: { cookie: sessionCookie }
       })
       // User gets redirected back to original app
       expect(postLoginResponse.status).to.equal(302)
