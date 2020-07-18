@@ -167,9 +167,8 @@ describe('Authentication API (OIDC)', () => {
 
         aliceCredentialStore.createUser(aliceAccount, alicePassword)
         alice.post('/login/password')
-          .type('form')
-          .send({ username: 'alice' })
-          .send({ password: alicePassword })
+          .send({ username: 'alice', password: alicePassword })
+          .set('Accept', 'application/json')
           .end((err, res) => {
             response = res
             const error = err | response.error
@@ -182,8 +181,8 @@ describe('Authentication API (OIDC)', () => {
       })
 
       it('should redirect to /authorize', () => {
-        const loginUri = response.headers.location
-        expect(response).to.have.property('status', 302)
+        const loginUri = response.body.redirect
+        expect(response).to.have.property('status', 200)
         expect(loginUri.startsWith(aliceServerUri + '/authorize'))
       })
 
@@ -269,23 +268,22 @@ describe('Authentication API (OIDC)', () => {
 
     it('should throw a 400 if no username is provided', (done) => {
       alice.post('/login/password')
-        .type('form')
         .send({ password: alicePassword })
+        .set('Accept', 'application/json')
         .expect(400, done)
     })
 
     it('should throw a 400 if no password is provided', (done) => {
       alice.post('/login/password')
-        .type('form')
         .send({ username: 'alice' })
+        .set('Accept', 'application/json')
         .expect(400, done)
     })
 
     it('should throw a 400 if user is found but no password match', (done) => {
       alice.post('/login/password')
-        .type('form')
-        .send({ username: 'alice' })
-        .send({ password: 'wrongpassword' })
+        .send({ username: 'alice', password: 'wrongpassword' })
+        .set('Accept', 'application/json')
         .expect(400, done)
     })
   })
