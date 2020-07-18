@@ -66,7 +66,7 @@ describe('OidcManager', () => {
       oidc.initMultiRpClient()
 
       const clientStore = oidc.clients
-      expect(clientStore.store.backend.dir.endsWith('oidc-mgr/rp/clients'))
+      expect(clientStore.store).to.exist()
       expect(clientStore).to.respondTo('registerClient')
     })
   })
