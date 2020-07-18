@@ -12,20 +12,19 @@ const AuthRequest = require('../../lib/authentication/auth-request')
 const { LoginRequest } = require('../../lib/authentication/login-request')
 
 const ServerHost = require('../../lib/server-host')
-const { AccountManager } = require('../../lib/account-mgmt/account-manager')
-const { testAccountManagerOptions } = require('../utils')
+// const { AccountManager } = require('../../lib/account-mgmt/account-manager')
+// const { testAccountManagerOptions } = require('../utils')
 
 const mockUserCredentialStore = {
   findUser: () => { return Promise.resolve(true) },
   matchPassword: (user, password) => { return Promise.resolve(user) }
 }
 
-const authMethod = 'oidc'
+// const authMethod = 'oidc'
 const host = ServerHost.from({
   serverUri: 'https://localhost:8443'
 })
-const options = testAccountManagerOptions(host, { authMethod })
-const accountManager = AccountManager.from(options)
+// const options = testAccountManagerOptions(host, { authMethod })
 
 const localAuth = { password: true }
 
@@ -123,7 +122,7 @@ describe('LoginRequest', () => {
         })
     })
 
-    it('should call redirectPostLogin()', () => {
+    it('should call sendResponse()', () => {
       const validUser = {}
       options.response = response
       options.authenticator = {
@@ -132,11 +131,11 @@ describe('LoginRequest', () => {
 
       const request = new LoginRequest(options)
 
-      const redirectPostLogin = sinon.spy(request, 'redirectPostLogin')
+      const sendResponse = sinon.spy(request, 'sendResponse')
 
       return LoginRequest.login(request)
         .then(() => {
-          expect(redirectPostLogin).to.have.been.calledWith(validUser)
+          expect(sendResponse).to.have.been.calledWith(validUser)
         })
     })
   })
@@ -149,68 +148,6 @@ describe('LoginRequest', () => {
       const user = { accountUri: aliceAccount }
 
       expect(request.postLoginUrl(user)).to.equal(aliceAccount)
-    })
-  })
-
-  describe('redirectPostLogin()', () => {
-    it('should redirect to the /authorize url if client_id is present', () => {
-      const res = HttpMocks.createResponse()
-      const authUrl = 'https://localhost:8443/authorize?client_id=client123'
-      const validUser = accountManager.userAccountFrom({ username: 'alice' })
-
-      const authQueryParams = {
-        client_id: 'client123'
-      }
-
-      const options = { accountManager, authQueryParams, response: res }
-      const request = new LoginRequest(options)
-
-      request.authorizeUrl = sinon.stub().returns(authUrl)
-
-      request.redirectPostLogin(validUser)
-
-      expect(res.statusCode).to.equal(302)
-      expect(res._getRedirectUrl()).to.equal(authUrl)
-    })
-
-    it('should redirect to account uri if no client_id present', () => {
-      const res = HttpMocks.createResponse()
-      const authUrl = 'https://localhost/authorize?redirect_uri=https%3A%2F%2Fapp.example.com%2Fcallback'
-      const validUser = accountManager.userAccountFrom({ username: 'alice' })
-
-      const authQueryParams = {}
-
-      const options = { accountManager, authQueryParams, response: res }
-      const request = new LoginRequest(options)
-
-      request.authorizeUrl = sinon.stub().returns(authUrl)
-
-      request.redirectPostLogin(validUser)
-
-      const expectedUri = accountManager.accountUriFor('alice')
-      expect(res.statusCode).to.equal(302)
-      expect(res._getRedirectUrl()).to.equal(expectedUri)
-    })
-
-    it('should redirect to account uri if redirect_uri is string "undefined', () => {
-      const res = HttpMocks.createResponse()
-      const authUrl = 'https://localhost/authorize?client_id=123'
-      const validUser = accountManager.userAccountFrom({ username: 'alice' })
-
-      const body = { redirect_uri: 'undefined' }
-
-      const options = { host, response: res }
-      const request = new LoginRequest(options)
-      request.authQueryParams = AuthRequest.extractAuthParams({ body })
-
-      request.authorizeUrl = sinon.stub().returns(authUrl)
-
-      request.redirectPostLogin(validUser)
-
-      const expectedUri = accountManager.accountUriFor('alice')
-
-      expect(res.statusCode).to.equal(302)
-      expect(res._getRedirectUrl()).to.equal(expectedUri)
     })
   })
 })
