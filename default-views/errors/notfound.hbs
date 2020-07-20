@@ -1,0 +1,16 @@
+{{> nav/navbar}}
+
+<div class="container center">
+  <div class="row ">
+    <h1 class="header">
+      Resource Not Found
+    </h1>
+    <p>
+      The requested resource was not found on this server.
+    </p>
+  </div>
+</div>
+
+{{#unless isAuthenticated}}
+  {{> errors/login-with-wallet}}
+{{/unless}}
