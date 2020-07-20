@@ -1,0 +1,60 @@
+<div class="container center">
+  <div class="row">
+    <div class="card">
+      <div class="card-content">
+        <button class="waves-effect waves-light btn-large green darken-3" id="loginWalletBtn">
+          <i class="small material-icons" style="vertical-align: middle; display: inline-block;">
+            account_balance_wallet
+          </i>
+          Login with Wallet
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  async function onClickLogin() {
+    // document.getElementById('rawResults').innerHTML = '' // clear results
+
+    const domain = window.location.origin
+    const challenge = '99612b24-63d9-11ea-b99f-4f66f3e4f81a' // TODO: generate
+
+    const didAuthQuery =   {
+      "web": {
+        "VerifiablePresentation": {
+          query: [{
+            type: 'DIDAuth'
+          }],
+          challenge,
+          domain // e.g.: requestingparty.example.com
+        }
+      }
+    }
+
+    // document.getElementById('rawResults').innerText = 'Logging in...'
+
+    // Use Credential Handler API to authenticate
+    const result = await navigator.credentials.get(didAuthQuery)
+
+    // document.getElementById('resultsPanel').classList.remove('hide')
+    // document.getElementById('rawResults').innerText = JSON.stringify(result, null, 2)
+    //
+    // console.log('Result of logging in request:', result)
+    //
+    // if(!result) {
+    //   document.getElementById('rawResults').innerHTML = 'null result'
+    //   return
+    // }
+  }
+
+  onDocumentReady(() => {
+    document.getElementById('loginWalletBtn').addEventListener('click', onClickLogin)
+    console.log('Document ready.')
+  })
+
+  credentialHandlerPolyfill
+    .loadOnce(MEDIATOR)
+    .then(console.log('Polyfill loaded.'))
+    .catch(e => console.error('Error loading polyfill:', e))
+</script>
