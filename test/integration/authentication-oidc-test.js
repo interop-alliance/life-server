@@ -291,7 +291,7 @@ describe('Authentication API (OIDC)', () => {
   describe('Two Pods + Browser Login workflow', () => {
     // Step 1: Alice tries to access bob.com/shared-with-alice.txt, and
     //   gets redirected to bob.com's Provider Discovery endpoint
-    it('401 Unauthorized -> redirect to provider discovery', async () => {
+    it.skip('401 Unauthorized -> redirect to provider discovery', async () => {
       const res = await bob.get('/shared-with-alice.txt')
         .expect(401)
 
@@ -301,7 +301,7 @@ describe('Authentication API (OIDC)', () => {
     })
 
     // Step 2: Alice enters her pod's URI to Bob's Provider Discovery endpoint
-    it('Enter webId -> redirect to provider login', async () => {
+    it.skip('Enter webId -> redirect to provider login', async () => {
       const res = await bob.post('/api/auth/select-provider')
         .send('webid=' + aliceServerUri)
         .expect(302)
