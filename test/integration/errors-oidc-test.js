@@ -45,7 +45,7 @@ describe('OIDC error handling', function () {
           .expect(401)
       })
 
-      it('should return an html redirect body', () => {
+      it.skip('should return an html redirect body', () => {
         return server.get('/profile/')
           .set('Accept', 'text/html')
           .expect('Content-Type', 'text/html; charset=utf-8')

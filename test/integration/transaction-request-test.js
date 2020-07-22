@@ -46,10 +46,11 @@ describe('TransactionRequest', () => {
       const response = await request(server)
         .post('/transaction')
         .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
         .send({})
         .expect(400)
 
-      expect(response.text).to
+      expect(response.body.detail).to
         .match(/"keys" or "key_handle" parameter is required/)
     })
 
@@ -57,20 +58,23 @@ describe('TransactionRequest', () => {
       const response = await request(server)
         .post('/transaction')
         .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
         .send({ keys: { jwks: [] } })
         .expect(400)
 
-      expect(response.text).to.match(/"resources" or "resource_handle" parameter is required/)
+      expect(response.body.detail).to
+        .match(/"resources" or "resource_handle" parameter is required/)
     })
 
     it('should reject a transaction with no interact param', async () => {
       const response = await request(server)
         .post('/transaction')
         .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
         .send({ keys: { jwks: [] }, resources: ['scope1'] })
         .expect(400)
 
-      expect(response.text).to
+      expect(response.body.detail).to
         .match(/"interact" parameter is required/)
     })
 
@@ -85,7 +89,7 @@ describe('TransactionRequest', () => {
         .expect(200)
 
       expect(response.body).to.have.property('handle')
-      console.log('Response:', response.body)
+      // console.log('Response:', response.body)
     })
   })
 })
