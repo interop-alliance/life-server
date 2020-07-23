@@ -14,6 +14,8 @@
 </div>
 
 <script>
+  const POST_LOGIN_RETRY_PATH = window.location.href
+
   async function onClickLogin() {
     // document.getElementById('rawResults').innerHTML = '' // clear results
 
@@ -36,6 +38,9 @@
 
     // Use Credential Handler API to authenticate
     const result = await navigator.credentials.get(didAuthQuery)
+
+    // Retry the path that resulted in this error page
+    window.location = POST_LOGIN_RETRY_PATH
 
     // document.getElementById('resultsPanel').classList.remove('hide')
     // document.getElementById('rawResults').innerText = JSON.stringify(result, null, 2)
