@@ -3,9 +3,7 @@
     <div class="card">
       <div class="card-content">
         <button class="waves-effect waves-light btn-large green darken-3" id="loginWalletBtn">
-          <i class="small material-icons" style="vertical-align: middle; display: inline-block;">
-            account_balance_wallet
-          </i>
+          <i class="small material-icons" style="vertical-align: middle; display: inline-block;">account_balance_wallet</i>
           Login with Wallet
         </button>
       </div>
@@ -22,12 +20,16 @@
     const domain = window.location.origin
     const challenge = '99612b24-63d9-11ea-b99f-4f66f3e4f81a' // TODO: generate
 
+    console.log('Sending DIDAuth query...')
+
     const didAuthQuery =   {
-      "web": {
-        "VerifiablePresentation": {
-          query: [{
-            type: 'DIDAuth'
-          }],
+      web: {
+        VerifiablePresentation: {
+          query: [
+            {
+              type: 'DIDAuth'
+            }
+          ],
           challenge,
           domain // e.g.: requestingparty.example.com
         }
@@ -54,12 +56,13 @@
   }
 
   onDocumentReady(() => {
-    document.getElementById('loginWalletBtn').addEventListener('click', onClickLogin)
+    document.getElementById('loginWalletBtn')
+      .addEventListener('click', onClickLogin)
     console.log('Document ready.')
   })
 
   credentialHandlerPolyfill
     .loadOnce(MEDIATOR)
-    .then(console.log('Polyfill loaded.'))
+    .then(console.log(`Polyfill loaded, mediator: '${MEDIATOR}'`))
     .catch(e => console.error('Error loading polyfill:', e))
 </script>
