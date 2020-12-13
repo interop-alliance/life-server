@@ -92,18 +92,19 @@ projects and specs.
 
 * [x] Fix/update Dockerfile (to enable **[Life Server to be hosted on 
   PermanentCloud](https://permanent.cloud/apps/life-server)**)
-* [ ] Interop with DIDs and Verifiable Credentials
-    * [x] Implement 
-      [Credential Handler API Wallet](https://github.com/digitalbazaar/credential-handler-polyfill)
-      registration when user creates an account.
+* [ ] DID Integration
     * [x] Generate a [`did:web`](https://github.com/w3c-ccg/did-method-web) DID
       and corresponding keys for the Server itself, during installation.
     * [x] Generate a [`did:web`](https://github.com/w3c-ccg/did-method-web) DID
       and corresponding keys for each user on account registration.
     * [ ] (in progress) Implement DIDAuth for wallet, hook it up to Login page.
-    * [ ] Support the
-        [`did:key`](https://github.com/digitalbazaar/did-method-key-js) and 
-        [Veres One](https://github.com/w3c-ccg/didm-veres-one) DID methods.
+    * [ ] Add [`did:key`](https://github.com/digitalbazaar/did-method-key-js)
+        support
+    * [ ] Add [Veres One](https://github.com/w3c-ccg/didm-veres-one) DIDs support
+* [ ] Interop with Verifiable Credentials
+    * [x] Implement 
+      [Credential Handler API Wallet](https://github.com/digitalbazaar/credential-handler-polyfill)
+      registration when user creates an account.
 * [ ] Implement an in-Memory based LDP backend, to go alongside the FS backend.
 * [ ] Integrate or implement Static OIDC Client Registration functionality,
     to make interfacing with server-side Solid apps easier.

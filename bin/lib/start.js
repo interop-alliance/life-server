@@ -40,7 +40,9 @@ module.exports = (program) => {
     .action(async (options) => {
       let config
       try {
-        config = require(path.resolve(options.config))
+        const configPath = path.resolve(options.config)
+        console.log('Config path:', configPath)
+        config = require(configPath)
       } catch (error) {
         if (error.code === 'MODULE_NOT_FOUND') {
           console.log('ERROR', `Config file is not found at ${options.config}.`,
