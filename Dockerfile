@@ -25,7 +25,7 @@ COPY config config
 COPY common common
 COPY default-templates default-templates
 COPY default-views default-views
-COPY lib lib
+COPY src lib
 COPY test test
 # add files
 COPY \

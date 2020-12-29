@@ -11,7 +11,7 @@ chai.should()
 
 const HttpMocks = require('node-mocks-http')
 
-const DeleteAccountConfirmRequest = require('../../lib/account-mgmt/delete-account-confirm-request')
+const DeleteAccountConfirmRequest = require('../../src/account-mgmt/delete-account-confirm-request')
 
 describe('DeleteAccountConfirmRequest', () => {
   describe('constructor()', () => {

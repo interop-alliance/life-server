@@ -1,6 +1,6 @@
 'use strict'
 
-const provider = require('../../lib/authentication/preferred-provider')
+const provider = require('../../src/authentication/preferred-provider')
 
 const nock = require('nock')
 const chai = require('chai')

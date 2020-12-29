@@ -1,4 +1,4 @@
-const forceUser = require('../../lib/authentication/force-user')
+const forceUser = require('../../src/authentication/force-user')
 const sinon = require('sinon')
 const chai = require('chai')
 const { expect } = chai

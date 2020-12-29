@@ -6,7 +6,7 @@ chai.use(dirtyChai)
 const expect = chai.expect
 const HttpMocks = require('node-mocks-http')
 
-const LogoutRequest = require('../../lib/authentication/handlers/logout-request')
+const LogoutRequest = require('../../src/authentication/handlers/logout-request')
 
 describe('LogoutRequest', () => {
   it('should clear user session properties', async () => {

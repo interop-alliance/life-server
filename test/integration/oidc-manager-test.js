@@ -8,8 +8,8 @@ chai.use(dirtyChai)
 const expect = chai.expect
 chai.should()
 
-const { OidcManager } = require('../../lib/authentication/oidc-manager')
-const ServerHost = require('../../lib/server-host')
+const { OidcManager } = require('../../src/authentication/oidc-manager')
+const ServerHost = require('../../src/server-host')
 const { testStorage } = require('../utils')
 
 const dbPath = path.resolve(__dirname, '..', 'resources', 'temp', 'db', 'oidc')

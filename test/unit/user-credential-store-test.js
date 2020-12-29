@@ -7,7 +7,7 @@ const sinon = require('sinon')
 chai.use(require('sinon-chai'))
 chai.should()
 
-const { UserCredentialStore } = require('../../lib/authentication/user-credential-store')
+const { UserCredentialStore } = require('../../src/authentication/user-credential-store')
 
 describe('UserCredentialStore', () => {
   describe('from()', () => {
