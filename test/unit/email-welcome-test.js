@@ -9,12 +9,12 @@ chai.use(sinonChai)
 chai.use(require('dirty-chai'))
 chai.should()
 
-const ServerHost = require('../../src/server-host')
+const ServerHost = require('../../src/server/server-host')
 const { AccountManager } = require('../../src/account-mgmt/account-manager')
 const EmailService = require('../../src/email-service')
 const { testAccountManagerOptions } = require('../utils')
 
-const templatePath = path.join(__dirname, '..', '..', 'default-templates', 'emails')
+const templatePath = path.join(__dirname, '..', '..', 'src', 'templates', 'emails')
 
 let host, accountManager, emailService
 

@@ -7,8 +7,8 @@ const fs = require('fs-extra')
 const path = require('path')
 const { v1: uuidv1 } = require('uuid')
 const session = require('express-session')
-const { AccountTemplate, processHandlebarFile } = require('./account-mgmt/account-template')
-const { logger } = require('./logger')
+const { AccountTemplate, processHandlebarFile } = require('../account-mgmt/account-template')
+const { logger } = require('../logger')
 
 function printDebugInfo (options) {
   logger.info('Server URI: ' + options.serverUri)
@@ -34,12 +34,12 @@ function printDebugInfo (options) {
 async function ensureWelcomePage ({
   root, multiuser, templates, server, host, storage
 }) {
-  const serverTemplate = path.join(__dirname, '..', 'default-templates', 'server')
+  const serverTemplate = path.join(__dirname, '..', 'templates', 'server')
   const rootDir = path.resolve(root)
   const serverRootDir = multiuser ? path.join(rootDir, host.hostname) : rootDir
   logger.info(`Checking for server welcome page, root dir: '${serverRootDir}'`)
   const existingIndexPage = path.join(serverRootDir, 'index.html')
-  const packageData = require('../package.json')
+  const packageData = require('../../package.json')
 
   if (!fs.existsSync(existingIndexPage)) {
     logger.info('Creating server root dir.')

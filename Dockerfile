@@ -23,9 +23,7 @@ RUN npm install
 COPY bin bin
 COPY config config
 COPY common common
-COPY default-templates default-templates
-COPY default-views default-views
-COPY src lib
+COPY src src
 COPY test test
 # add files
 COPY \

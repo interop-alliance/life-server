@@ -11,7 +11,7 @@ const HttpMocks = require('node-mocks-http')
 const AuthRequest = require('../../src/authentication/auth-request')
 const { LoginRequest } = require('../../src/authentication/login-request')
 
-const ServerHost = require('../../src/server-host')
+const ServerHost = require('../../src/server/server-host')
 // const { AccountManager } = require('../../src/account-mgmt/account-manager')
 // const { testAccountManagerOptions } = require('../utils')
 

@@ -4,7 +4,7 @@ const express = require('express')
 const fs = require('fs')
 const https = require('https')
 const http = require('http')
-const { logger } = require('./logger')
+const { logger } = require('../logger')
 const createApp = require('./create-app')
 
 async function createServer (argv, app) {

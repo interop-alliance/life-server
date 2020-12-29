@@ -7,7 +7,7 @@ chai.use(require('dirty-chai'))
 chai.should()
 
 const AuthRequest = require('../../src/authentication/auth-request')
-const ServerHost = require('../../src/server-host')
+const ServerHost = require('../../src/server/server-host')
 const UserAccount = require('../../src/account-mgmt/user-account')
 
 describe('AuthRequest', () => {
