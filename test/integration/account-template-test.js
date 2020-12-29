@@ -34,7 +34,8 @@ describe('AccountTemplate', () => {
       const substitutions = {
         webId: 'https://example.com/#me',
         email: 'alice@example.com',
-        name: 'Alice Q.'
+        name: 'Alice Q.',
+        serverUri: host.serverUri
       }
       const template = new AccountTemplate({
         substitutions, accountStorage: storage.accountStorage
@@ -46,6 +47,7 @@ describe('AccountTemplate', () => {
 
       const profile = fs.readFileSync(path.join(accountPath, 'web'), 'utf8')
       expect(profile).to.include('"Alice Q."')
+      expect(profile).to.include('solid:oidcIssuer <https://example.com>')
 
       const rootAcl = fs.readFileSync(path.join(accountPath, '.acl'), 'utf8')
       expect(rootAcl).to.include('<mailto:alice@')

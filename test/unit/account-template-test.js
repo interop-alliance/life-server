@@ -8,7 +8,6 @@ chai.use(require('dirty-chai'))
 chai.should()
 
 const { AccountTemplate } = require('../../lib/account-mgmt/account-template')
-const UserAccount = require('../../lib/account-mgmt/user-account')
 
 describe('AccountTemplate', () => {
   describe('isTemplate()', () => {
@@ -38,23 +37,6 @@ describe('AccountTemplate', () => {
     it('should recognize arbitrary binary files as non-templates', () => {
       expect(template.isTemplate('./favicon.ico')).to.be.false()
       expect(template.isTemplate('./file')).to.be.false()
-    })
-  })
-
-  describe('templateSubstitutionsFor()', () => {
-    it('should init', () => {
-      const userOptions = {
-        username: 'alice',
-        webId: 'https://alice.example.com/web#id',
-        name: 'Alice Q.',
-        email: 'alice@example.com'
-      }
-      const userAccount = UserAccount.from(userOptions)
-
-      const substitutions = AccountTemplate.templateSubstitutionsFor(userAccount)
-      expect(substitutions.name).to.equal('Alice Q.')
-      expect(substitutions.email).to.equal('alice@example.com')
-      expect(substitutions.webId).to.equal('https://alice.example.com/web#id')
     })
   })
 })
