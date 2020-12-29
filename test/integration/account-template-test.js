@@ -6,11 +6,11 @@ const chai = require('chai')
 const expect = chai.expect
 chai.should()
 
-const ServerHost = require('../../src/server-host')
+const ServerHost = require('../../src/server/server-host')
 const { AccountTemplate } = require('../../src/account-mgmt/account-template')
 const { testStorage } = require('../utils')
 
-const templatePath = path.join(__dirname, '..', '..', 'default-templates',
+const templatePath = path.join(__dirname, '..', '..', 'src', 'templates',
   'new-account')
 const accountPath = path.join(__dirname, '..', 'resources', 'new-account')
 

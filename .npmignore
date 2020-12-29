@@ -8,10 +8,6 @@
 /accounts
 /config.json
 /config.*.js
-/config/account-template
-/config/email-templates
-/config/templates
-/config/views
 /data
 /coverage
 /node_modules

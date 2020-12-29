@@ -8,7 +8,7 @@ chai.use(sinonChai)
 chai.use(require('dirty-chai'))
 chai.should()
 
-const ServerHost = require('../../src/server-host')
+const ServerHost = require('../../src/server/server-host')
 const { AccountManager, isValidUsername } = require('../../src/account-mgmt/account-manager')
 const UserAccount = require('../../src/account-mgmt/user-account')
 const TokenService = require('../../src/account-mgmt/token-service')

@@ -3,7 +3,7 @@ const chai = require('chai')
 const { expect } = chai
 chai.use(require('dirty-chai'))
 
-const ServerHost = require('../../src/server-host')
+const ServerHost = require('../../src/server/server-host')
 const defaults = require('../../src/defaults')
 
 describe('ServerHost', () => {

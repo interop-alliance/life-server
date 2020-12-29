@@ -8,12 +8,11 @@ chai.use(sinonChai)
 chai.use(require('dirty-chai'))
 chai.should()
 
-const templatePath = path.join(__dirname, '..', '..', 'default-templates', 'emails')
+const templatePath = path.join(__dirname, '..', '..', 'src', 'templates', 'emails')
 
 describe('Email Service', function () {
   describe('EmailService constructor', () => {
     it('should set up a nodemailer instance', () => {
-      const templatePath = '../../config/email-templates'
       const config = {
         host: 'smtp.gmail.com',
         auth: {
@@ -92,12 +91,11 @@ describe('Email Service', function () {
   describe('templatePathFor()', () => {
     it('should compose filename based on base path and template name', () => {
       const config = { host: 'example.com', auth: {} }
-      const templatePath = '../../config/email-templates'
       const emailService = new EmailService(templatePath, config)
 
       const templateFile = emailService.templatePathFor('welcome')
 
-      expect(templateFile.endsWith('email-templates/welcome'))
+      expect(templateFile.endsWith('templates/emails/welcome'))
     })
   })
 

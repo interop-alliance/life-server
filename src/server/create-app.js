@@ -2,24 +2,24 @@ module.exports = createApp
 
 const express = require('express')
 const handlebars = require('express-handlebars')
-const { addLdpMiddleware } = require('./data-storage/api')
+const { addLdpMiddleware } = require('../data-storage/api')
 const ServerHost = require('./server-host')
-const { AccountManager } = require('./account-mgmt/account-manager')
-const { StorageManager } = require('./storage-manager')
+const { AccountManager } = require('../account-mgmt/account-manager')
+const { StorageManager } = require('../storage-manager')
 const vhost = require('vhost')
-const EmailService = require('./email-service')
-const TokenService = require('./account-mgmt/token-service')
-const accountMgmtApi = require('./account-mgmt/routes')
-const ShareRequest = require('./authorization/share-request')
-const errorPages = require('./error-pages')
+const EmailService = require('../email-service')
+const TokenService = require('../account-mgmt/token-service')
+const accountMgmtApi = require('../account-mgmt/routes')
+const ShareRequest = require('../authorization/share-request')
+const errorPages = require('../error-pages')
 const config = require('./server-config')
-const defaults = require('./defaults')
+const defaults = require('../defaults')
 const path = require('path')
 const bodyParserJson = express.json()
 const bodyParserForm = express.urlencoded({ extended: false })
-const { ldpRequestHandler } = require('./data-storage/api')
-const { corsSettings, initHeaders } = require('./common-headers')
-const TransactionRequest = require('./authentication/xyz/transaction-request')
+const { ldpRequestHandler } = require('../data-storage/api')
+const { corsSettings, initHeaders } = require('../common-headers')
+const TransactionRequest = require('../authentication/xyz/transaction-request')
 
 async function createApp (argv = {}) {
   // Override default configs (defaults) with passed-in params (argv)
@@ -36,8 +36,8 @@ async function createApp (argv = {}) {
   argv.host = host
 
   argv.templates = {
-    account: path.join(__dirname, '..', 'default-templates', 'new-account'),
-    email: path.join(__dirname, '..', 'default-templates', 'emails')
+    account: path.join(__dirname, '..', 'templates', 'new-account'),
+    email: path.join(__dirname, '..', 'templates', 'emails')
   }
 
   config.printDebugInfo(argv) // Prints server config
@@ -74,9 +74,9 @@ async function createApp (argv = {}) {
 
 function initStaticRoutes (app) {
   // Serve the public 'common' directory (for shared CSS files, etc)
-  app.use('/common', express.static(path.join(__dirname, '..', 'common')))
+  app.use('/common', express.static(path.join(__dirname, '..', '..', 'common')))
   app.use('/.well-known',
-    express.static(path.join(__dirname, '..', 'common', 'well-known')))
+    express.static(path.join(__dirname, '..', '..', 'common', 'well-known')))
 
   // Serve bootstrap from it's node_module directory
   routeResolvedFile(app, '/common/css/', 'bootstrap/dist/css/bootstrap.min.css')
@@ -109,7 +109,7 @@ function initAppLocals ({ app, argv, storage }) {
  * @param app {Function} Express.js app
  */
 function initViews (app) {
-  const viewsPath = path.join(__dirname, '..', 'default-views')
+  const viewsPath = path.join(__dirname, '..', 'views')
 
   app.set('views', viewsPath)
   app.engine('.hbs', handlebars({
@@ -176,7 +176,7 @@ async function initWebId (argv, app, storage) {
  */
 async function initAuthentication (app, argv, storage) {
   const auth = argv.forceUser ? 'forceUser' : argv.auth
-  const authenticationApi = require('./authentication')
+  const authenticationApi = require('../authentication')
   if (!(auth in authenticationApi)) {
     throw new Error(`Unsupported authentication scheme: ${auth}`)
   }

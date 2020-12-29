@@ -9,7 +9,7 @@ chai.should()
 const HttpMocks = require('node-mocks-http')
 
 const { AccountManager } = require('../../src/account-mgmt/account-manager')
-const ServerHost = require('../../src/server-host')
+const ServerHost = require('../../src/server/server-host')
 const defaults = require('../../src/defaults')
 const { CreateAccountRequest } = require('../../src/account-mgmt/create-account-request')
 const { testAccountManagerOptions } = require('../utils')

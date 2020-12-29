@@ -1,7 +1,7 @@
 'use strict'
 
 const { URL, URLSearchParams } = require('url')
-const defaults = require('./defaults')
+const defaults = require('../defaults')
 
 /**
  * Represents the URI that a server is installed on.
