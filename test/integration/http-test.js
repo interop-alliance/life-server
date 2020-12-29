@@ -9,7 +9,7 @@ const { assert, expect } = chai
 chai.use(require('dirty-chai'))
 // const rdf = require('rdflib')
 
-const { ACL_SUFFIX, META_SUFFIX } = require('../../lib/defaults')
+const { ACL_SUFFIX, META_SUFFIX } = require('../../src/defaults')
 
 let ldpServer, server
 

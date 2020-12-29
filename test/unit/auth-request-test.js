@@ -6,9 +6,9 @@ chai.use(require('sinon-chai'))
 chai.use(require('dirty-chai'))
 chai.should()
 
-const AuthRequest = require('../../lib/authentication/auth-request')
-const ServerHost = require('../../lib/server-host')
-const UserAccount = require('../../lib/account-mgmt/user-account')
+const AuthRequest = require('../../src/authentication/auth-request')
+const ServerHost = require('../../src/server-host')
+const UserAccount = require('../../src/account-mgmt/user-account')
 
 describe('AuthRequest', () => {
   const host = ServerHost.from({ serverUri: 'https://localhost:8443' })

@@ -8,7 +8,7 @@ chai.use(dirtyChai)
 const expect = chai.expect
 chai.should()
 
-// const { UserCredentialStore } = require('../../lib/authentication/user-credential-store')
+// const { UserCredentialStore } = require('../../src/authentication/user-credential-store')
 const { testStorage } = require('../utils')
 const dbPath = path.resolve(__dirname, '..', 'db')
 const host = { serverUri: 'https://localhost:8443' }

@@ -7,10 +7,10 @@ chai.use(require('sinon-chai'))
 chai.use(require('dirty-chai'))
 chai.should()
 
-const { PasswordAuthenticator } = require('../../lib/authentication/authenticator')
+const { PasswordAuthenticator } = require('../../src/authentication/authenticator')
 
-const ServerHost = require('../../lib/server-host')
-const { AccountManager } = require('../../lib/account-mgmt/account-manager')
+const ServerHost = require('../../src/server-host')
+const { AccountManager } = require('../../src/account-mgmt/account-manager')
 const { testAccountManagerOptions } = require('../utils')
 
 const mockUserCredentialStore = {

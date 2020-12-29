@@ -11,7 +11,7 @@ chai.should()
 const expect = chai.expect
 const HttpMocks = require('node-mocks-http')
 
-const AuthCallbackRequest = require('../../lib/authentication/handlers/auth-callback-request')
+const AuthCallbackRequest = require('../../src/authentication/handlers/auth-callback-request')
 
 describe('AuthCallbackRequest', () => {
   let res
@@ -46,7 +46,7 @@ describe('AuthCallbackRequest', () => {
 
   describe('fromIncoming()', () => {
     it('should initialize an AuthCallbackRequest instance from request params', () => {
-      const AuthCallbackRequest = require('../../lib/authentication/handlers/auth-callback-request')
+      const AuthCallbackRequest = require('../../src/authentication/handlers/auth-callback-request')
 
       const requestUri = 'https://example.com/api/oidc/rp'
 

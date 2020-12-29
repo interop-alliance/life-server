@@ -5,9 +5,9 @@ chai.should()
 // const rdf = require('rdflib')
 // const ns = require('solid-namespace')(rdf)
 const path = require('path')
-const ServerHost = require('../../lib/server-host')
-const LegacyResourceMapper = require('../../lib/data-storage/ldp-backend-fs/legacy-resource-mapper')
-const { LdpFileStore } = require('../../lib/data-storage/ldp-backend-fs/ldp-file-store')
+const ServerHost = require('../../src/server-host')
+const LegacyResourceMapper = require('../../src/data-storage/ldp-backend-fs/legacy-resource-mapper')
+const { LdpFileStore } = require('../../src/data-storage/ldp-backend-fs/ldp-file-store')
 
 // Helper functions for the FS
 // var rm = require('./../utils').rm

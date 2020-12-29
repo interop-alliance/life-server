@@ -12,8 +12,8 @@ const sinonChai = require('sinon-chai')
 chai.use(sinonChai)
 chai.should()
 
-const { OidcManager } = require('../../lib/authentication/oidc-manager')
-const ServerHost = require('../../lib/server-host')
+const { OidcManager } = require('../../src/authentication/oidc-manager')
+const ServerHost = require('../../src/server-host')
 const { testStorage } = require('../utils')
 const host = ServerHost.from({ serverUri: 'https://localhost:8443' })
 

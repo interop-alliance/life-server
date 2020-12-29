@@ -7,8 +7,8 @@ const expect = chai.expect
 chai.use(require('dirty-chai'))
 chai.should()
 
-const ServerHost = require('../../lib/server-host')
-const { AccountManager } = require('../../lib/account-mgmt/account-manager')
+const ServerHost = require('../../src/server-host')
+const { AccountManager } = require('../../src/account-mgmt/account-manager')
 const { testAccountManagerOptions } = require('../utils')
 
 const testAccountsDir = path.join(__dirname, '..', 'resources', 'accounts')

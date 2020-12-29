@@ -5,7 +5,7 @@ const sinonChai = require('sinon-chai')
 chai.use(sinonChai)
 chai.should()
 
-const { MultiRpClient } = require('../../lib/authentication/multi-rp-client')
+const { MultiRpClient } = require('../../src/authentication/multi-rp-client')
 const OIDCRelyingParty = require('@interop-alliance/oidc-rp')
 const { FlexDocStore } = require('flex-docstore')
 

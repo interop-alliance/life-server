@@ -6,7 +6,7 @@ chai.use(dirtyChai)
 chai.should()
 const expect = chai.expect
 
-const AuthResponseSent = require('../../lib/authentication/errors/auth-response-sent')
+const AuthResponseSent = require('../../src/authentication/errors/auth-response-sent')
 
 describe('AuthResponseSent', () => {
   it('should create a handled error', () => {

@@ -153,7 +153,7 @@ function escapeDidForFilename ({ did }) {
 }
 
 async function storeDidKeys ({ didKeys, did, dir }) {
-  const { keyStore, exportKeys } = require('../lib/data-storage/key-storage')
+  const { keyStore, exportKeys } = require('.//data-storage/key-storage')
 
   await fs.ensureDir(dir)
   await keyStore({ dir: dir }).put(escapeDidForFilename({ did }),

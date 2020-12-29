@@ -6,7 +6,7 @@ const from = require('from2')
 
 const TEST_HOSTS = ['nic.localhost', 'tim.localhost', 'nicola.localhost']
 
-const { StorageManager } = require('../lib/storage-manager')
+const { StorageManager } = require('../src/storage-manager')
 
 function startServer (server, port) {
   return new Promise((resolve) => {

@@ -11,7 +11,7 @@ chai.should()
 
 const HttpMocks = require('node-mocks-http')
 
-const PasswordChangeRequest = require('../../lib/account-mgmt/password-change-request')
+const PasswordChangeRequest = require('../../src/account-mgmt/password-change-request')
 
 describe('PasswordChangeRequest', () => {
   describe('constructor()', () => {

@@ -10,7 +10,7 @@ chai.should()
 const expect = chai.expect
 const HttpMocks = require('node-mocks-http')
 
-const api = require('../../lib/authentication/host-api')
+const api = require('../../src/authentication/host-api')
 
 describe('Host API', () => {
   describe('authenticatedUser', () => {
@@ -46,7 +46,7 @@ describe('Host API', () => {
 
     beforeEach(() => {
       // re-import because we're going to be mocking methods
-      api = require('../../lib/authentication/host-api')
+      api = require('../../src/authentication/host-api')
     })
 
     it('should initialize subject claim and return request if user is logged in', () => {

@@ -9,7 +9,7 @@ chai.use(sinonChai)
 const expect = chai.expect
 const HttpMocks = require('node-mocks-http')
 
-const SelectProviderRequest = require('../../lib/authentication/handlers/select-provider-request')
+const SelectProviderRequest = require('../../src/authentication/handlers/select-provider-request')
 
 describe('SelectProviderRequest', () => {
   describe('normalizeWebId()', () => {
@@ -217,7 +217,7 @@ describe('SelectProviderRequest', () => {
   })
 
   describe('post()', () => {
-    const SelectProviderRequest = require('../../lib/authentication/handlers/select-provider-request')
+    const SelectProviderRequest = require('../../src/authentication/handlers/select-provider-request')
 
     it('should create a request instance and invoke handlePost()', () => {
       const req = HttpMocks.createRequest()

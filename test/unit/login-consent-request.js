@@ -11,7 +11,7 @@ chai.should()
 const expect = chai.expect
 const HttpMocks = require('node-mocks-http')
 
-const LoginConsentRequest = require('../../lib/authentication/handlers/login-consent-request')
+const LoginConsentRequest = require('../../src/authentication/handlers/login-consent-request')
 
 function createOpAuthRequest (overwrite) {
   return Object.assign({
