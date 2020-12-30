@@ -7,7 +7,7 @@ chai.use(sinonChai)
 chai.use(require('dirty-chai'))
 chai.should()
 
-const { AccountTemplate } = require('../../src/account-mgmt/account-template')
+const { AccountTemplate } = require('../../src/accounts/account-template')
 
 describe('AccountTemplate', () => {
   describe('isTemplate()', () => {

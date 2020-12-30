@@ -95,7 +95,7 @@ const publicAcl = `
 
 async function initServer (config) {
   const { generateDid } = require('../../src/dids')
-  const { storeDidKeys } = require('../../src/storage-manager')
+  const { storeDidKeys } = require('../../src/storage/storage-manager')
 
   console.log('Initializing server, config:', config)
 

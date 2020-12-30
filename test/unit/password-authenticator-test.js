@@ -10,7 +10,7 @@ chai.should()
 const { PasswordAuthenticator } = require('../../src/authentication/authenticator')
 
 const ServerHost = require('../../src/server/server-host')
-const { AccountManager } = require('../../src/account-mgmt/account-manager')
+const { AccountManager } = require('../../src/accounts/account-manager')
 const { testAccountManagerOptions } = require('../utils')
 
 const mockUserCredentialStore = {

@@ -7,7 +7,7 @@ const { AccountTemplate } = require('./account-template')
 const { LdpTarget } = require('../storage/ldp-target')
 const { logger } = require('../logger')
 const { generateDid, didForWebId, didKeys, keySuite, didWebDocumentLoader } = require('../dids')
-const { escapeDidForFilename } = require('../storage-manager')
+const { escapeDidForFilename } = require('../storage/storage-manager')
 
 const { ACL_SUFFIX } = require('../defaults')
 const DEFAULT_ADMIN_USERNAME = 'admin'

@@ -9,8 +9,8 @@ const bodyParserForm = express.urlencoded({ extended: false })
 const { OidcManager } = require('./oidc-manager')
 const { LoginRequest } = require('./login-request')
 
-const PasswordResetEmailRequest = require('../account-mgmt/password-reset-email-request')
-const PasswordChangeRequest = require('../account-mgmt/password-change-request')
+const PasswordResetEmailRequest = require('../accounts/password-reset-email-request')
+const PasswordChangeRequest = require('../accounts/password-change-request')
 
 const {
   AuthCallbackRequest,

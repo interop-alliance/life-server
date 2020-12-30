@@ -11,8 +11,8 @@ chai.should()
 
 const HttpMocks = require('node-mocks-http')
 
-const DeleteAccountRequest = require('../../src/account-mgmt/delete-account-request')
-const { AccountManager } = require('../../src/account-mgmt/account-manager')
+const DeleteAccountRequest = require('../../src/accounts/delete-account-request')
+const { AccountManager } = require('../../src/accounts/account-manager')
 const ServerHost = require('../../src/server/server-host')
 const { testAccountManagerOptions } = require('../utils')
 

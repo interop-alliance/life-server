@@ -8,7 +8,7 @@ chai.should()
 
 const AuthRequest = require('../../src/authentication/auth-request')
 const ServerHost = require('../../src/server/server-host')
-const UserAccount = require('../../src/account-mgmt/user-account')
+const UserAccount = require('../../src/accounts/user-account')
 
 describe('AuthRequest', () => {
   const host = ServerHost.from({ serverUri: 'https://localhost:8443' })
