@@ -4,7 +4,7 @@ const { URL } = require('url')
 const defaults = require('../defaults')
 const UserAccount = require('./user-account')
 const { AccountTemplate } = require('./account-template')
-const { LdpTarget } = require('../data-storage/ldp-target')
+const { LdpTarget } = require('../storage/ldp-target')
 const { logger } = require('../logger')
 const { generateDid, didForWebId, didKeys, keySuite, didWebDocumentLoader } = require('../dids')
 const { escapeDidForFilename } = require('../storage-manager')
@@ -377,7 +377,7 @@ class AccountManager {
 
   async saveKeys ({ accountUri, did, didKeys }) {
     const { accountStorage } = this
-    const { exportKeys } = require('../data-storage/key-storage')
+    const { exportKeys } = require('../storage/key-storage')
     const exportedKeys = await exportKeys(didKeys)
     const didFilename = escapeDidForFilename({ did })
 

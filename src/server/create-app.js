@@ -2,7 +2,7 @@ module.exports = createApp
 
 const express = require('express')
 const handlebars = require('express-handlebars')
-const { addLdpMiddleware } = require('../data-storage/api')
+const { addLdpMiddleware } = require('../storage/api')
 const ServerHost = require('./server-host')
 const { AccountManager } = require('../account-mgmt/account-manager')
 const { StorageManager } = require('../storage-manager')
@@ -17,7 +17,7 @@ const defaults = require('../defaults')
 const path = require('path')
 const bodyParserJson = express.json()
 const bodyParserForm = express.urlencoded({ extended: false })
-const { ldpRequestHandler } = require('../data-storage/api')
+const { ldpRequestHandler } = require('../storage/api')
 const { corsSettings, initHeaders } = require('../common-headers')
 const TransactionRequest = require('../authentication/xyz/transaction-request')
 

@@ -4,7 +4,7 @@ const { getNearestACL, getPermissionSet } = require('./ldp-wac')
 const { URL } = require('url')
 const acl = require('@interop/solid-permissions')
 const { PermissionSet, Permission, SingleAgent } = acl
-const { LdpTarget } = require('../data-storage/ldp-target')
+const { LdpTarget } = require('../storage/ldp-target')
 const rdf = require('rdflib')
 const { logger } = require('../logger')
 

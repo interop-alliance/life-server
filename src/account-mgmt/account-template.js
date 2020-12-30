@@ -8,7 +8,7 @@ const { URL } = require('url')
 const fs = require('fs-extra')
 const { logger } = require('../logger')
 const Handlebars = require('handlebars')
-const { LdpTarget } = require('../data-storage/ldp-target')
+const { LdpTarget } = require('../storage/ldp-target')
 
 const { RDF_MIME_TYPES } = require('../defaults')
 const TEMPLATE_EXTENSIONS = ['.acl', '.meta', '.json', '.hbs', '.handlebars']
