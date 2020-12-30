@@ -1,8 +1,8 @@
 'use strict'
 
 const { LdpRequest, LdpPatchRequest } = require('./ldp-request')
-const { HomeRequest } = require('../ui/home-request')
-const { ServerWelcomeRequest } = require('../ui/server-welcome-request')
+const { HomeRequest } = require('../accounts/home-request')
+const { ServerWelcomeRequest } = require('../server/server-welcome-request')
 const wac = require('../authorization/ldp-wac')
 const HttpError = require('standard-http-error')
 const crypto = require('crypto')

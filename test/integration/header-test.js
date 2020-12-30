@@ -1,6 +1,6 @@
 const { expect } = require('chai')
 const path = require('path')
-const ldnode = require('../../index')
+const ldnode = require('../../src')
 const supertest = require('supertest')
 
 const serverOptions = {

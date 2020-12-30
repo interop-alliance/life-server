@@ -29,7 +29,6 @@ COPY test test
 COPY \
   .npmrc \
   config.default.js \
-  index.js \
   LICENSE.md \
   package.json \
   README.md \

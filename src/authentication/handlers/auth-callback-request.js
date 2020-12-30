@@ -2,9 +2,9 @@
 
 const { logger } = require('../../logger')
 const HttpError = require('standard-http-error')
-const { ServerRequest } = require('../../server-request')
+const { ApiRequest } = require('../../api-request')
 
-class AuthCallbackRequest extends ServerRequest {
+class AuthCallbackRequest extends ApiRequest {
   constructor (options) {
     super(options)
     this.issuer = options.issuer
@@ -23,7 +23,7 @@ class AuthCallbackRequest extends ServerRequest {
    * @return {AuthCallbackRequest}
    */
   static fromIncoming (req, res) {
-    const options = ServerRequest.baseOptions(req, res)
+    const options = ApiRequest.baseOptions(req, res)
 
     const locals = req.app.locals
     const { host: { serverUri }, oidc: oidcManager } = locals

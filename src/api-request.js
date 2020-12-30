@@ -5,7 +5,7 @@ const { logger } = require('./logger')
 /**
  * Base LifeServer http request.
  */
-class ServerRequest {
+class ApiRequest {
   /**
    * @param options.host {ServerHost}
    * @param [options.requestUri] {string} Fully qualified request URL
@@ -34,7 +34,7 @@ class ServerRequest {
    *
    * @param req {IncomingRequest}
    * @param res {ServerResponse}
-   * @returns {Promise<ServerRequest>}
+   * @returns {Promise<ApiRequest>}
    */
   static fromIncoming (req, res) {
     const Request = this
@@ -86,7 +86,7 @@ class ServerRequest {
         const request = this.fromIncoming(req, res)
         await request.handleGet()
       } catch (error) {
-        logger.error('Error in ServerRequest.get:' + error)
+        logger.error('Error in ApiRequest.get:' + error)
         next(error)
       }
     }
@@ -103,7 +103,7 @@ class ServerRequest {
         const request = this.fromIncoming(req, res)
         await request.handlePost()
       } catch (error) {
-        logger.error('Error in ServerRequest.post:' + error)
+        logger.error('Error in ApiRequest.post:' + error)
         next(error)
       }
     }
@@ -115,7 +115,7 @@ class ServerRequest {
    * Usage:
    *
    *   ```
-   *   ServerRequest.parseParameter(req, 'client_id')
+   *   ApiRequest.parseParameter(req, 'client_id')
    *   // -> 'client123'
    *   ```
    *
@@ -164,5 +164,5 @@ class ServerRequest {
 }
 
 module.exports = {
-  ServerRequest
+  ApiRequest
 }

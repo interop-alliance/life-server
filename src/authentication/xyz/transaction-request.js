@@ -4,7 +4,7 @@ const HttpError = require('standard-http-error')
 const cryptoRandomString = require('crypto-random-string')
 // const { URL, URLSearchParams } = require('url')
 // const { logger } = require('../../logger')
-const { ServerRequest } = require('../../server-request')
+const { ApiRequest } = require('../../api-request')
 
 function newHandle () {
   return cryptoRandomString({ length: 20, type: 'base64' })
@@ -49,7 +49,7 @@ class AuthTransaction {
   }
 }
 
-class TransactionRequest extends ServerRequest {
+class TransactionRequest extends ApiRequest {
   /**
    * @param options.body {object} Parsed JSON request body
    * @param options.txStore {FlexDocStore} Transactions store
@@ -70,7 +70,7 @@ class TransactionRequest extends ServerRequest {
    * @return {TransactionRequest}
    */
   static fromIncoming (req, res) {
-    const options = ServerRequest.baseOptions(req, res)
+    const options = ApiRequest.baseOptions(req, res)
     options.txStore = options.storage.transactions
     options.body = req.body
 

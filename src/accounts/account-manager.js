@@ -6,7 +6,7 @@ const UserAccount = require('./user-account')
 const { AccountTemplate } = require('./account-template')
 const { LdpTarget } = require('../storage/ldp-target')
 const { logger } = require('../logger')
-const { generateDid, didForWebId, didKeys, keySuite, didWebDocumentLoader } = require('../dids')
+const { generateDid, didForWebId, didKeys, keySuite, didWebDocumentLoader } = require('./dids')
 const { escapeDidForFilename } = require('../storage/storage-manager')
 
 const { ACL_SUFFIX } = require('../defaults')

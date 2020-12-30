@@ -4,7 +4,7 @@ const chai = require('chai')
 const { expect } = chai
 chai.should()
 
-const { generateDid, didForWebId } = require('../../src/dids')
+const { generateDid, didForWebId } = require('../../src/accounts/dids')
 
 describe('dids utils', () => {
   describe('generateDid()', () => {

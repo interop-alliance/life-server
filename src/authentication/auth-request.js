@@ -2,7 +2,7 @@
 
 const { URL, URLSearchParams } = require('url')
 const { logger } = require('./../logger')
-const { ServerRequest } = require('../server-request')
+const { ApiRequest } = require('../api-request')
 
 /**
  * Hidden form fields from the login page that must be passed through to the
@@ -15,7 +15,7 @@ const AUTH_QUERY_PARAMS = ['response_type', 'display', 'scope',
 /**
  * Base authentication request (used for login and password reset workflows).
  */
-class AuthRequest extends ServerRequest {
+class AuthRequest extends ApiRequest {
   /**
    * @param [options.returnToUrl] {string}
    * @param [options.localAuth] {object} Local authentication config object,
@@ -51,7 +51,7 @@ class AuthRequest extends ServerRequest {
     const session = req.session || {}
     const credentials = { webId: session.userId }
 
-    const returnToUrl = ServerRequest.parseParameter(req, 'returnToUrl')
+    const returnToUrl = ApiRequest.parseParameter(req, 'returnToUrl')
 
     console.log('AuthRequest, returnToUrl:', returnToUrl)
     session.returnToUrl = returnToUrl || session.returnToUrl

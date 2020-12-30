@@ -1,11 +1,11 @@
 'use strict'
 
-const { ServerRequest } = require('../../server-request')
+const { ApiRequest } = require('../../api-request')
 const { logger } = require('../../logger')
 
 const DEFAULT_POST_LOGOUT_URL = '/goodbye'
 
-class LogoutRequest extends ServerRequest {
+class LogoutRequest extends ApiRequest {
   /**
    * @param options
    * @param options.request {IncomingRequest} req
@@ -18,7 +18,7 @@ class LogoutRequest extends ServerRequest {
   }
 
   static fromIncoming (req, res) {
-    const options = ServerRequest.baseOptions(req, res)
+    const options = ApiRequest.baseOptions(req, res)
     options.returnToUrl = LogoutRequest.parseReturnUrl(req)
 
     return new LogoutRequest(options)

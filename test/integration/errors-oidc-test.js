@@ -1,5 +1,5 @@
 const supertest = require('supertest')
-const ldnode = require('../../index')
+const ldnode = require('../../src')
 const path = require('path')
 const { promisify } = require('util')
 const { cleanDir } = require('../utils')

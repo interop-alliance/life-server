@@ -1,4 +1,4 @@
-const server = require('../../index')
+const server = require('../../src')
 const path = require('path')
 const fs = require('fs-extra')
 const UserAccount = require('../../src/accounts/user-account')

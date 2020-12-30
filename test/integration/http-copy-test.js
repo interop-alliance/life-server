@@ -6,7 +6,7 @@ const { promisify } = require('util')
 // Helper functions for the FS
 var rm = require('./../utils').rm
 
-var solidServer = require('../../index')
+var solidServer = require('../../src')
 
 describe('HTTP COPY API', function () {
   const address = 'https://localhost:3456'
