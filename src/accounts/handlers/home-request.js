@@ -1,6 +1,6 @@
 'use strict'
 
-const { LdpGetRequest } = require('../storage/ldp-request')
+const { LdpGetRequest } = require('../../storage/ldp-request')
 
 class HomeRequest extends LdpGetRequest {
   /**

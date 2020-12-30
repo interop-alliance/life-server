@@ -8,8 +8,8 @@ chai.use(require('dirty-chai'))
 chai.should()
 const HttpMocks = require('node-mocks-http')
 
-const AuthRequest = require('../../src/authentication/auth-request')
-const { LoginRequest } = require('../../src/authentication/login-request')
+const AuthRequest = require('../../src/authentication/handlers/auth-request')
+const { LoginRequest } = require('../../src/authentication/handlers/login-request')
 
 const ServerHost = require('../../src/server/server-host')
 // const { AccountManager } = require('../../src/accounts/account-manager')

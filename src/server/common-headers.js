@@ -2,11 +2,10 @@
  * Settings for headers in common to all requests (whether related to user
  * account management, authentication and authorization, or data storage).
  */
-
 'use strict'
 
 const cors = require('cors')
-const { version } = require('../package.json')
+const { version } = require('../../package.json')
 
 const corsSettings = cors({
   methods: [

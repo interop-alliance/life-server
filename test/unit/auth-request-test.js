@@ -6,7 +6,7 @@ chai.use(require('sinon-chai'))
 chai.use(require('dirty-chai'))
 chai.should()
 
-const AuthRequest = require('../../src/authentication/auth-request')
+const AuthRequest = require('../../src/authentication/handlers/auth-request')
 const ServerHost = require('../../src/server/server-host')
 const UserAccount = require('../../src/accounts/user-account')
 

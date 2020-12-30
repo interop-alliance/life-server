@@ -1,7 +1,7 @@
 'use strict'
 
 const { LdpRequest, LdpPatchRequest } = require('./ldp-request')
-const { HomeRequest } = require('../accounts/home-request')
+const { HomeRequest } = require('../accounts/handlers/home-request')
 const { ServerWelcomeRequest } = require('../server/server-welcome-request')
 const wac = require('../authorization/ldp-wac')
 const HttpError = require('standard-http-error')

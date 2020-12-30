@@ -1,8 +1,8 @@
 'use strict'
 
-const AuthRequest = require('../authentication/auth-request')
-const { logger } = require('../logger')
-const { isValidUsername } = require('./account-manager')
+const AuthRequest = require('../../authentication/handlers/auth-request')
+const { logger } = require('../../logger')
+const { isValidUsername } = require('../account-manager')
 const HttpError = require('standard-http-error')
 
 /**

@@ -41,8 +41,8 @@ class LdpStore {
    *
    * @returns {LdpFileResource}
    */
-  newResource ({ target, contentType, encoding }) {
-    throw new Error('newResource() must be implemented in subclass.')
+  addResource ({ target, contentType, encoding }) {
+    throw new Error('addResource() must be implemented in subclass.')
   }
 
   /**

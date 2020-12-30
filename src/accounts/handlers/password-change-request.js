@@ -1,7 +1,7 @@
 'use strict'
 
-const AuthRequest = require('../authentication/auth-request')
-const { logger } = require('../logger')
+const AuthRequest = require('../../authentication/handlers/auth-request')
+const { logger } = require('../../logger')
 
 class PasswordChangeRequest extends AuthRequest {
   /**

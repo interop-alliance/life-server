@@ -584,7 +584,7 @@ class LdpPostRequest extends LdpRequest {
         const target = new LdpTarget({
           name: filename, url: fileUrl, bodyContentType: contentType
         })
-        const resource = ldpStore.newResource({ target, contentType })
+        const resource = ldpStore.addResource({ target, contentType })
         return ldpStore.writeResourceStream({ resource, fromStream: fileStream })
           .catch(error => busboy.emit('error', error))
       })
