@@ -14,7 +14,7 @@ const UserAccount = require('../../src/accounts/user-account')
 const TokenService = require('../../src/accounts/token-service')
 const { testAccountManagerOptions } = require('../utils')
 
-var host
+let host
 
 beforeEach(() => {
   host = ServerHost.from({ serverUri: 'https://example.com' })

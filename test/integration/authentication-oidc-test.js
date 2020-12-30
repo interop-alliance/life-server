@@ -397,7 +397,7 @@ describe('Authentication API (OIDC)', () => {
       console.log('Step 4, login to:', loginUri.toString())
       const pageText = await response.text()
 
-      const loginFormRegex = new RegExp('<form id="loginPasswordForm"')
+      const loginFormRegex = /<form id="loginPasswordForm"/
 
       expect(pageText).to.match(loginFormRegex)
     })

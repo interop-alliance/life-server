@@ -1,12 +1,12 @@
-var assert = require('chai').assert
-var fs = require('fs')
-var request = require('request')
-var path = require('path')
+const assert = require('chai').assert
+const fs = require('fs')
+const request = require('request')
+const path = require('path')
 const { promisify } = require('util')
 // Helper functions for the FS
-var rm = require('./../utils').rm
+const rm = require('./../utils').rm
 
-var solidServer = require('../../src')
+const solidServer = require('../../src')
 
 describe('HTTP COPY API', function () {
   const address = 'https://localhost:3456'
@@ -31,7 +31,7 @@ describe('HTTP COPY API', function () {
     ldp.close()
   })
 
-  var userCredentials = {
+  const userCredentials = {
     user1: {
       cert: fs.readFileSync(path.join(__dirname, '..', 'keys', 'user1-cert.pem')),
       key: fs.readFileSync(path.join(__dirname, '..', 'keys', 'user1-key.pem'))
@@ -43,7 +43,7 @@ describe('HTTP COPY API', function () {
   }
 
   function createOptions (method, url, user) {
-    var options = {
+    const options = {
       method: method,
       url: url,
       headers: {}
@@ -55,10 +55,10 @@ describe('HTTP COPY API', function () {
   }
 
   it('should create the copied resource', (done) => {
-    var copyFrom = '/samplePublicContainer/nicola.jpg'
-    var copyTo = '/sampleUser1Container/nicola-copy.jpg'
-    var uri = address + copyTo
-    var options = createOptions('COPY', uri, 'user1')
+    const copyFrom = '/samplePublicContainer/nicola.jpg'
+    const copyTo = '/sampleUser1Container/nicola-copy.jpg'
+    const uri = address + copyTo
+    const options = createOptions('COPY', uri, 'user1')
     options.headers.Source = copyFrom
 
     request(uri, options, function (error, response) {
@@ -75,10 +75,10 @@ describe('HTTP COPY API', function () {
   })
 
   it('should give a 404 if source document doesn\'t exist', function (done) {
-    var copyFrom = '/samplePublicContainer/invalid-resource'
-    var copyTo = '/sampleUser1Container/invalid-resource-copy'
-    var uri = address + copyTo
-    var options = createOptions('COPY', uri, 'user1')
+    const copyFrom = '/samplePublicContainer/invalid-resource'
+    const copyTo = '/sampleUser1Container/invalid-resource-copy'
+    const uri = address + copyTo
+    const options = createOptions('COPY', uri, 'user1')
     options.headers.Source = copyFrom
     request(uri, options, function (error, response) {
       assert.equal(error, null)
@@ -88,9 +88,9 @@ describe('HTTP COPY API', function () {
   })
 
   it('should give a 400 if Source header is not supplied', function (done) {
-    var copyTo = '/sampleUser1Container/nicola-copy.jpg'
-    var uri = address + copyTo
-    var options = createOptions('COPY', uri, 'user1')
+    const copyTo = '/sampleUser1Container/nicola-copy.jpg'
+    const uri = address + copyTo
+    const options = createOptions('COPY', uri, 'user1')
     request(uri, options, function (error, response) {
       assert.equal(error, null)
       assert.equal(response.statusCode, 400)

@@ -1,6 +1,6 @@
-var supertest = require('supertest')
-var ldnode = require('../../src')
-var path = require('path')
+const supertest = require('supertest')
+const ldnode = require('../../src')
+const path = require('path')
 const assert = require('chai').assert
 
 describe('formats', () => {
@@ -29,8 +29,8 @@ describe('formats', () => {
   describe('JSON-LD', function () {
     function isCorrectSubject (idFragment) {
       return (res) => {
-        var payload = JSON.parse(res.text)
-        var id = payload[0]['@id']
+        const payload = JSON.parse(res.text)
+        const id = payload[0]['@id']
         assert(id.endsWith(idFragment), 'The subject of the JSON-LD graph is correct')
       }
     }

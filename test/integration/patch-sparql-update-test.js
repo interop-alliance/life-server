@@ -1,12 +1,12 @@
 // Integration tests for PATCH with application/sparql-update
 
-var ldnode = require('../../src')
-var supertest = require('supertest')
-var assert = require('chai').assert
-var path = require('path')
+const ldnode = require('../../src')
+const supertest = require('supertest')
+const assert = require('chai').assert
+const path = require('path')
 
 // Helper functions for the FS
-var { rm, write, read } = require('../utils')
+const { rm, write, read } = require('../utils')
 
 describe.skip('PATCH through application/sparql-update', function () {
   // Starting LDP
@@ -56,7 +56,7 @@ describe.skip('PATCH through application/sparql-update', function () {
     })
 
     it('should delete a single triple from a pad document', function (done) {
-      var expected = '@prefix : </existingTriple.ttl#>.\n@prefix dc: <http://purl.org/dc/elements/1.1/>.\n@prefix c: <https://www.w3.org/People/Berners-Lee/card#>.\n@prefix n: <http://rdfs.org/sioc/ns#>.\n@prefix p: <http://www.w3.org/ns/pim/pad#>.\n@prefix ic: <http://www.w3.org/2002/12/cal/ical#>.\n@prefix XML: <http://www.w3.org/2001/XMLSchema#>.\n@prefix flow: <http://www.w3.org/2005/01/wf/flow#>.\n@prefix ui: <http://www.w3.org/ns/ui#>.\n@prefix ind: </parent/index.ttl#>.\n@prefix mee: <http://www.w3.org/ns/pim/meeting#>.\n\n:id1477502276660 dc:author c:i; n:content ""; p:next :this.\n\n:id1477522707481\n    ic:dtstart "2016-10-26T22:58:27Z"^^XML:dateTime;\n    flow:participant c:i;\n    ui:backgroundColor "#c1d0c8".\n:this\n    a p:Notepad;\n    dc:author c:i;\n    dc:created "2016-10-25T15:44:42Z"^^XML:dateTime;\n    dc:title "Shared Notes";\n    p:next :id1477502276660.\nind:this flow:participation :id1477522707481; mee:sharedNotes :this.\n\n'
+      const expected = '@prefix : </existingTriple.ttl#>.\n@prefix dc: <http://purl.org/dc/elements/1.1/>.\n@prefix c: <https://www.w3.org/People/Berners-Lee/card#>.\n@prefix n: <http://rdfs.org/sioc/ns#>.\n@prefix p: <http://www.w3.org/ns/pim/pad#>.\n@prefix ic: <http://www.w3.org/2002/12/cal/ical#>.\n@prefix XML: <http://www.w3.org/2001/XMLSchema#>.\n@prefix flow: <http://www.w3.org/2005/01/wf/flow#>.\n@prefix ui: <http://www.w3.org/ns/ui#>.\n@prefix ind: </parent/index.ttl#>.\n@prefix mee: <http://www.w3.org/ns/pim/meeting#>.\n\n:id1477502276660 dc:author c:i; n:content ""; p:next :this.\n\n:id1477522707481\n    ic:dtstart "2016-10-26T22:58:27Z"^^XML:dateTime;\n    flow:participant c:i;\n    ui:backgroundColor "#c1d0c8".\n:this\n    a p:Notepad;\n    dc:author c:i;\n    dc:created "2016-10-25T15:44:42Z"^^XML:dateTime;\n    dc:title "Shared Notes";\n    p:next :id1477502276660.\nind:this flow:participation :id1477522707481; mee:sharedNotes :this.\n\n'
 
       write(`\n\
 
