@@ -2,13 +2,13 @@
 
 const path = require('path')
 const fs = require('fs-extra')
-const { CollectionManager } = require('./storage/collection-manager')
+const { CollectionManager } = require('./collection-manager')
 const couchClient = require('nano')
 const { URL } = require('url')
 const { FlexDocStore } = require('flex-docstore')
-const { UserCredentialStore } = require('./authentication/user-credential-store')
-const LegacyResourceMapper = require('./storage/ldp-backend-fs/legacy-resource-mapper')
-const { LdpFileStore } = require('./storage/ldp-backend-fs/ldp-file-store')
+const { UserCredentialStore } = require('../authentication/user-credential-store')
+const LegacyResourceMapper = require('./ldp-backend-fs/legacy-resource-mapper')
+const { LdpFileStore } = require('./ldp-backend-fs/ldp-file-store')
 
 // const Url = require('url')
 
@@ -153,7 +153,7 @@ function escapeDidForFilename ({ did }) {
 }
 
 async function storeDidKeys ({ didKeys, did, dir }) {
-  const { keyStore, exportKeys } = require('./storage/key-storage')
+  const { keyStore, exportKeys } = require('./key-storage')
 
   await fs.ensureDir(dir)
   await keyStore({ dir: dir }).put(escapeDidForFilename({ did }),

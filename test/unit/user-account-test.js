@@ -3,7 +3,7 @@
 const chai = require('chai')
 chai.use(require('dirty-chai'))
 const { expect } = chai
-const UserAccount = require('../../src/account-mgmt/user-account')
+const UserAccount = require('../../src/accounts/user-account')
 
 describe('UserAccount', () => {
   describe('from()', () => {

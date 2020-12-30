@@ -8,10 +8,10 @@ chai.use(sinonChai)
 chai.should()
 const HttpMocks = require('node-mocks-http')
 
-const { AccountManager } = require('../../src/account-mgmt/account-manager')
+const { AccountManager } = require('../../src/accounts/account-manager')
 const ServerHost = require('../../src/server/server-host')
 const defaults = require('../../src/defaults')
-const { CreateAccountRequest } = require('../../src/account-mgmt/create-account-request')
+const { CreateAccountRequest } = require('../../src/accounts/create-account-request')
 const { testAccountManagerOptions } = require('../utils')
 
 describe('CreateAccountRequest', () => {

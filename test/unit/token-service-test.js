@@ -6,7 +6,7 @@ const dirtyChai = require('dirty-chai')
 chai.use(dirtyChai)
 chai.should()
 
-const TokenService = require('../../src/account-mgmt/token-service')
+const TokenService = require('../../src/accounts/token-service')
 
 describe('TokenService', () => {
   describe('constructor()', () => {

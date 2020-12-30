@@ -7,7 +7,7 @@ const fs = require('fs-extra')
 const path = require('path')
 const { v1: uuidv1 } = require('uuid')
 const session = require('express-session')
-const { AccountTemplate, processHandlebarFile } = require('../account-mgmt/account-template')
+const { AccountTemplate, processHandlebarFile } = require('../accounts/account-template')
 const { logger } = require('../logger')
 
 function printDebugInfo (options) {

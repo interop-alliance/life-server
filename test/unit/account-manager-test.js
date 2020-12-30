@@ -9,9 +9,9 @@ chai.use(require('dirty-chai'))
 chai.should()
 
 const ServerHost = require('../../src/server/server-host')
-const { AccountManager, isValidUsername } = require('../../src/account-mgmt/account-manager')
-const UserAccount = require('../../src/account-mgmt/user-account')
-const TokenService = require('../../src/account-mgmt/token-service')
+const { AccountManager, isValidUsername } = require('../../src/accounts/account-manager')
+const UserAccount = require('../../src/accounts/user-account')
+const TokenService = require('../../src/accounts/token-service')
 const { testAccountManagerOptions } = require('../utils')
 
 var host

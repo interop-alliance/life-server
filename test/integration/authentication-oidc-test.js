@@ -1,7 +1,7 @@
 const server = require('../../index')
 const path = require('path')
 const fs = require('fs-extra')
-const UserAccount = require('../../src/account-mgmt/user-account')
+const UserAccount = require('../../src/accounts/user-account')
 const { OIDCWebClient } = require('oidc-web')
 
 const fetch = require('node-fetch')

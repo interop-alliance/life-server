@@ -10,7 +10,7 @@ chai.use(require('dirty-chai'))
 chai.should()
 
 const ServerHost = require('../../src/server/server-host')
-const { AccountManager } = require('../../src/account-mgmt/account-manager')
+const { AccountManager } = require('../../src/accounts/account-manager')
 const EmailService = require('../../src/email-service')
 const { testAccountManagerOptions } = require('../utils')
 
