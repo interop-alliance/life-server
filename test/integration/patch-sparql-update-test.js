@@ -1,6 +1,6 @@
 // Integration tests for PATCH with application/sparql-update
 
-var ldnode = require('../../index')
+var ldnode = require('../../src')
 var supertest = require('supertest')
 var assert = require('chai').assert
 var path = require('path')

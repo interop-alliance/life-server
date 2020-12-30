@@ -1,5 +1,5 @@
 var supertest = require('supertest')
-var ldnode = require('../../index')
+var ldnode = require('../../src')
 var path = require('path')
 const assert = require('chai').assert
 

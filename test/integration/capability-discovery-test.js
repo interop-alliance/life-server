@@ -1,4 +1,4 @@
-const server = require('../../index')
+const server = require('../../src')
 const path = require('path')
 const { cleanDir, startServer } = require('../utils')
 const supertest = require('supertest')

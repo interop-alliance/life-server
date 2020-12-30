@@ -4,7 +4,7 @@ const supertest = require('supertest')
 const rdf = require('rdflib')
 
 const { rm, read, checkDnsSettings, cleanDir } = require('../utils')
-const ldnode = require('../../index')
+const ldnode = require('../../src')
 const path = require('path')
 const fs = require('fs-extra')
 const { promisify } = require('util')

@@ -6,7 +6,7 @@ const { promisify } = require('util')
 const { loadProvider, rm, checkDnsSettings, cleanDir } = require('../utils')
 const IDToken = require('@interop-alliance/oidc-op/src/IDToken')
 
-const ldnode = require('../../index')
+const ldnode = require('../../src')
 
 const port = 7777
 const serverUri = 'https://localhost:7777'

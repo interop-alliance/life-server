@@ -2,7 +2,7 @@
 
 const { URL } = require('url')
 const Busboy = require('busboy')
-const { ServerRequest } = require('../server-request')
+const { ApiRequest } = require('../api-request')
 const acl = require('@interop/solid-permissions')
 const HttpError = require('standard-http-error')
 const { LdpTarget } = require('./ldp-target')
@@ -15,7 +15,7 @@ const { addLinks, addLink, Metadata } = require('./ldp-header')
 const { logger } = require('../logger')
 const { DEFAULT_RDF_TYPE } = require('../defaults')
 
-class LdpRequest extends ServerRequest {
+class LdpRequest extends ApiRequest {
   /**
    * @param target {LdpTarget}
    * @param resource {LdpResource}

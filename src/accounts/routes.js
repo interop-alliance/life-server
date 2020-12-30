@@ -6,7 +6,7 @@ const bodyParserForm = express.urlencoded({ extended: false })
 const { logger } = require('../logger')
 const HttpError = require('standard-http-error')
 
-const { ServerRequest } = require('../server-request')
+const { ApiRequest } = require('../api-request')
 const { CreateAccountRequest } = require('./create-account-request')
 const { RegisterWalletRequest } = require('./register-wallet-request')
 const { WalletRequest } = require('./wallet-request')
@@ -16,7 +16,7 @@ const DeleteAccountConfirmRequest = require('./delete-account-confirm-request')
 
 function checkFeatureFlag (name) {
   return (req, res, next) => {
-    const { host: { features } } = ServerRequest.baseOptions(req, res)
+    const { host: { features } } = ApiRequest.baseOptions(req, res)
 
     if (features[name] !== undefined && !features[name]) {
       logger.warn(`Feature '${name}' is disabled.`)

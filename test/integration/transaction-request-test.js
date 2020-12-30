@@ -1,4 +1,4 @@
-const lfs = require('../../index')
+const lfs = require('../../src')
 const path = require('path')
 const fs = require('fs-extra')
 

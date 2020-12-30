@@ -1,7 +1,7 @@
 const supertest = require('supertest')
 const fs = require('fs-extra')
 const li = require('li')
-const lfs = require('../../index')
+const lfs = require('../../src')
 const { rm } = require('./../utils')
 const path = require('path')
 const chai = require('chai')

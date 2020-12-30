@@ -111,7 +111,7 @@
     "turtle-validator": "^1.1.1",
     "whatwg-url": "^8.1.0"
   },
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "init": "cross-env bin/server init",
     "start": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 node bin/server start",

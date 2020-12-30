@@ -1,6 +1,6 @@
 // Integration tests for PATCH with text/n3
 const { assert } = require('chai')
-const ldnode = require('../../index')
+const ldnode = require('../../src')
 const path = require('path')
 const { promisify } = require('util')
 const supertest = require('supertest')
