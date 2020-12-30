@@ -6,7 +6,7 @@ const dirtyChai = require('dirty-chai')
 chai.use(dirtyChai)
 chai.should()
 
-const { LdpTarget } = require('../../src/data-storage/ldp-target')
+const { LdpTarget } = require('../../src/storage/ldp-target')
 
 describe('LdpTarget', () => {
   describe('parent', () => {
