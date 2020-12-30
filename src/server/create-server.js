@@ -59,12 +59,7 @@ async function createServer (argv, app) {
       throw new Error('Can\'t find SSL cert in ' + argv.sslCert)
     }
 
-    const certCredentials = Object.assign({
-      key: key,
-      cert: cert
-    }, argv)
-
-    server = https.createServer(certCredentials, app)
+    server = https.createServer({ key, cert, ...argv }, app)
   }
 
   return server

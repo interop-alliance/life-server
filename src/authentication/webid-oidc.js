@@ -7,10 +7,10 @@ const express = require('express')
 const bodyParserJson = express.json()
 const bodyParserForm = express.urlencoded({ extended: false })
 const { OidcManager } = require('./oidc-manager')
-const { LoginRequest } = require('./login-request')
+const { LoginRequest } = require('./handlers/login-request')
 
-const PasswordResetEmailRequest = require('../accounts/password-reset-email-request')
-const PasswordChangeRequest = require('../accounts/password-change-request')
+const PasswordResetEmailRequest = require('../accounts/handlers/password-reset-email-request')
+const PasswordChangeRequest = require('../accounts/handlers/password-change-request')
 
 const {
   AuthCallbackRequest,

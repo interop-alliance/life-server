@@ -103,15 +103,13 @@ class LdpFileStore extends LdpStore {
    *
    * Used in multi-file upload on POST.
    *
-   * TODO: Make this sync (after making mapUrlToFile sync).
-   *
    * @param target
    * @param [contentType]
    * @param [encoding] {string}
    *
    * @returns {LdpFileResource}
    */
-  newResource ({ target, contentType, encoding }) {
+  addResource ({ target, contentType, encoding }) {
     contentType = contentType || target.bodyContentType
 
     const {
@@ -183,9 +181,7 @@ class LdpFileStore extends LdpStore {
    */
   async exists ({ target }) {
     const resource = await this.resource({ target })
-    const exists = await this.fs.pathExists(resource.path)
-
-    return exists
+    return this.fs.pathExists(resource.path)
   }
 
   /**

@@ -11,7 +11,7 @@ chai.should()
 
 const HttpMocks = require('node-mocks-http')
 
-const PasswordResetEmailRequest = require('../../src/accounts/password-reset-email-request')
+const PasswordResetEmailRequest = require('../../src/accounts/handlers/password-reset-email-request')
 const { AccountManager } = require('../../src/accounts/account-manager')
 const ServerHost = require('../../src/server/server-host')
 const { testAccountManagerOptions } = require('../utils')

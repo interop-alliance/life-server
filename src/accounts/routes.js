@@ -7,12 +7,12 @@ const { logger } = require('../logger')
 const HttpError = require('standard-http-error')
 
 const { ApiRequest } = require('../api-request')
-const { CreateAccountRequest } = require('./create-account-request')
-const { RegisterWalletRequest } = require('./register-wallet-request')
-const { WalletRequest } = require('./wallet-request')
+const { CreateAccountRequest } = require('./handlers/create-account-request')
+const { RegisterWalletRequest } = require('./handlers/register-wallet-request')
+const { WalletRequest } = require('./handlers/wallet-request')
 const { WebKmsRequest } = require('../kms/web-kms-request')
-const DeleteAccountRequest = require('./delete-account-request')
-const DeleteAccountConfirmRequest = require('./delete-account-confirm-request')
+const DeleteAccountRequest = require('./handlers/delete-account-request')
+const DeleteAccountConfirmRequest = require('./handlers/delete-account-confirm-request')
 
 function checkFeatureFlag (name) {
   return (req, res, next) => {

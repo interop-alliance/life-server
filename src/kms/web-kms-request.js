@@ -3,7 +3,7 @@
  */
 'use strict'
 
-const AuthRequest = require('../authentication/auth-request')
+const AuthRequest = require('../authentication/handlers/auth-request')
 const { logger } = require('../logger')
 const HttpError = require('standard-http-error')
 const vc = require('vc-js')

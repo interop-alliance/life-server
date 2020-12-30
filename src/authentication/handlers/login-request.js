@@ -1,9 +1,9 @@
 'use strict'
 
-const { logger } = require('../logger')
+const { logger } = require('../../logger')
 
 const AuthRequest = require('./auth-request')
-const { PasswordAuthenticator } = require('./authenticator')
+const { PasswordAuthenticator } = require('../authenticator')
 
 const PASSWORD_AUTH = 'password'
 

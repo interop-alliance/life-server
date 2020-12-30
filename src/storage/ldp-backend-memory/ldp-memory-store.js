@@ -84,7 +84,7 @@ class LdpMemoryStore extends LdpStore {
    *
    * @returns {LdpResource}
    */
-  newResource ({ target, contentType, encoding }) {
+  addResource ({ target, contentType, encoding }) {
     contentType = contentType || target.bodyContentType
 
     const serverMeta = new LdpServerMeta({ contentType })
