@@ -181,6 +181,7 @@ class LdpFileStore extends LdpStore {
    */
   async exists ({ target }) {
     const resource = await this.resource({ target })
+    logger.info(`Checking if path '${resource.path}' exists.`)
     return this.fs.pathExists(resource.path)
   }
 
