@@ -54,6 +54,9 @@ class ApiRequest {
     }
 
     const session = req.session || {}
+
+    console.log(JSON.stringify(session, null, 2))
+
     const { userId: webId } = session
     const credentials = {
       webId,

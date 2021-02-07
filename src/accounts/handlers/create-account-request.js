@@ -14,7 +14,7 @@ const HttpError = require('standard-http-error')
  */
 class CreateAccountRequest extends AuthRequest {
   /**
-   * @param [options={}] {Object}
+   * @param [options={}] {object}
    * @param [options.accountManager] {AccountManager}
    * @param [options.username] {string}
    * @param [options.password] {string} Password, as entered by the user at signup
@@ -145,7 +145,7 @@ class CreateAccountRequest extends AuthRequest {
       logger.info(
         `Canceling account creation, ${userAccount.webId} already exists`
       )
-      throw new HttpError(400, 'Account already exists')
+      throw new HttpError(400, 'Account already exists.')
     }
 
     return userAccount
@@ -200,6 +200,7 @@ class CreateAccountRequest extends AuthRequest {
         this.returnToUrl ||
         this.accountManager.accountUriFor(userAccount.username)
     }
+    logger.info(`Account created, redirecting to: ${redirectUrl}`)
     this.response.json({ redirect: redirectUrl })
   }
 }

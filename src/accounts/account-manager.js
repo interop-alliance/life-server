@@ -111,6 +111,8 @@ class AccountManager {
 
     const rootAcl = new LdpTarget({ url: target.aclUrl })
 
+    logger.info(`Checking if account url ${accountUrl} exists at ${rootAcl.url}`)
+
     return this.accountStorage.exists({ target: rootAcl })
   }
 
