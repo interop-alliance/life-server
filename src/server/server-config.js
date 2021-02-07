@@ -7,6 +7,8 @@ const fs = require('fs-extra')
 const path = require('path')
 const { v1: uuidv1 } = require('uuid')
 const session = require('express-session')
+const MemoryStore = require('memorystore')(session)
+
 const { AccountTemplate, processHandlebarFile } = require('../accounts/account-template')
 const { logger } = require('../logger')
 
@@ -32,8 +34,8 @@ function printDebugInfo (options) {
  * @param argv {object} App config object
  */
 async function ensureWelcomePage ({
-  root, multiuser, templates, server, host, storage
-}) {
+                                    root, multiuser, templates, server, host, storage
+                                  }) {
   const serverTemplate = path.join(__dirname, '..', 'templates', 'server')
   const rootDir = path.resolve(root)
   const serverRootDir = multiuser ? path.join(rootDir, host.hostname) : rootDir
@@ -57,10 +59,26 @@ async function ensureWelcomePage ({
   }
 }
 
-function initSessionHandler ({ app, useSecureCookies, host }) {
+function initSessionHandler ({ app, useSecureCookies, host, secret = uuidv1() }) {
+  const sessionSettings = {
+    secret,
+    store: new MemoryStore({
+      checkPeriod: 24 * 60 * 60 * 1000 // prune/expire entries every 24h (in ms)
+    }),
+    saveUninitialized: false,
+    resave: false,
+    rolling: true,
+    cookie: {
+      maxAge: 14 * 24 * 60 * 60 * 1000, // 2 weeks in milliseconds
+      domain: host.cookieDomain,
+      secure: useSecureCookies // true if https is on
+    }
+  }
+
   // Store the user's session key in a cookie
   // (for same-domain browsing by people only)
-  const sessionHandler = session(sessionSettings(useSecureCookies, host))
+  const sessionHandler = session(sessionSettings)
+
   app.use((req, res, next) => {
     sessionHandler(req, res, () => {
       // Reject cookies from third-party applications.
@@ -81,38 +99,8 @@ function initSessionHandler ({ app, useSecureCookies, host }) {
   })
 }
 
-/**
- * Returns a settings object for Express.js sessions.
- *
- * @param secureCookies {boolean}
- * @param host {ServerHost}
- *
- * @return {object} `express-session` settings object
- */
-function sessionSettings (secureCookies, host) {
-  const sessionSettings = {
-    secret: uuidv1(),
-    saveUninitialized: false,
-    resave: false,
-    rolling: true,
-    cookie: {
-      maxAge: 24 * 60 * 60 * 1000
-    }
-  }
-  // Cookies should set to be secure if https is on
-  if (secureCookies) {
-    sessionSettings.cookie.secure = true
-  }
-
-  // Determine the cookie domain
-  sessionSettings.cookie.domain = host.cookieDomain
-
-  return sessionSettings
-}
-
 module.exports = {
   ensureWelcomePage,
   initSessionHandler,
-  printDebugInfo,
-  sessionSettings
+  printDebugInfo
 }

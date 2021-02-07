@@ -55,6 +55,7 @@ class ApiRequest {
 
     const session = req.session || {}
 
+    console.log('In ApiRequest.baseOptions:')
     console.log(JSON.stringify(session, null, 2))
 
     const { userId: webId } = session
