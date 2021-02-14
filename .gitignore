@@ -12,6 +12,8 @@
 /config.live.js
 /config.prod.js
 /config.test.js
+/config.multi.js
+/config.single.js
 /data
 /coverage
 /node_modules

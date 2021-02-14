@@ -28,7 +28,6 @@ module.exports = {
   // forceUser: 'https://localhost:8443/web#id',
 
   // Location of the SSL certificate private key and certificate chain
-  // These do not get generated automatically, you must create them yourself
   sslKey: './config/localhost.privkey.pem',
   sslCert: './config/localhost.fullchain.pem',
 
