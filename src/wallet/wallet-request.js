@@ -1,7 +1,7 @@
 'use strict'
 
-const AuthRequest = require('../../authentication/handlers/auth-request')
-const { logger } = require('../../logger')
+const AuthRequest = require('../authentication/handlers/auth-request')
+const { logger } = require('../logger')
 // const HttpError = require('standard-http-error')
 
 class WalletRequest extends AuthRequest {

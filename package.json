@@ -53,7 +53,7 @@
     "@digitalbazaar/ed25519-signature-2018": "^2.0.1",
     "@digitalbazaar/ed25519-verification-key-2018": "^3.1.1",
     "@interop-alliance/oidc-op": "^0.8.0",
-    "@interop-alliance/oidc-rp": "^0.12.5",
+    "@interop-alliance/oidc-rp": "^0.13.0",
     "@interop/did-web-resolver": "^0.2.0",
     "@interop/solid-permissions": "^0.10.0",
     "@solid/oidc-rs": "^0.5.4",
