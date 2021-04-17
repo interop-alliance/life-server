@@ -23,7 +23,7 @@ const TransactionRequest = require('../authentication/gnap/transaction-request')
 
 async function createApp (argv = {}) {
   // Override default configs (defaults) with passed-in params (argv)
-  argv = Object.assign({}, defaults, argv)
+  argv = { ...defaults, ...argv }
 
   const host = ServerHost.from({
     port: argv.port,
@@ -136,7 +136,7 @@ async function initWebId (argv, app, storage) {
   }
 
   // Store the user's session key in a cookie
-  // (for same-domain browsing by people only)
+  // (for same-domain browsing)
   const useSecureCookies = !!argv.sslKey // use secure cookies when over HTTPS
   config.initSessionHandler({ app, useSecureCookies, host })
 

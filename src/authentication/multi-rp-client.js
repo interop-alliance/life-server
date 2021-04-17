@@ -62,6 +62,7 @@ class MultiRpClient {
       const client = await this.clientForIssuer(issuer)
       return this.authUrl(client, session, workflow)
     } catch (error) {
+      console.error(error)
       logger.error('Error in authUrlForIssuer(): ' + error)
       throw error
     }

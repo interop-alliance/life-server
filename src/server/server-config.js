@@ -62,9 +62,9 @@ async function ensureWelcomePage ({
 function initSessionHandler ({ app, useSecureCookies, host, secret = uuidv1() }) {
   const sessionSettings = {
     secret,
-    store: new MemoryStore({
-      checkPeriod: 24 * 60 * 60 * 1000 // prune/expire entries every 24h (in ms)
-    }),
+    // store: new MemoryStore({
+    //   checkPeriod: 24 * 60 * 60 * 1000 // prune/expire entries every 24h (in ms)
+    // }),
     saveUninitialized: false,
     resave: false,
     rolling: true,
