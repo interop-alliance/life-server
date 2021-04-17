@@ -34,8 +34,8 @@ function printDebugInfo (options) {
  * @param argv {object} App config object
  */
 async function ensureWelcomePage ({
-                                    root, multiuser, templates, server, host, storage
-                                  }) {
+  root, multiuser, templates, server, host, storage
+}) {
   const serverTemplate = path.join(__dirname, '..', 'templates', 'server')
   const rootDir = path.resolve(root)
   const serverRootDir = multiuser ? path.join(rootDir, host.hostname) : rootDir
