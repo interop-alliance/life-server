@@ -48,7 +48,7 @@ priorities will be: Developer QoL (Quality of Life) over User QoL over DevOps Qo
 **Updated:** June 2020.
 
 This is an experimental server focusing on interop exploration and rapid feature 
-iteration ("move fast and break things", to use a tired cliché).
+iteration. "Move fast and break things (and then fix them just as quickly)", to use a tired cliché.
 
 #### Roadmap Phase One
 
