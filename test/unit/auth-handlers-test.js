@@ -6,7 +6,9 @@ chai.use(require('sinon-chai'))
 chai.use(require('dirty-chai'))
 chai.should()
 
-const Auth = require('../../src/authentication')
+const Auth = {
+  oidc: require('../../src/authentication/webid-oidc')
+}
 
 describe('OIDC Handler', () => {
   describe('setAuthenticateHeader()', () => {

@@ -5,9 +5,6 @@
 
 const fs = require('fs-extra')
 const path = require('path')
-const { v1: uuidv1 } = require('uuid')
-const session = require('express-session')
-const MemoryStore = require('memorystore')(session)
 
 const { AccountTemplate, processHandlebarFile } = require('../accounts/account-template')
 const { logger } = require('../logger')
@@ -59,29 +56,7 @@ async function ensureWelcomePage ({
   }
 }
 
-function initSessionHandler ({ app, useSecureCookies, host, secret = uuidv1() }) {
-  const sessionSettings = {
-    secret,
-    // store: new MemoryStore({
-    //   checkPeriod: 24 * 60 * 60 * 1000 // prune/expire entries every 24h (in ms)
-    // }),
-    saveUninitialized: false,
-    resave: false,
-    rolling: true,
-    cookie: {
-      // Enable 3rd-party cookies for CHAPI wallet use.
-      sameSite: 'None',
-      maxAge: 14 * 24 * 60 * 60 * 1000, // 2 weeks in milliseconds
-      domain: host.cookieDomain,
-      secure: useSecureCookies // true if https is on
-    }
-  }
-
-  app.use(session(sessionSettings))
-}
-
 module.exports = {
   ensureWelcomePage,
-  initSessionHandler,
   printDebugInfo
 }

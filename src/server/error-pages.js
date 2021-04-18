@@ -1,5 +1,8 @@
 const { logger } = require('../logger')
-const Auth = require('../authentication')
+const Auth = {
+  oidc: require('../authentication/webid-oidc'),
+  forceUser: require('../authentication/force-user')
+}
 
 // Authentication methods that require a Provider Select page
 const SELECT_PROVIDER_AUTH_METHODS = ['oidc']
