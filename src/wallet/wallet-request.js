@@ -41,7 +41,7 @@ class WalletRequest extends AuthRequest {
   async handleWorker () {
     try {
       this.renderForm(null, {
-        view: 'account/wallet-worker',
+        view: 'wallet/wallet-worker',
         title: 'Worker'
       })
     } catch (error) {
@@ -72,7 +72,7 @@ class WalletRequest extends AuthRequest {
       const { credentials: { webId } } = this
 
       if (webId) {
-        this.renderForm(null, { view: 'account/wallet-get-ui', title: 'Wallet' })
+        this.renderForm(null, { view: 'wallet/wallet-get-ui', title: 'Wallet' })
       } else {
         const returnToUrl = '/api/wallet/get'
         const session = this.session || {}
@@ -112,7 +112,7 @@ class WalletRequest extends AuthRequest {
 
   async handleStoreOperation () {
     try {
-      this.renderForm(null, { view: 'account/wallet-store-ui', title: 'Wallet' })
+      this.renderForm(null, { view: 'wallet/wallet-store-ui', title: 'Wallet' })
     } catch (error) {
       this.error(error)
     }
