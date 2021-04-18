@@ -1,6 +1,6 @@
 # History
 
-## 8.0.0 - TBD
+## 8.0.0 - 2021-04-17
 
 ### Added
 - Added feature flags, exposed on the `SolidHost` object as `host.features`.
