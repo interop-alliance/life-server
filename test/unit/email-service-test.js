@@ -1,4 +1,4 @@
-const EmailService = require('../../src/email-service')
+const EmailService = require('../../src/email/email-service')
 const path = require('path')
 const sinon = require('sinon')
 const chai = require('chai')
@@ -8,7 +8,7 @@ chai.use(sinonChai)
 chai.use(require('dirty-chai'))
 chai.should()
 
-const templatePath = path.join(__dirname, '..', '..', 'src', 'templates', 'emails')
+const templatePath = path.join(__dirname, '..', '..', 'src', 'email', 'email-templates')
 
 describe('Email Service', function () {
   describe('EmailService constructor', () => {
@@ -95,7 +95,7 @@ describe('Email Service', function () {
 
       const templateFile = emailService.templatePathFor('welcome')
 
-      expect(templateFile.endsWith('templates/emails/welcome'))
+      expect(templateFile.endsWith('email/email-templates/welcome'))
     })
   })
 

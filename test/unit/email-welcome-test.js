@@ -11,10 +11,10 @@ chai.should()
 
 const ServerHost = require('../../src/server/server-host')
 const { AccountManager } = require('../../src/accounts/account-manager')
-const EmailService = require('../../src/email-service')
+const EmailService = require('../../src/email/email-service')
 const { testAccountManagerOptions } = require('../utils')
 
-const templatePath = path.join(__dirname, '..', '..', 'src', 'templates', 'emails')
+const templatePath = path.join(__dirname, '..', '..', 'src', 'email', 'email-templates')
 
 let host, accountManager, emailService
 

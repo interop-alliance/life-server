@@ -1,15 +1,15 @@
 'use strict'
 
 const { URL } = require('url')
-const defaults = require('../defaults')
+const defaults = require('../server/defaults')
 const UserAccount = require('./user-account')
 const { AccountTemplate } = require('./account-template')
 const { LdpTarget } = require('../storage/ldp-target')
-const { logger } = require('../logger')
+const { logger } = require('../util/logger')
 const { generateDid, didForWebId, didKeys, keySuite, didWebDocumentLoader } = require('./dids')
 const { escapeDidForFilename } = require('../storage/storage-manager')
 
-const { ACL_SUFFIX } = require('../defaults')
+const { ACL_SUFFIX } = require('../server/defaults')
 const DEFAULT_ADMIN_USERNAME = 'admin'
 
 /**
@@ -43,8 +43,7 @@ class AccountManager {
     this.authMethod = options.authMethod || defaults.auth
     this.pathCard = options.pathCard || 'web'
     this.suffixURI = options.suffixURI || '#id'
-    this.accountTemplatePath = options.accountTemplatePath ||
-      './default-templates/new-account/'
+    this.accountTemplatePath = options.accountTemplatePath
 
     this.storage = options.storage || {}
     this.accountStorage = this.storage.accountStorage

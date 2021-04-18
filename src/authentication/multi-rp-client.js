@@ -1,6 +1,6 @@
 'use strict'
 const OIDCRelyingParty = require('@interop-alliance/oidc-rp')
-const { logger } = require('../logger')
+const { logger } = require('../util/logger')
 const DEFAULT_MAX_AGE = 86400
 
 class MultiRpClient {

@@ -1,7 +1,7 @@
 'use strict'
 
 const { URL, URLSearchParams } = require('url')
-const { logger } = require('../logger')
+const { logger } = require('../util/logger')
 
 // const LogoutRequest = require('./handlers/logout-request')
 const LoginConsentRequest = require('./handlers/login-consent-request')

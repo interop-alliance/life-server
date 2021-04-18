@@ -5,7 +5,7 @@ const { URL } = require('url')
 const ns = require('solid-namespace')(rdf)
 const mime = require('mime-types')
 
-const { DEFAULT_ENCODING, DEFAULT_RDF_TYPE, RDF_MIME_TYPES } = require('../defaults')
+const { DEFAULT_ENCODING, DEFAULT_RDF_TYPE, RDF_MIME_TYPES } = require('../server/defaults')
 
 class LdpServerMeta {
   /**

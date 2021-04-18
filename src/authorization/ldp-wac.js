@@ -3,8 +3,8 @@
 const { PermissionSet } = require('@interop/solid-permissions')
 const rdf = require('rdflib')
 const ACL = rdf.Namespace('http://www.w3.org/ns/auth/acl#')
-const { logger } = require('../logger')
-const { ACL_SUFFIX } = require('../defaults')
+const { logger } = require('../util/logger')
+const { ACL_SUFFIX } = require('../server/defaults')
 const HttpError = require('standard-http-error')
 
 /**

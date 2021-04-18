@@ -1,6 +1,6 @@
 'use strict'
 
-const { logger } = require('../logger')
+const { logger } = require('../util/logger')
 const { URL } = require('url')
 const validUrl = require('valid-url')
 const ResourceAuthenticator = require('@solid/oidc-rs')

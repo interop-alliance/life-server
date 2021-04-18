@@ -7,7 +7,7 @@ const fs = require('fs-extra')
 const path = require('path')
 
 const { AccountTemplate, processHandlebarFile } = require('../accounts/account-template')
-const { logger } = require('../logger')
+const { logger } = require('../util/logger')
 
 function printDebugInfo (options) {
   logger.info('Server URI: ' + options.serverUri)
@@ -23,7 +23,7 @@ function printDebugInfo (options) {
 }
 
 /**
- * Creates (copies from the server templates dir) a Welcome index page for the
+ * Creates (copies from the server account-templates dir) a Welcome index page for the
  * server root web directory, if one does not already exist. This page
  * typically has links to account signup and login, and can be overridden by
  * the server operator.

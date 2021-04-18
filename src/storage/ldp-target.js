@@ -1,7 +1,7 @@
 'use strict'
 
 const { URL } = require('url')
-const { RDF_MIME_TYPES, ACL_SUFFIX, META_SUFFIX } = require('../defaults')
+const { RDF_MIME_TYPES, ACL_SUFFIX, META_SUFFIX } = require('../server/defaults')
 
 class LdpTarget {
   /**

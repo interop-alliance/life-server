@@ -11,7 +11,7 @@ const { LdpStore } = require('../ldp-store')
 const { LdpTarget } = require('../ldp-target')
 const { LdpResource, LdpContainer, LdpServerMeta } = require('../ldp-resource')
 
-const { DEFAULT_ENCODING } = require('../../defaults')
+const { DEFAULT_ENCODING } = require('../../server/defaults')
 const AVAILABLE_CHARSETS = ['utf8']
 
 class LdpMemoryStore extends LdpStore {

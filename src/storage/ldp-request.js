@@ -2,7 +2,7 @@
 
 const { URL } = require('url')
 const Busboy = require('busboy')
-const { ApiRequest } = require('../api-request')
+const { ApiRequest } = require('../server/api-request')
 const acl = require('@interop/solid-permissions')
 const HttpError = require('standard-http-error')
 const { LdpTarget } = require('./ldp-target')
@@ -10,10 +10,10 @@ const Negotiator = require('negotiator')
 const { promisify } = require('util')
 const rdf = require('rdflib')
 const serialize = promisify(rdf.serialize)
-const translateRdfStream = promisify(require('../rdf').translateRdfStream)
+const translateRdfStream = promisify(require('../util/rdf').translateRdfStream)
 const { addLinks, addLink, Metadata } = require('./ldp-header')
-const { logger } = require('../logger')
-const { DEFAULT_RDF_TYPE } = require('../defaults')
+const { logger } = require('../util/logger')
+const { DEFAULT_RDF_TYPE } = require('../server/defaults')
 
 class LdpRequest extends ApiRequest {
   /**

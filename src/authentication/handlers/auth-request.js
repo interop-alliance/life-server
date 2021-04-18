@@ -1,8 +1,8 @@
 'use strict'
 
 const { URL, URLSearchParams } = require('url')
-const { logger } = require('../../logger')
-const { ApiRequest } = require('../../api-request')
+const { logger } = require('../../util/logger')
+const { ApiRequest } = require('../../server/api-request')
 
 /**
  * Hidden form fields from the login page that must be passed through to the

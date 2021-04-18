@@ -1,6 +1,6 @@
 'use strict'
 
-const { logger } = require('./../logger')
+const { logger } = require('../util/logger')
 const { isUri } = require('valid-url')
 const HttpError = require('standard-http-error')
 // const provider = require('oidc-auth-manager/src/preferred-provider')
