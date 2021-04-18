@@ -54,7 +54,7 @@ use a tired cliché.
 #### Roadmap Phase One (Complete)
 
 This phase focused on general cleanup and refactoring from the source
-`node-solid-server` v4 baseline. (See [Phase One details](docs/roadmap.md#).)
+`node-solid-server` v4 baseline. (See [Phase One details](docs/roadmap.md#roadmap-phase-one-complete).)
 
 #### Roadmap Phase Two
 
