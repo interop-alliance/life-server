@@ -1,8 +1,8 @@
 'use strict'
 
-const { logger } = require('../../logger')
+const { logger } = require('../../util/logger')
 const HttpError = require('standard-http-error')
-const { ApiRequest } = require('../../api-request')
+const { ApiRequest } = require('../../server/api-request')
 
 class AuthCallbackRequest extends ApiRequest {
   constructor (options) {

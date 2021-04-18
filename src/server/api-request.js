@@ -1,6 +1,6 @@
 'use strict'
 
-const { logger } = require('./logger')
+const { logger } = require('../util/logger')
 
 /**
  * Base LifeServer http request.

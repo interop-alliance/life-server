@@ -6,7 +6,7 @@ const { ServerWelcomeRequest } = require('../server/server-welcome-request')
 const wac = require('../authorization/ldp-wac')
 const HttpError = require('standard-http-error')
 const crypto = require('crypto')
-const { logger } = require('../logger')
+const { logger } = require('../util/logger')
 const { parseMetadataFromHeader, Metadata } = require('./ldp-header')
 
 function ldpRequestHandler () {

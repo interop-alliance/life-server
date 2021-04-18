@@ -5,11 +5,11 @@ const handlebars = require('express-handlebars')
 const ServerHost = require('./server-host')
 const { AccountManager } = require('../accounts/account-manager')
 const { StorageManager } = require('../storage/storage-manager')
-const EmailService = require('../email-service')
+const EmailService = require('../email/email-service')
 const TokenService = require('../accounts/token-service')
-const { logger } = require('../logger')
+const { logger } = require('../util/logger')
 const config = require('./server-config')
-const defaults = require('../defaults')
+const defaults = require('./defaults')
 const path = require('path')
 const { OidcManager } = require('../authentication/oidc-manager')
 const { initHeaders } = require('./common-headers')
@@ -24,8 +24,8 @@ async function createApp (argv = {}) {
   argv.host = host
 
   const templates = {
-    account: path.join(__dirname, '..', 'templates', 'new-account'),
-    email: path.join(__dirname, '..', 'templates', 'emails')
+    account: path.join(__dirname, '..', 'accounts', 'account-templates', 'new-account'),
+    email: path.join(__dirname, '..', 'email', 'email-templates')
   }
   argv.templates = templates
 

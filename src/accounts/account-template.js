@@ -6,17 +6,17 @@ const path = require('path')
 const mime = require('mime-types')
 const { URL } = require('url')
 const fs = require('fs-extra')
-const { logger } = require('../logger')
+const { logger } = require('../util/logger')
 const Handlebars = require('handlebars')
 const { LdpTarget } = require('../storage/ldp-target')
 
-const { RDF_MIME_TYPES } = require('../defaults')
+const { RDF_MIME_TYPES } = require('../server/defaults')
 const TEMPLATE_EXTENSIONS = ['.acl', '.meta', '.json', '.hbs', '.handlebars']
 const TEMPLATE_FILES = ['web']
 
 /**
  * Performs account container initialization from an account template
- * (see `./default-templates/new-account/`, for example).
+ * (see `./account-templates/new-account/`, for example).
  *
  * @class AccountTemplate
  */
@@ -79,7 +79,7 @@ class AccountTemplate {
    * Usage:
    * ```
    * provisionAccountFrom({
-   *   templatePath: '/Users/alice/life-server/default-templates/',
+   *   templatePath: '/Users/alice/life-server/src/accounts/account-templates/',
    *   accountUrl: 'https://alice.com/'
    * })
    * ```

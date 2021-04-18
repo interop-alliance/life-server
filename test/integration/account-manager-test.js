@@ -13,7 +13,7 @@ const { testAccountManagerOptions } = require('../utils')
 
 const testAccountsDir = path.join(__dirname, '..', 'resources', 'accounts')
 const accountTemplatePath = path.join(__dirname, '..', '..', 'src',
-  'templates', 'new-account')
+  'accounts', 'account-templates', 'new-account')
 
 let host
 

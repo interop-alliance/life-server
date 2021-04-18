@@ -5,7 +5,7 @@ const validUrl = require('valid-url')
 const fetch = require('node-fetch')
 const li = require('li')
 const rdf = require('rdflib')
-const { fetchRemoteGraph } = require('../rdf')
+const { fetchRemoteGraph } = require('../util/rdf')
 
 module.exports = {
   discoverProviderFor,

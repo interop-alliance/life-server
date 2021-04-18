@@ -1,4 +1,4 @@
-const { logger } = require('../logger')
+const { logger } = require('../util/logger')
 const Auth = {
   oidc: require('../authentication/webid-oidc')
 }

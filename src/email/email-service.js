@@ -2,7 +2,7 @@
 
 const nodemailer = require('nodemailer')
 const path = require('path')
-const { logger } = require('./logger')
+const { logger } = require('../util/logger')
 
 /**
  * Models a Nodemailer-based email sending service.

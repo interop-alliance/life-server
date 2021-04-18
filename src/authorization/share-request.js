@@ -6,7 +6,7 @@ const acl = require('@interop/solid-permissions')
 const { PermissionSet, Permission, SingleAgent } = acl
 const { LdpTarget } = require('../storage/ldp-target')
 const rdf = require('rdflib')
-const { logger } = require('../logger')
+const { logger } = require('../util/logger')
 
 class ShareRequest {
   constructor ({ host, resourceUrl, target, currentWebId, permissionSet, nearestAcl, body, ldpStore, res }) {

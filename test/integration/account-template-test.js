@@ -10,7 +10,7 @@ const ServerHost = require('../../src/server/server-host')
 const { AccountTemplate } = require('../../src/accounts/account-template')
 const { testStorage } = require('../utils')
 
-const templatePath = path.join(__dirname, '..', '..', 'src', 'templates',
+const templatePath = path.join(__dirname, '..', '..', 'src', 'accounts', 'account-templates',
   'new-account')
 const accountPath = path.join(__dirname, '..', 'resources', 'new-account')
 

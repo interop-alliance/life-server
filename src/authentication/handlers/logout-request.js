@@ -1,7 +1,7 @@
 'use strict'
 
-const { ApiRequest } = require('../../api-request')
-const { logger } = require('../../logger')
+const { ApiRequest } = require('../../server/api-request')
+const { logger } = require('../../util/logger')
 
 const DEFAULT_POST_LOGOUT_URL = '/goodbye'
 

@@ -10,7 +10,7 @@ const HttpMocks = require('node-mocks-http')
 
 const { AccountManager } = require('../../src/accounts/account-manager')
 const ServerHost = require('../../src/server/server-host')
-const defaults = require('../../src/defaults')
+const defaults = require('../../src/server/defaults')
 const { CreateAccountRequest } = require('../../src/accounts/handlers/create-account-request')
 const { testAccountManagerOptions } = require('../utils')
 

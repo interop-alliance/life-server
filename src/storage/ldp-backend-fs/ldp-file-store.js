@@ -4,7 +4,7 @@ const { dirname } = require('path')
 const fs = require('fs-extra')
 const { v1: uuidv1 } = require('uuid')
 const { URL } = require('url')
-const { logger } = require('../../logger')
+const { logger } = require('../../util/logger')
 const { extensions } = require('mime-types')
 const http = require('http')
 const https = require('https')
@@ -16,7 +16,7 @@ const { LdpFileResource, LdpFileContainer } =
   require('./ldp-file-resource')
 const { LdpTarget } = require('../ldp-target')
 
-const { DEFAULT_ENCODING } = require('../../defaults')
+const { DEFAULT_ENCODING } = require('../../server/defaults')
 const AVAILABLE_CHARSETS = ['utf8']
 
 class LdpFileStore extends LdpStore {

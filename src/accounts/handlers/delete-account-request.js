@@ -1,7 +1,7 @@
 'use strict'
 
 const AuthRequest = require('../../authentication/handlers/auth-request')
-const { logger } = require('../../logger')
+const { logger } = require('../../util/logger')
 
 class DeleteAccountRequest extends AuthRequest {
   constructor (options) {

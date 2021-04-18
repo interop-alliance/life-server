@@ -1,6 +1,6 @@
 'use strict'
 
-const { ACL_SUFFIX, META_SUFFIX, DEFAULT_RDF_TYPE } = require('../defaults')
+const { ACL_SUFFIX, META_SUFFIX, DEFAULT_RDF_TYPE } = require('../server/defaults')
 const { v1: uuidv1 } = require('uuid')
 const { promisify } = require('util')
 const rdf = require('rdflib')
