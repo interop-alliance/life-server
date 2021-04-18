@@ -56,7 +56,7 @@ class RegisterWalletRequest extends AuthRequest {
       this.response.status(error.statusCode)
     }
 
-    this.response.render('account/register-wallet',
+    this.response.render('wallet/register-wallet',
       { title: 'Register Wallet', layout: 'wallet', ...params })
   }
 
