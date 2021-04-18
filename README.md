@@ -1,9 +1,9 @@
 # Life Server _(life-server)_
 
-[![Build Status](https://travis-ci.org/interop-alliance/life-server.svg?branch=master&style=flat-square)](https://travis-ci.org/interop-alliance/life-server)
+[![Build status](https://img.shields.io/github/workflow/status/interop-alliance/life-server/Node.js%20CI)](https://github.com/interop-alliance/life-server/actions?query=workflow%3A%22Node.js+CI%22)
 [![NPM Version](https://img.shields.io/npm/v/life-server.svg?style=flat-square)](https://npm.im/life-server)
 
-> A decentralized personal data server inspired by Solid
+> A decentralized personal data server inspired by Solid and Identity Hubs.
 
 ## Table of Contents
 
@@ -45,7 +45,7 @@ priorities will be: Developer QoL (Quality of Life) over User QoL over DevOps Qo
 
 ### Roadmap
 
-**Updated:** June 2020.
+**Updated:** April 2021.
 
 This is an experimental server focusing on interop exploration and rapid feature 
 iteration. "Move fast and break things (and then fix them just as quickly)", to use a tired cliché.
@@ -153,7 +153,7 @@ doc.
 * Linux, Mac OS X, or Windows 10
 * Node 12+
 
-To run the Life Server server, you will first need to install
+To run Life Server, you will first need to install
 Node.js. (The developers recommend using [`nvm`](https://github.com/creationix/nvm) 
 to install Node.)
 
