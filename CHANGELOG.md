@@ -15,6 +15,7 @@
 - **BREAKING**: Account recover email is now loaded from `storage.users` db,
   instead of from the account root `.acl` file.
 - **BREAKING**: Default port is now `7070`.
+- **BREAKING**: Enable sameSite 'None' for CHAPI wallet requests.
 
 ## 7.0.0 - 2020-02-15
 
