@@ -69,9 +69,6 @@ class WalletRequest extends AuthRequest {
 
   async handleGetOperation () {
     try {
-      console.log('in handleGetOperation, session:')
-      console.log(JSON.stringify(this.session, null, 2))
-
       const { credentials: { webId } } = this
 
       if (webId) {
@@ -79,7 +76,7 @@ class WalletRequest extends AuthRequest {
       } else {
         const returnToUrl = '/api/wallet/get'
         const session = this.session || {}
-        // session.returnToUrl = returnToUrl
+        session.returnToUrl = returnToUrl
         const params = {
           registerUrl: this.registerUrl(),
           returnToUrl

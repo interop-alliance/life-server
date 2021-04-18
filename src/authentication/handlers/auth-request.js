@@ -102,9 +102,6 @@ class AuthRequest extends ApiRequest {
       _id: userAccount.webId
     }
 
-    console.log('In initUserSession:')
-    console.log(JSON.stringify(session, null, 2))
-
     return userAccount
   }
 
