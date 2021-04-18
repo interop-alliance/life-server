@@ -4,7 +4,7 @@ const HttpError = require('standard-http-error')
 const cryptoRandomString = require('crypto-random-string')
 // const { URL, URLSearchParams } = require('url')
 // const { logger } = require('../../logger')
-const { ApiRequest } = require('../../api-request')
+const { ApiRequest } = require('../api-request')
 
 function newHandle () {
   return cryptoRandomString({ length: 20, type: 'base64' })

@@ -8,27 +8,6 @@ const HttpError = require('standard-http-error')
 const crypto = require('crypto')
 const { logger } = require('../logger')
 const { parseMetadataFromHeader, Metadata } = require('./ldp-header')
-const express = require('express')
-const bodyParserText = express.text({ type: () => true })
-
-function addLdpMiddleware ({ corsSettings }) {
-  const router = express.Router('/')
-
-  const handleLdpRequest = ldpRequestHandler()
-
-  router.use(corsSettings)
-
-  // Note: options handler is set in create-app
-  router.head('/*', handleLdpRequest)
-  router.get('/*', handleLdpRequest)
-  router.post('/*', handleLdpRequest)
-  router.put('/*', handleLdpRequest)
-  router.delete('/*', handleLdpRequest)
-  router.copy('/*', handleLdpRequest)
-  router.patch('/*', bodyParserText, handleLdpRequest)
-
-  return router
-}
 
 function ldpRequestHandler () {
   /**
@@ -195,6 +174,5 @@ function hash (text) {
 
 module.exports = {
   ldpRequestHandler,
-  requestFrom,
-  addLdpMiddleware
+  requestFrom
 }
