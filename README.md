@@ -48,41 +48,13 @@ priorities will be: Developer QoL (Quality of Life) over User QoL over DevOps Qo
 **Updated:** April 2021.
 
 This is an experimental server focusing on interop exploration and rapid feature 
-iteration. "Move fast and break things (and then fix them just as quickly)", to use a tired cliché.
+iteration. "Move fast and break things (and then fix them just as quickly)", to 
+use a tired cliché.
 
-#### Roadmap Phase One
+#### Roadmap Phase One (Complete)
 
-This phase focuses on general cleanup and refactoring from the source 
-`node-solid-server` v4 baseline.
-
-* [x] Remove external dependency on Mashlib and the Data Browser. (The various 
-    built-in apps (account homepage, data viewing and file management, sharing 
-    and permission management, etc) will be performed on the server side.)
-* [x] Simplify architecture, remove a number of non-core components (globbing,
-    realtime updates via WebSockets, WebID-TLS local authentication, CORS proxy
-    and authentication proxy, storage quotas, external WebIDs).
-* [x] Refactor the LDP interface to more closely match the [proposed Solid 
-    architecture](https://github.com/solid/solid-architecture/blob/master/server/request-flow.md),
-    and to support modular/pluggable storage backends
-    beyond the existing File System based one (such as an in-memory store, graph 
-    stores and others).
-* [x] Bring some external authn-related dependencies (such as the 
-    [`oidc-auth-manager`](https://github.com/solid/oidc-auth-manager) and the 
-    [`solid-multi-rp-client`](https://github.com/solid/solid-multi-rp-client))
-    libs into this repository (to make for a faster release and refactoring
-    process).
-* [x] Replace logging layer (currently a mix of `console` and `debug`) with a
-    dedicated logger like Bunyan or Pino.
-* [x] Shorten the WebID Profile URL template for new accounts from
-    `/profile/card#me` to `/web#id`
-* [x] Simplify the new account templating system (do not create template and
-    view copies for customizability)
-
-Bonus/If-time:
-
-* [x] Update `node-mailer` package to latest version
-* [x] Update `inquirer` and `commander` packages to latest version
-* [x] Make all tests pass on Windows 10
+This phase focused on general cleanup and refactoring from the source
+`node-solid-server` v4 baseline. (See [Phase One details](docs/roadmap.md#).)
 
 #### Roadmap Phase Two
 
@@ -129,6 +101,8 @@ projects and specs.
 Since [`node-solid-server`](https://github.com/solid/node-solid-server) (NSS) is 
 being deprecated in favor of [`inrupt/pod-server`](https://github.com/inrupt/pod-server),
 this repo intends to be another compatible implementation (the more the merrier!).
+
+* Works on Windows 10 (WSL2)
 
 **Does not support:**
 
@@ -216,10 +190,10 @@ After startup, the server is available at the configured server URL (by default,
 
 You can run life-server from our [prebuilt docker image](https://hub.docker.com/r/interopalliance/life-server) with the following command:
 
-Run latest build from master branch
+Run latest build from `main` branch
 
 ```
-docker run -p 7070:7070 interopalliance/life-server:master
+docker run -p 7070:7070 interopalliance/life-server:main
 ```
 
 Run a tagged release
