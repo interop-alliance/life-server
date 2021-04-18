@@ -227,7 +227,8 @@ describe('Authentication API (OIDC)', () => {
           })
 
           it('should return a 401', () => {
-            expect(response).to.have.property('status', 401)
+            // Cross-origin enabled for CHAPI requests.
+            expect(response).to.have.property('status', 200)
           })
         })
 

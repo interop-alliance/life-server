@@ -77,28 +77,7 @@ function initSessionHandler ({ app, useSecureCookies, host, secret = uuidv1() })
     }
   }
 
-  // Store the user's session key in a cookie
-  // (for same-domain browsing by people only)
-  const sessionHandler = session(sessionSettings)
-
-  app.use((req, res, next) => {
-    sessionHandler(req, res, () => {
-      // Reject cookies from third-party applications.
-      // Otherwise, when a user is logged in to their server,
-      // any third-party application could perform authenticated requests
-      // without permission by including the credentials set by the server.
-      const origin = req.headers.origin
-      const userId = req.session.userId
-      if (!host.allowsSessionFor(userId, origin)) {
-        logger.warn(`Rejecting session for ${userId} from ${origin}`)
-        // Destroy session data
-        delete req.session.userId
-        // Ensure this modified session is not saved
-        req.session.save = (done) => done()
-      }
-      next()
-    })
-  })
+  app.use(session(sessionSettings))
 }
 
 module.exports = {
