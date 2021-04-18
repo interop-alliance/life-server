@@ -20,7 +20,7 @@ jobs:
         run: npm run standard
   test-node:
     runs-on: ubuntu-latest
-    needs: [lint]
+#    needs: [lint]
     timeout-minutes: 10
     strategy:
       matrix:
