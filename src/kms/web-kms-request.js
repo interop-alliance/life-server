@@ -75,6 +75,7 @@ class WebKmsRequest extends AuthRequest {
     })
 
     logger.info('Returning DIDAuth VP.')
+    console.log(JSON.stringify(vp, null, 2));
 
     // Send the Verifiable Presentation (used for DIDAuthn)
     this.response.json(vp)

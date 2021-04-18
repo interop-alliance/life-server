@@ -37,9 +37,9 @@ function initializeExpressRoutes ({ app, argv, oidc, accountManager, logger }) {
 
   // Init static routes
   // Serve the public 'common' directory (for shared CSS files, etc)
-  app.use('/common', express.static(path.join(__dirname, '..', '..', 'common')))
+  app.use('/common', express.static(path.join(__dirname, '..', 'common')))
   app.use('/.well-known',
-    express.static(path.join(__dirname, '..', '..', 'common', 'well-known')))
+    express.static(path.join(__dirname, '..', 'common', 'well-known')))
 
   // Serve bootstrap from its node_module directory
   _routeResolvedFile(app, '/common/css/', 'bootstrap/dist/css/bootstrap.min.css')

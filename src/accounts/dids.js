@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Interop Alliance.
+ * Copyright 2020-2021 Interop Alliance.
  */
 'use strict'
 

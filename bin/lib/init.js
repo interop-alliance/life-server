@@ -5,7 +5,7 @@ const camelize = require('camelize')
 const util = require('util')
 const path = require('path')
 
-const DEFAULT_CONFIG_FILE = './config.dev.js'
+const DEFAULT_CONFIG_FILE = './config.default.js'
 
 function loadInitServer (program) {
   program
