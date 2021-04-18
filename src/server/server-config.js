@@ -69,6 +69,8 @@ function initSessionHandler ({ app, useSecureCookies, host, secret = uuidv1() })
     resave: false,
     rolling: true,
     cookie: {
+      // Enable 3rd-party cookies for CHAPI wallet use.
+      sameSite: 'None',
       maxAge: 14 * 24 * 60 * 60 * 1000, // 2 weeks in milliseconds
       domain: host.cookieDomain,
       secure: useSecureCookies // true if https is on
