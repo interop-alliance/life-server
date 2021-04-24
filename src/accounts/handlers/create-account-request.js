@@ -196,7 +196,8 @@ class CreateAccountRequest extends AuthRequest {
     if (this.host.features.registerWalletOnSignup) {
       redirectUrl = '/api/wallet/new'
     } else {
-      redirectUrl = this.authorizeUrl() ||
+      logger.info('SKIP registering wallet (registerWalletOnSignup false in config).')
+      redirectUrl = // this.authorizeUrl() ||
         this.returnToUrl ||
         this.accountManager.accountUriFor(userAccount.username)
     }
