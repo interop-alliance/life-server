@@ -18,7 +18,19 @@ jobs:
       - run: npm install
       - name: Run Standard.js lint
         run: npm run standard
+  add-hosts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v2
+      - name: Add test hosts to /etc/hosts
+        run: |
+          echo "127.0.0.1 nic.localhost" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 tim.localhost" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 nicola.localhost" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 ldnode.localhost" | sudo tee -a /etc/hosts
   test-node:
+    needs: [add-hosts]
     runs-on: ubuntu-latest
 #    needs: [lint]
     timeout-minutes: 10
@@ -34,24 +46,3 @@ jobs:
       - run: npm install
       - name: Run Mocha Tests on Node.js ${{ matrix.node-version }}
         run: npm run mocha
-#  coverage:
-#    needs: [test-node, test-karma]
-#    timeout-minutes: 10
-#    runs-on: ubuntu-latest
-#    strategy:
-#      matrix:
-#        node-version: [14.x]
-#    steps:
-#      - uses: actions/checkout@v2
-#      - name: Use Node.js ${{ matrix.node-version }}
-#        uses: actions/setup-node@v1
-#        with:
-#          node-version: ${{ matrix.node-version }}
-#      - run: npm install
-#      - name: Generate coverage report
-#        run: npm run coverage-ci
-#      - name: Upload coverage to Codecov
-#        uses: codecov/codecov-action@v1
-#        with:
-#          file: ./coverage/lcov.info
-#          fail_ci_if_error: true

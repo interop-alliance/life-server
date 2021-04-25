@@ -9,6 +9,7 @@ const { FlexDocStore } = require('flex-docstore')
 const { UserCredentialStore } = require('../authentication/user-credential-store')
 const LegacyResourceMapper = require('./ldp-backend-fs/legacy-resource-mapper')
 const { LdpFileStore } = require('./ldp-backend-fs/ldp-file-store')
+const keyStorage = require('./key-storage')
 
 // const Url = require('url')
 
@@ -152,12 +153,12 @@ function escapeDidForFilename ({ did }) {
   return did.replace(/:/g, '-')
 }
 
-async function storeDidKeys ({ didKeys, did, dir }) {
-  const { keyStore, exportKeys } = require('./key-storage')
-
+async function storeDidKeys ({ keyPairs, did, dir }) {
   await fs.ensureDir(dir)
-  await keyStore({ dir: dir }).put(escapeDidForFilename({ did }),
-    await exportKeys(didKeys))
+  await keyStorage.keyStore({ dir: dir }).put(
+    escapeDidForFilename({ did }),
+    keyStorage.exportKeys({ keyPairs })
+  )
 }
 
 module.exports = {

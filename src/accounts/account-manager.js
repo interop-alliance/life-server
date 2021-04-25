@@ -6,7 +6,8 @@ const UserAccount = require('./user-account')
 const { AccountTemplate } = require('./account-template')
 const { LdpTarget } = require('../storage/ldp-target')
 const { logger } = require('../util/logger')
-const { generateDid, didForWebId, didKeys, keySuite, didWebDocumentLoader } = require('./dids')
+const dids = require('./dids')
+const keyStorage = require('../storage/key-storage')
 const { escapeDidForFilename } = require('../storage/storage-manager')
 
 const { ACL_SUFFIX } = require('../server/defaults')
@@ -21,7 +22,7 @@ const DEFAULT_ADMIN_USERNAME = 'admin'
 class AccountManager {
   /**
    * @constructor
-   * @param [options={}] {Object}
+   * @param [options={}] {object}
    * @param [options.authMethod='oidc'] {string} Primary authentication method
    * @param [options.emailService] {EmailService}
    * @param [options.tokenService] {TokenService}
@@ -61,7 +62,7 @@ class AccountManager {
   /**
    * Factory method for new account manager creation. Usage:
    *
-   * @param [options={}] {Object} See the `constructor()` docstring.
+   * @param [options={}] {object} See the `constructor()` docstring.
    *
    * @return {AccountManager}
    */
@@ -196,22 +197,18 @@ class AccountManager {
    * @throws {Error} If unsupported key type.
    *
    * @param webId {string}
-   * @parma purpose {string} E.g. 'authentication', 'assertionMethod' etc.
+   * @param purpose {string} E.g. 'authentication', 'assertionMethod' etc.
    */
   async signingKey ({ webId, purpose }) {
-    const did = didForWebId({ webId })
+    const did = dids.didForWebId({ webId })
     const user = UserAccount.from({ webId })
     const { accountUri } = user
-    const didKeys = await this.loadKeys({
-      accountUri, did
-    })
+    const keyPairs = await this.loadKeys({ accountUri, did })
     const didDocument = await this.loadDidDocument({ accountUri })
 
-    const signingKeyId = didDocument[purpose][0].id
-    const signingKey = didKeys[signingKeyId]
-    const suite = keySuite({ key: signingKey })
+    const suite = dids.keySuite({ didDocument, keyPairs, purpose })
 
-    const documentLoader = didWebDocumentLoader({ didDocument, didKeys })
+    const documentLoader = dids.didWebDocumentLoader({ didDocument, keyPairs })
 
     return { did, suite, documentLoader }
   }
@@ -220,7 +217,7 @@ class AccountManager {
    * Creates and returns a `UserAccount` instance from submitted user data
    * (typically something like `req.body`, from a signup form).
    *
-   * @param userData {Object} Options hashmap, like `req.body`.
+   * @param userData {object} Options hashmap, like `req.body`.
    *   Either a `username` or a `webid` property is required.
    *
    * @param [userData.username] {string}
@@ -339,22 +336,40 @@ class AccountManager {
     }
   }
 
+  /**
+   * Generates a did:web DID Document (and associated keys) for a new account.
+   * (Only when `features.provisionDidOnSignup` is enabled, in config.)
+   *
+   * @param userAccount {UserAccount}
+   *
+   * @returns {Promise}
+   */
   async provisionAccountDid ({ userAccount }) {
     const { accountUri } = userAccount
 
     try {
-      const { didDocument, didKeys } = await generateDid({ url: accountUri })
+      const { didDocument, keyPairs } = await dids.generateDid({ url: accountUri })
       const did = didDocument.id
       logger.info(`User DID generated: '${did}'.`)
 
       await this.saveDidDocument({ accountUri, didDocument })
-      await this.saveKeys({ accountUri, did, didKeys })
+      await this.saveKeys({ accountUri, did, keyPairs })
     } catch (error) {
       error.message = 'Error generating user DID: ' + error.message
       throw error
     }
   }
 
+  /**
+   * Saves a DID Document (provisioned for a new account) to the account storage,
+   * in `/.well-known/did.json`.
+   *
+   * @param accountUri {string}
+   * @param didDocument {object}
+   *
+   * @returns {Promise<string>} Resolves with the url to which the did doc was
+   *   written.
+   */
   async saveDidDocument ({ accountUri, didDocument }) {
     const { accountStorage } = this
     const didDocLocation = new URL('/.well-known/did.json', accountUri)
@@ -365,7 +380,7 @@ class AccountManager {
       blob: JSON.stringify(didDocument, null, 2)
     })
     logger.info('User DID written to: ' + resource.path)
-    return didDocLocation
+    return didDocLocation.toString()
   }
 
   async loadDidDocument ({ accountUri }) {
@@ -376,10 +391,19 @@ class AccountManager {
     return JSON.parse(await accountStorage.readBlob({ resource }))
   }
 
-  async saveKeys ({ accountUri, did, didKeys }) {
+  /**
+   * Saves keys (generated for the DID Document of a newly provisioned account)
+   * to that account's storage (to the `/vault/keys/` container).
+   *
+   * @param accountUri {string}
+   * @param did {string}
+   * @param keyPairs {Map}
+   *
+   * @returns {Promise}
+   */
+  async saveKeys ({ accountUri, did, keyPairs }) {
     const { accountStorage } = this
-    const { exportKeys } = require('../storage/key-storage')
-    const exportedKeys = await exportKeys(didKeys)
+    const exportedKeys = keyStorage.exportKeys({ keyPairs })
     const didFilename = escapeDidForFilename({ did })
 
     const keysLocation = new URL(`/vault/keys/${didFilename}.keys.json`,
@@ -392,6 +416,11 @@ class AccountManager {
     })
   }
 
+  /**
+   * @param accountUri
+   * @param did
+   * @returns {Promise<Map>}
+   */
   async loadKeys ({ accountUri, did }) {
     const { accountStorage } = this
     const didFilename = escapeDidForFilename({ did })
@@ -402,7 +431,7 @@ class AccountManager {
     const resource = await accountStorage.resource({ target })
 
     const keyData = JSON.parse(await accountStorage.readBlob({ resource }))
-    return didKeys({ did, keyData })
+    return dids.didKeys({ did, keyData })
   }
 
   /**

@@ -7,6 +7,7 @@ const expect = chai.expect
 chai.use(require('dirty-chai'))
 chai.should()
 
+const vc = require('vc-js')
 const ServerHost = require('../../src/server/server-host')
 const { AccountManager } = require('../../src/accounts/account-manager')
 const { testAccountManagerOptions } = require('../utils')
@@ -125,13 +126,54 @@ describe('AccountManager', () => {
 
       expect(didDoc.id).to.equal('did:web:alice.example.com')
 
-      const keys = await accountManager.loadKeys({
+      const keyPairs = await accountManager.loadKeys({
         accountUri: accountManager.accountUriFor('alice'), did: didDoc.id
       })
 
-      for (const keyId of Object.keys(keys)) {
-        expect(keys[keyId].type).to.equal('Ed25519VerificationKey2018')
-      }
+      expect(keyPairs).to.exist()
+      expect(keyPairs.size > 0).to.be.true()
+
+      keyPairs.forEach(keyPair => {
+        expect(keyPair.controller).to.equal('did:web:alice.example.com')
+      })
+    })
+  })
+
+  describe('signingKey', () => {
+    it('should fetch a signing/verification suite and loader', async () => {
+      const options = testAccountManagerOptions(host)
+      const accountManager = AccountManager.from({
+        accountTemplatePath, ...options
+      })
+      const userData = { username: 'alice' }
+      const userAccount = accountManager.userAccountFrom(userData)
+
+      await accountManager.provisionAccountDid({ userAccount })
+
+      const { webId } = userAccount
+
+      const { did, suite, documentLoader } = await accountManager.signingKey({
+        webId, purpose: 'authentication'
+      })
+
+      expect(did).to.equal('did:web:alice.example.com')
+      expect(suite.type).to.equal('Ed25519Signature2020')
+      const { document } = await documentLoader(
+        'https://w3id.org/security/suites/ed25519-2020/v1'
+      )
+      expect(document['@context'].id).to.equal('@id')
+
+      // Ensure it works to sign a presentation
+      const presentation = vc.createPresentation({ holder: did })
+
+      const vp = await vc.signPresentation(
+        { presentation, suite, challenge: '1234', domain: 'https://example.com', documentLoader }
+      )
+
+      expect(vp.type.includes('VerifiablePresentation')).to.be.true()
+      expect(vp.holder).to.equal(did)
+      expect(vp.proof.type).to.equal('Ed25519Signature2020')
+      // console.log(vp)
     })
   })
 })
