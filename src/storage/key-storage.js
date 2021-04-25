@@ -104,17 +104,22 @@ function metaStore (options = {}) {
 }
 
 /**
- * Exports LDKeyPair instances to JSON, for secure storage.
- * @param {object} didKeys - Hashmap of a DID Document's keys, by key id.
+ * Exports LDKeyPair instances to a plain serializable object, for storage.
  *
- * @returns {Promise<object>} JSON object for serialization.
+ * @param keyPairs {Map} - Map of public/private key pairs, by key id.
+ *
+ * @returns {object[]} Array of key objects, for JSON serialization.
  */
-async function exportKeys (didKeys) {
-  const exportedKeys = {}
-  for (const keyId in didKeys) {
-    exportedKeys[keyId] = await didKeys[keyId]
-      .export({ publicKey: true, privateKey: true })
+function exportKeys ({ keyPairs }) {
+  if (!keyPairs) {
+    throw new TypeError('The "keyPairs" parameter is required.')
   }
+  const exportedKeys = []
+  keyPairs.forEach(keyPair => {
+    exportedKeys.push(
+      keyPair.export({ publicKey: true, privateKey: true, includeContext: true })
+    )
+  })
 
   return exportedKeys
 }

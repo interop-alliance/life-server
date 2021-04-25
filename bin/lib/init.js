@@ -100,7 +100,7 @@ async function initServer (config) {
   console.log('Initializing server, config:', config)
 
   const { keyStorage, url, serverFolder, didFilename } = didParamsFrom(config)
-  const { didDocument, didKeys } = await generateDid({ url })
+  const { didDocument, keyPairs } = await generateDid({ url })
   console.log(`DID generated: "${didDocument.id}".`)
 
   // write did document
@@ -111,7 +111,7 @@ async function initServer (config) {
   console.log(`Server DID Document written to "${didFilename}".`)
 
   // export keys
-  await storeDidKeys({ didKeys, did: didDocument.id, dir: keyStorage })
+  await storeDidKeys({ keyPairs, did: didDocument.id, dir: keyStorage })
   console.log(`Keys written to "${keyStorage}".`)
 }
 
