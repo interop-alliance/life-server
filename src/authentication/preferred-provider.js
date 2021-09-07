@@ -1,6 +1,5 @@
 'use strict'
 
-const { URL } = require('whatwg-url')
 const validUrl = require('valid-url')
 const fetch = require('node-fetch')
 const li = require('li')

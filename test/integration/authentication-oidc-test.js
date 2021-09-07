@@ -6,10 +6,6 @@ const { OIDCWebClient } = require('oidc-web')
 
 const fetch = require('node-fetch')
 const localStorage = require('localstorage-memory')
-const { URL } = require('url')
-
-global.URL = URL
-global.URLSearchParams = require('whatwg-url').URLSearchParams
 const currentLocation = 'https://app.com/'
 global.window = {
   location: { href: currentLocation }
