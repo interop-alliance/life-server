@@ -45,7 +45,7 @@ priorities will be: Developer QoL (Quality of Life) over User QoL over DevOps Qo
 
 ### Roadmap
 
-**Updated:** April 2021.
+**Updated:** September 2021.
 
 This is an experimental server focusing on interop exploration and rapid feature 
 iteration. "Move fast and break things (and then fix them just as quickly)", to 
@@ -122,10 +122,10 @@ doc.
 
 ## Install
 
-### Pre-requisites: Node.js v12+
+### Pre-requisites: Node.js v14+
 
 * Linux, Mac OS X, or Windows 10
-* Node 12+
+* Node 14+
 
 To run Life Server, you will first need to install
 Node.js. (The developers recommend using [`nvm`](https://github.com/creationix/nvm) 
@@ -141,8 +141,7 @@ npm install
 
 ### Edit `/etc/hosts` (development/testing only)
 
-To run the account creation on unit tests, `life-server`'s test suite
-uses the following localhost domains: `nic.localhost`, `tim.localhost`, and
+`life-server`'s test suite uses the following localhost domains: `nic.localhost`, `tim.localhost`, and
 `nicola.localhost`. You will need to create host file entries for these, in
 order for the tests to pass.
 
