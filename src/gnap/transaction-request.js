@@ -2,7 +2,6 @@
 
 const HttpError = require('standard-http-error')
 const cryptoRandomString = require('crypto-random-string')
-// const { URL, URLSearchParams } = require('url')
 // const { logger } = require('../../logger')
 const { ApiRequest } = require('../server/api-request')
 

@@ -7,7 +7,8 @@ const { Ed25519VerificationKey2020 } = require('@digitalbazaar/ed25519-verificat
 const { X25519KeyAgreementKey2020 } = require('@digitalbazaar/x25519-key-agreement-key-2020')
 const { CryptoLD } = require('crypto-ld')
 const { Ed25519Signature2020 } = require('@digitalbazaar/ed25519-signature-2020')
-const { coreLoader } = require('@digitalbazaar/core-document-loader')
+const { CachedResolver } = require('@digitalbazaar/did-io')
+const { securityLoader } = require('@digitalbazaar/security-document-loader')
 const didWeb = require('@interop/did-web-resolver')
 const { logger } = require('../util/logger')
 
@@ -104,20 +105,20 @@ function keySuite ({ didDocument, keyPairs, purpose } = {}) {
  * @returns {function} Document loader function needed for vc-js etc.
  */
 function didWebDocumentLoader ({ didDocument, keyPairs }) {
-  return async url => {
-    const loader = coreLoader()
-    loader.addStatic(didDocument.id, didDocument)
+  const resolver = new CachedResolver()
+  resolver.use(didWebDriver)
+  const loader = securityLoader()
+  loader.setDidResolver(resolver)
+  loader.addStatic(didDocument.id, didDocument)
+  keyPairs.forEach((keyPair, keyId) => {
+    loader.addStatic(
+      keyId, keyPair.export({ publicKey: true, includeContext: true })
+    )
+  })
 
-    keyPairs.forEach((keyPair, keyId) => {
-      loader.addStatic(
-        keyId, keyPair.export({ publicKey: true, includeContext: true })
-      )
-    })
+  const documentLoader = loader.build()
 
-    loader.addResolver(didWebDriver)
-
-    return loader.build()(url)
-  }
+  return async url => documentLoader(url)
 }
 
 module.exports = {

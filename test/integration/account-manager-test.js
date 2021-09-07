@@ -7,7 +7,7 @@ const expect = chai.expect
 chai.use(require('dirty-chai'))
 chai.should()
 
-const vc = require('vc-js')
+const vc = require('@digitalbazaar/vc')
 const ServerHost = require('../../src/server/server-host')
 const { AccountManager } = require('../../src/accounts/account-manager')
 const { testAccountManagerOptions } = require('../utils')
