@@ -62,7 +62,7 @@ function initializeExpressRoutes ({ app, argv, oidc, accountManager, logger }) {
       bodyParserJson, CreateAccountRequest.post())
     app.get(['/register', '/api/accounts/new'], _checkFeatureFlag('allowAccountCreation'),
       CreateAccountRequest.get())
-    app.post('/api/prove/presentations', bodyParserJson, WebKmsRequest.prove())
+    app.post('/api/presentations/verify', bodyParserJson, WebKmsRequest.prove())
     app.get('/api/wallet/new', RegisterWalletRequest.get())
     app.post('/api/wallet/new', RegisterWalletRequest.post())
     app.get('/api/wallet/worker', WalletRequest.getWorker())
