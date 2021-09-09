@@ -82,7 +82,7 @@
 
   async function fetchDidAuthVp ({ domain, challenge }) {
     // @see https://transmute-industries.github.io/vc-http-api/#/Holder/provePresentation
-    const url = new URL('/api/prove/presentations', WALLET_LOCATION)
+    const url = new URL('/api/presentations/verify', WALLET_LOCATION)
     try {
       const response = await fetch(url, {
         method: 'POST',
