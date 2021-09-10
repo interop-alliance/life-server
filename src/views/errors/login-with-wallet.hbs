@@ -28,6 +28,15 @@
           query: [
             {
               type: 'DIDAuth'
+            },
+            {
+              type: 'SolidOidcCredential',
+            },
+            {
+              type: 'QueryByExample',
+              credentialQuery: {
+                example: { type: 'LoginDisplayCredential' }
+              }
             }
           ],
           challenge,
