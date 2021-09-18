@@ -12,6 +12,12 @@
 </div>
 
 <script>
+  async function handleVpQuery ({query}) {
+    if(!['QueryByExample', 'DIDAuth', 'SolidOidcCredential'].includes(query.type)) {
+      throw new Error(`Query type ${query.type} is not supported by this wallet.`)
+    }
+  }
+
   /**
    * Globals:
    *   WALLET_LOCATION, MEDIATOR - wallet.hbs layout
@@ -27,19 +33,15 @@
     const event = await WebCredentialHandler.receiveCredentialEvent()
 
     console.log('Wallet processing get() event:', event)
+    const requestSource = event.credentialRequestOrigin
+    document.getElementById('requestSource').innerHTML = requestSource
 
     // document.getElementById('requestOrigin').innerHTML = event.credentialRequestOrigin
 
     const vpRequest = event.credentialRequestOptions.web.VerifiablePresentation
+    const query = [].concat(vpRequest.query)
 
-    const query = Array.isArray(vpRequest.query) ? vpRequest.query[0] : vpRequest.query
 
-    if(!['QueryByExample', 'DIDAuth', 'SolidOidcCredential'].includes(query.type)) {
-      throw new Error(`Query type ${query.type} is not supported by this wallet.`)
-    }
-
-    const requestSource = event.credentialRequestOrigin
-    document.getElementById('requestSource').innerHTML = requestSource
 
     if (query.type === 'DIDAuth') {
       document.getElementById('didAuthPanel').classList.remove('hide')
