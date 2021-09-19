@@ -119,7 +119,7 @@ class WalletRequest extends AuthRequest {
   }
 
   /**
-   * Renders the Register form
+   * Renders the response
    */
   renderForm (error, { view, title } = {}) {
     const { serverUri, features } = this.host
@@ -136,17 +136,6 @@ class WalletRequest extends AuthRequest {
 
     this.response.render(view, { title, layout: 'wallet', ...params })
   }
-
-  /**
-   * Sends response to user (directs the user to the next step of registration).
-   *
-   * @param userAccount {UserAccount}
-   */
-  // sendResponse (userAccount) {
-  //   const redirectUrl = this.returnToUrl ||
-  //     this.accountManager.accountUriFor(userAccount.username)
-  //   this.response.redirect(redirectUrl)
-  // }
 }
 
 module.exports = {

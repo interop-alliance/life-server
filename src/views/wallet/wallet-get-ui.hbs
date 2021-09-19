@@ -1,23 +1,25 @@
 <div class="container">
-  <div class="card-panel hide" id="didAuthPanel">
-    <h4>Login Request</h4>
+  <div class="card-panel">
+    <h4>Credential Request</h4>
 
     <p>
-      <strong>Source:</strong> <code id="requestSource"></code>
+      <strong>Request Origin:</strong> <code id="requestOrigin"></code>
     </p>
+    <p>is requesting the following:</p>
 
-    <a class="waves-effect waves-light btn" id="authButton">Allow</a>
+    <ul id="requestItems">
+      <li class="hide" id="didAuthItem">Login request (your DID)</li>
+      <li class="hide" id="accessTokenItem">SolidOIDC Access Token (to read from/write to your online storage)</li>
+    </ul>
+  </div>
+
+  <div class="card-panel hide" id="actionButtons">
+    <a class="waves-effect waves-light btn" id="allowButton">Allow</a>
     <a class="waves-effect waves-light btn" id="cancelButton">Cancel</a>
   </div>
 </div>
 
 <script>
-  async function handleVpQuery ({query}) {
-    if(!['QueryByExample', 'DIDAuth', 'SolidOidcCredential'].includes(query.type)) {
-      throw new Error(`Query type ${query.type} is not supported by this wallet.`)
-    }
-  }
-
   /**
    * Globals:
    *   WALLET_LOCATION, MEDIATOR - wallet.hbs layout
@@ -33,67 +35,78 @@
     const event = await WebCredentialHandler.receiveCredentialEvent()
 
     console.log('Wallet processing get() event:', event)
-    const requestSource = event.credentialRequestOrigin
-    document.getElementById('requestSource').innerHTML = requestSource
+    document.getElementById('requestOrigin').innerHTML = event.credentialRequestOrigin
 
-    // document.getElementById('requestOrigin').innerHTML = event.credentialRequestOrigin
+    const {
+      query, challenge, domain, supportedProofTypes
+    }  = event.credentialRequestOptions.web.VerifiablePresentation
 
-    const vpRequest = event.credentialRequestOptions.web.VerifiablePresentation
-    const query = [].concat(vpRequest.query)
-
-
-
-    if (query.type === 'DIDAuth') {
-      document.getElementById('didAuthPanel').classList.remove('hide')
-
-      // Communicate with server, get an auth VP response
-      const { domain, challenge } = vpRequest
-      const data = await fetchDidAuthVp({ domain, challenge })
-
-      // Authenticate/Login button
-      document.getElementById('authButton').addEventListener('click', () => {
-        // const data = JSON.parse(document.getElementById('responseText').value)
-        event.respondWith(Promise.resolve({dataType: 'VerifiablePresentation', data}))
-      })
-    }
-
-    // Cancel button
+    // Set up the Cancel button
     document.getElementById('cancelButton').addEventListener('click', () => {
       event.respondWith(Promise.resolve({dataType: 'Response', data: 'error'}))
     })
 
-    // const requestReason = query.credentialQuery.reason
-    // document.getElementById('requestReason').innerHTML = requestReason
-
-    // refreshUserArea({
-    //   shareButton: {
-    //     text: 'Share',
-    //     sourceEvent: event
-    //   }
-    // })
-
-    // const requestOptions = event.credentialRequestOptions || {web:{}}
-    // document.getElementById('queryContents').innerHTML = JSON.stringify(requestOptions.web, null, 2)
-
-    // Respond button
-    // document.getElementById('respondBtn').addEventListener('click', () => {
-    //   const data = JSON.parse(document.getElementById('responseText').value)
-    //
-    //   event.respondWith(Promise.resolve({dataType: 'VerifiablePresentation', data}))
-    // })
+    handleVpQuery({ event, query, challenge, domain, supportedProofTypes })
   }
 
-  async function fetchDidAuthVp ({ domain, challenge }) {
-    // @see https://transmute-industries.github.io/vc-http-api/#/Holder/provePresentation
-    const url = new URL('/api/presentations/verify', WALLET_LOCATION)
+  /**
+   * @param event {Event}
+   * @param query {object}
+   * @param challenge {string}
+   * @param domain {string}
+   * @param supportedProofTypes {string[]}
+   * @returns {Promise<void>}
+   */
+  async function handleVpQuery ({ event, query, challenge, domain, supportedProofTypes }) {
+    validateSupportedProofTypes ({ supportedProofTypes })
+
+    query = [].concat(query)
+
+    if (query.find(q => q.type === 'DIDAuth')) {
+      document.getElementById('didAuthItem').classList.remove('hide')
+    }
+    if (query.find(q => q.type === 'SolidOidcCredential')) {
+      document.getElementById('accessTokenItem').classList.remove('hide')
+    }
+
+    const credRequest = query.find(q => q.type === 'QueryByExample')
+    if (credRequest) {
+      const requestItems = document.getElementById('requestItems')
+      for (const cred of credRequest.credentialQuery) {
+        requestItems.append(
+          document.createElement('li').appendChild(
+            document.createTextNode(cred.example.type)
+          )
+        )
+      }
+    }
+
+    // Allow/Login button
+    document.getElementById('allowButton').addEventListener('click', async () => {
+      // Communicate with server, get a signed VP containing the requested credentials
+      const response = await requestVp({ query, challenge, domain })
+      console.log('CHAPI response:', response)
+
+      event.respondWith(Promise.resolve({dataType: 'VerifiablePresentation', data: response}))
+    })
+  }
+
+  function validateSupportedProofTypes ({ supportedProofTypes }) {
+    // todo: ensure it's either blank, or Ed25519Signature2020 is supported
+  }
+
+  async function requestVp ({ query, challenge, domain }) {
+    // const url = new URL('/api/presentations/verify', WALLET_LOCATION)
+    const url = new URL('/api/wallet/vp-request', WALLET_LOCATION)
     try {
       const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ domain, challenge })
+        body: JSON.stringify({ query, domain, challenge })
       })
       if (!response.ok) {
-        throw new Error(`Error fetching authn vp: ${response.status} ${response.statusText}`)
+        console.log('Error fetching:', await response.json())
+        throw new Error(`Error fetching vp request: ${response.status} ${response.statusText}`)
       }
       return response.json()
     } catch (error) {

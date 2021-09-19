@@ -27,9 +27,11 @@
         VerifiablePresentation: {
           query: [
             {
+              // A request for the controller's DID
               type: 'DIDAuth'
             },
             {
+              // A request for a SolidOIDC access token.
               type: 'SolidOidcCredential',
               vp: {
                 '@context': ['https://www.w3.org/2018/credentials/v1'],
@@ -56,9 +58,27 @@
             },
             {
               type: 'QueryByExample',
-              credentialQuery: {
-                example: { type: 'LoginDisplayCredential' }
-              }
+              credentialQuery: [
+                {
+                  example: {
+                    '@context': [
+                      'https://www.w3.org/2018/credentials/v1',
+                      'https://w3id.org/xr/v1'
+                    ],
+                    type: 'LoginDisplayCredential'
+                  }
+                },
+                {
+                  example: {
+                    '@context': [
+                      'https://www.w3.org/2018/credentials/v1',
+                      'https://w3id.org/xr/v1'
+                    ],
+                    type: 'UserPreferencesCredential'
+                  }
+                },
+
+              ]
             }
           ],
           challenge,
