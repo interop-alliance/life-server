@@ -7,7 +7,9 @@ const { logger } = require('../util/logger')
  */
 class ApiRequest {
   /**
+   * @param options {object}
    * @param options.host {ServerHost}
+   * @param [options.body] {object} Parsed JSON body
    * @param [options.requestUri] {string} Fully qualified request URL
    *   (parsed by `ServerHost.parseTargetUrl()`)
    * @param [options.response] {ServerResponse} middleware `res` object
@@ -20,6 +22,7 @@ class ApiRequest {
   constructor (options) {
     this.requestUri = options.requestUri
     this.host = options.host
+    this.body = options.body
     this.response = options.response
     this.session = options.session || {}
     this.credentials = options.credentials || null
@@ -67,6 +70,7 @@ class ApiRequest {
 
     return {
       requestUri,
+      body: req.body,
       response: res,
       session,
       host,
@@ -133,6 +137,14 @@ class ApiRequest {
     return query[parameter] || body[parameter] || params[parameter] || null
   }
 
+  handleGet () {
+    throw new Error('Abstract method, must be implemented in a subclass.')
+  }
+
+  handlePost () {
+    throw new Error('Abstract method, must be implemented in a subclass.')
+  }
+
   /**
    * Calls the appropriate form to display to the user.
    * Serves as an error handler for this request workflow.
@@ -152,8 +164,8 @@ class ApiRequest {
    *
    * @param error {Error}
    */
-  errorJson (error) {
-    const statusCode = error.code || 400
+  errorJson (error, { statusCode }) {
+    statusCode = statusCode || error.code || 400
 
     logger.error(error)
     this.response.status(statusCode).json({ message: error.message })

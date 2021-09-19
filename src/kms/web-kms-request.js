@@ -25,11 +25,9 @@ class WebKmsRequest extends AuthRequest {
    */
   static fromIncoming (req, res) {
     const options = AuthRequest.baseOptions(req, res)
-    const body = req.body || {}
-    options.challenge = body.challenge
-    options.domain = body.domain
+    const { challenge, domain } = req.body || {}
 
-    return new WebKmsRequest(options)
+    return new WebKmsRequest({ challenge, domain, ...options })
   }
 
   static prove () {
@@ -49,6 +47,11 @@ class WebKmsRequest extends AuthRequest {
     }
   }
 
+  /**
+   * FIXME: Merge this with ApiRequest.errorJson()
+   * @param error
+   * @param res
+   */
   static jsonError (error, res) {
     const statusCode = error.statusCode || 400
     res.status(statusCode).send({ error: error.message })
