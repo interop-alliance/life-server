@@ -83,7 +83,7 @@
 
     // Allow/Login button
     document.getElementById('allowButton').addEventListener('click', async () => {
-      // Communicate with server, get a signed VP containing the requested credentials
+      // Send to server (/api/presentations/verify), get a signed VP with the requested credentials
       const response = await requestVp({ query, challenge, domain })
       console.log('CHAPI response:', response)
 
