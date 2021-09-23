@@ -73,8 +73,9 @@ async function didKeys ({ did, keyData }) {
 }
 
 /**
- * @param didDocument {object}
- * @param keyPairs {Map}
+ * @param didDocument {object} A DID Document for a user.
+ * @param keyPairs {Map} Map of public/private key pairs (for a given user
+ *   account, loaded from a KMS), by key id.
  * @param purpose {string} e.g. 'assertionMethod', 'authentication' etc.
  *
  * @returns {Ed25519Signature2020} Signature suite instance, for passing to
