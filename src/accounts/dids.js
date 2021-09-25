@@ -3,10 +3,10 @@
  */
 'use strict'
 
-const { Ed25519VerificationKey2020 } = require('@digitalbazaar/ed25519-verification-key-2020')
-const { X25519KeyAgreementKey2020 } = require('@digitalbazaar/x25519-key-agreement-key-2020')
+const { Ed25519VerificationKey2020 } = require('@digitalcredentials/ed25519-verification-key-2020')
+const { X25519KeyAgreementKey2020 } = require('@digitalcredentials/x25519-key-agreement-key-2020')
 const { CryptoLD } = require('crypto-ld')
-const { Ed25519Signature2020 } = require('@digitalbazaar/ed25519-signature-2020')
+const { Ed25519Signature2020 } = require('@digitalcredentials/ed25519-signature-2020')
 const { CachedResolver } = require('@digitalbazaar/did-io')
 const { securityLoader } = require('@digitalbazaar/security-document-loader')
 const didWeb = require('@interop/did-web-resolver')
