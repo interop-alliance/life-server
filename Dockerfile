@@ -21,7 +21,7 @@ RUN npm install
 
 # add directories
 COPY bin bin
-COPY config config
+COPY certificates certificates
 COPY common common
 COPY src src
 COPY test test
