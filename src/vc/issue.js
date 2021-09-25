@@ -1,6 +1,6 @@
 'use strict'
 
-const vcjs = require('@digitalbazaar/vc')
+const vcjs = require('@digitalcredentials/vc')
 
 async function issueSolidOidcCredential ({ authSuite, vp }) {}
 
@@ -28,8 +28,7 @@ async function _loginDisplayCredential ({ did }) {
       'https://w3id.org/xr/v1'
     ],
     type: ['VerifiableCredential', 'LoginDisplayCredential'],
-    issuer: '<this pods DID>',
-    issuanceDate: '<set to now>',
+    issuer: did,
     credentialSubject: {
       id: did,
       displayName: '<load from user profile>',
@@ -45,8 +44,7 @@ async function _userPreferencesCredential ({ did }) {
       'https://w3id.org/xr/v1'
     ],
     type: ['VerifiableCredential', 'UserPreferencesCredential'],
-    issuer: '<this pods DID>',
-    issuanceDate: '<set to now>',
+    issuer: did,
     credentialSubject: {
       id: did
       // TODO: Figure out what XR Engine's minimal user prefs are

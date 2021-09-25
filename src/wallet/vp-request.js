@@ -2,7 +2,7 @@
 
 const { ApiRequest } = require('../server/api-request')
 const { issueSolidOidcCredential, issueVcFromExample } = require('../vc/issue')
-const vcjs = require('@digitalbazaar/vc')
+const vcjs = require('@digitalcredentials/vc')
 
 class VpRequest extends ApiRequest {
   /**

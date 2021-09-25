@@ -6,7 +6,7 @@
 const AuthRequest = require('../authentication/handlers/auth-request')
 const { logger } = require('../util/logger')
 const HttpError = require('standard-http-error')
-const vc = require('@digitalbazaar/vc')
+const vc = require('@digitalcredentials/vc')
 
 class WebKmsRequest extends AuthRequest {
   constructor ({ challenge, domain, ...options }) {
