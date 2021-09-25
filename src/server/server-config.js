@@ -33,7 +33,8 @@ function printDebugInfo (options) {
 async function ensureWelcomePage ({
   root, multiuser, templates, server, host, storage
 }) {
-  const serverTemplate = path.join(__dirname, '..', 'templates', 'server')
+  const serverTemplate = path.join(__dirname, '..', 'accounts',
+    'account-templates', 'server')
   const rootDir = path.resolve(root)
   const serverRootDir = multiuser ? path.join(rootDir, host.hostname) : rootDir
   logger.info(`Checking for server welcome page, root dir: '${serverRootDir}'`)
