@@ -45,12 +45,6 @@ module.exports = {
   // Enable multi-user mode
   multiuser: false,
 
-  // Path to the SSL private key in PEM format
-  sslKey: '../privkey.pem',
-
-  // Path to the SSL certificate key in PEM format
-  sslCert: '../fullchain.pem'
-
   // "email": {
   //   "host": "smtp.mailtrap.io",
   //   "port": "2525",

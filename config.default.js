@@ -28,8 +28,8 @@ module.exports = {
   // forceUser: 'https://localhost:8443/web#id',
 
   // Location of the SSL certificate private key and certificate chain
-  sslKey: './config/localhost.privkey.pem',
-  sslCert: './config/localhost.fullchain.pem',
+  sslKey: './certificates/localhost.privkey.pem',
+  sslCert: './certificates/localhost.fullchain.pem',
 
   // Optional email settings (these enable the sending of 'account created'
   // and account recovery emails
