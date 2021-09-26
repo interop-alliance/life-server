@@ -142,11 +142,10 @@ describe('Authentication API (OIDC)', () => {
   describe('Login by Username and Password (POST /login/password)', () => {
     // Logging in as alice, to alice's pod
     const alicePassword = '12345'
-    beforeEach(() => {
+    beforeEach(async () => {
       const aliceAccount = UserAccount.from({ webId: aliceWebId })
 
       return aliceCredentialStore.createUser(aliceAccount, alicePassword)
-        .catch(console.error.bind(console))
     })
 
     afterEach(() => {
@@ -162,6 +161,7 @@ describe('Authentication API (OIDC)', () => {
         })
 
         aliceCredentialStore.createUser(aliceAccount, alicePassword)
+
         alice.post('/login/password')
           .send({ username: 'alice', password: alicePassword })
           .set('Accept', 'application/json')

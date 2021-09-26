@@ -164,7 +164,7 @@ class ApiRequest {
    *
    * @param error {Error}
    */
-  errorJson (error, { statusCode }) {
+  errorJson (error, { statusCode } = {}) {
     statusCode = statusCode || error.code || 400
 
     logger.error(error)
