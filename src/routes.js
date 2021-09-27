@@ -69,7 +69,7 @@ function initializeExpressRoutes ({ app, argv, oidc, accountManager, logger }) {
     app.get('/api/wallet/worker', WalletRequest.getWorker())
     app.get('/api/wallet/get', WalletRequest.getOperationUi())
     app.get('/api/wallet/store', WalletRequest.storeOperationUi())
-    app.post('/api/wallet/vp-request', VpRequest.post())
+    app.post('/api/wallet/vp-request', bodyParserJson, VpRequest.post())
     app.get('/account/delete', DeleteAccountRequest.get())
     app.post('/account/delete', bodyParserForm, DeleteAccountRequest.post())
     app.get('/account/delete/confirm', DeleteAccountConfirmRequest.get())
