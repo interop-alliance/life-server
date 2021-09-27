@@ -92,13 +92,14 @@
     // Use Credential Handler API to authenticate
     const result = await navigator.credentials.get(didAuthQuery)
 
+    console.log('Result of logging in request:', result)
+
     // Retry the path that resulted in this error page
-    window.location = POST_LOGIN_RETRY_PATH
+    // window.location = POST_LOGIN_RETRY_PATH
 
     // document.getElementById('resultsPanel').classList.remove('hide')
     // document.getElementById('rawResults').innerText = JSON.stringify(result, null, 2)
     //
-    console.log('Result of logging in request:', result)
     //
     // if(!result) {
     //   document.getElementById('rawResults').innerHTML = 'null result'

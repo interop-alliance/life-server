@@ -44,7 +44,7 @@ class VpRequest extends ApiRequest {
       }
 
       const verifiableCredential = [] // Assume it's an array for simplicity
-      const { did, suite: authSuite, documentLoader } = accountManager
+      const { did, suite: authSuite, documentLoader } = await accountManager
         .signingKey({ webId, purpose: 'authentication' })
 
       // Determine whether to sign the VP (and add the holder property)
@@ -62,7 +62,7 @@ class VpRequest extends ApiRequest {
 
       // Determine if any VCs need to be issued
       const queryByExample = query.find(q => q.type === 'QueryByExample')
-      const { suite: vcSuite } = accountManager
+      const { suite: vcSuite } = await accountManager
         .signingKey({ webId, purpose: 'assertionMethod' })
       if (queryByExample) {
         for (const { example } of queryByExample.credentialQuery) {
