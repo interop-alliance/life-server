@@ -10,6 +10,7 @@ const { Ed25519Signature2020 } = require('@digitalcredentials/ed25519-signature-
 const { CachedResolver } = require('@digitalbazaar/did-io')
 const { securityLoader } = require('@digitalbazaar/security-document-loader')
 const didWeb = require('@interop/did-web-resolver')
+const xrCtx = require('xr-context')
 const { logger } = require('../util/logger')
 
 const cryptoLd = new CryptoLD()
@@ -109,6 +110,8 @@ function didWebDocumentLoader ({ didDocument, keyPairs }) {
   const resolver = new CachedResolver()
   resolver.use(didWebDriver)
   const loader = securityLoader()
+  loader.addStatic(xrCtx.CONTEXT_URL_V1, xrCtx.CONTEXT_V1)
+
   loader.setDidResolver(resolver)
   loader.addStatic(didDocument.id, didDocument)
   keyPairs.forEach((keyPair, keyId) => {
