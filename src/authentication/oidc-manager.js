@@ -5,7 +5,7 @@ const { URL } = require('url')
 const validUrl = require('valid-url')
 const ResourceAuthenticator = require('@solid/oidc-rs')
 const { MultiRpClient } = require('./multi-rp-client')
-const OIDCProvider = require('@interop-alliance/oidc-op')
+const OIDCProvider = require('@interop/oidc-op')
 const OIDCRelyingParty = require('@interop-alliance/oidc-rp')
 
 const HostAPI = require('./host-api')

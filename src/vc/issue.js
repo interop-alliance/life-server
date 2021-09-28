@@ -2,7 +2,34 @@
 
 const vcjs = require('@digitalcredentials/vc')
 
-async function issueSolidOidcCredential ({ authSuite, vp }) {}
+/**
+ * @param authSuite {LinkedDataSignature} Authentication suite with private key.
+ * @param vp {VerifiablePresentation} VP containing the client app's ephemeral
+ *   did:key.
+ * @param issuer {string} This server.
+ * @param documentLoader {function}
+ *
+ * @see https://datatracker.ietf.org/doc/html/rfc8037 Ed25519 JWT rfc
+ * @example
+ * {
+ *   "kty": "OKP", "crv":"Ed25519", "x": "base64url(pub key)"
+ * }
+ *
+ * @returns {Promise<VerifiableCredential>}
+ */
+async function issueSolidOidcCredential ({ authSuite, vp, issuer, documentLoader }) {
+  const credential = {
+    '@context': [
+      'https://www.w3.org/2018/credentials/v1',
+      'https://w3id.org/xr/v1'
+    ],
+    type: ['VerifiableCredential', 'SolidOidcCredential'],
+    issuer,
+    credentialSubject: {
+    }
+  }
+  return vcjs.issue({ credential, suite: authSuite, documentLoader })
+}
 
 async function issueVcFromExample ({ example, did, vcSuite, documentLoader }) {
   let credential
