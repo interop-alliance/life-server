@@ -51,14 +51,14 @@ class VpRequest extends ApiRequest {
       const didAuth = query.find(q => q.type === 'DIDAuth')
 
       // Determine if a Solid OIDC access token was requested
-      // const accessTokenRequest = query.find(q => q.type === 'SolidOidcCredential')
-      // if (accessTokenRequest) {
-      //   verifiableCredential.push(
-      //     await issueSolidOidcCredential({
-      //       authSuite, vp: accessTokenRequest.vp
-      //     })
-      //   )
-      // }
+      const accessTokenRequest = query.find(q => q.type === 'SolidOidcCredential')
+      if (accessTokenRequest) {
+        verifiableCredential.push(
+          await issueSolidOidcCredential({
+            authSuite, vp: accessTokenRequest.vp, issuer: did, documentLoader
+          })
+        )
+      }
 
       // Determine if any VCs need to be issued
       const queryByExample = query.find(q => q.type === 'QueryByExample')

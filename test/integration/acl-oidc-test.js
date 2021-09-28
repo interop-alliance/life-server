@@ -4,7 +4,7 @@ const request = require('request')
 const path = require('path')
 const { promisify } = require('util')
 const { loadProvider, rm, checkDnsSettings, cleanDir } = require('../utils')
-const IDToken = require('@interop-alliance/oidc-op/src/IDToken')
+const IDToken = require('@interop/oidc-op/src/IDToken')
 
 const ldnode = require('../../src')
 
