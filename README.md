@@ -3,7 +3,7 @@
 [![Build status](https://img.shields.io/github/workflow/status/interop-alliance/life-server/Node.js%20CI)](https://github.com/interop-alliance/life-server/actions?query=workflow%3A%22Node.js+CI%22)
 [![NPM Version](https://img.shields.io/npm/v/life-server.svg?style=flat-square)](https://npm.im/life-server)
 
-> A decentralized personal data server inspired by Solid and Identity Hubs.
+> A decentralized personal data server inspired by Solid and Decentralized Web Node.
 
 ## Table of Contents
 
@@ -44,8 +44,6 @@ To put it another way, due to a shortage of engineering resources, the
 priorities will be: Developer QoL (Quality of Life) over User QoL over DevOps QoL.
 
 ### Roadmap
-
-**Updated:** September 2021.
 
 This is an experimental server focusing on interop exploration and rapid feature 
 iteration. "Move fast and break things (and then fix them just as quickly)", to 
@@ -109,6 +107,7 @@ this repo intends to be another compatible implementation (the more the merrier!
 * Using an external WebID on signup 
 * `acl:origin` checking or Trusted Apps (uses [`solid-permissions`](https://github.com/interop-alliance/solid-permissions)  
     instead of [`acl-check.js`](https://github.com/solid/acl-check) for access control)
+* `acl:trustedOrigin` (removed on purpose during refactoring)
 * Password strength checking on account signup.
 * Enforcement of storage space quotas
 * WebID-TLS local authentication
