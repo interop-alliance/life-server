@@ -2,15 +2,30 @@
   <div class="card-panel">
     <h4>Credential Request</h4>
 
-    <p>
-      <strong>Request Origin:</strong> <code id="requestOrigin"></code>
-    </p>
-    <p>is requesting the following:</p>
+    <p><strong id="requestOrigin"></strong> is requesting:</p>
 
-    <ul id="requestItems">
-      <li class="hide" id="didAuthItem">Login request (your DID)</li>
-      <li class="hide" id="accessTokenItem">SolidOIDC Access Token (to read from/write to your online storage)</li>
-    </ul>
+    <div id="requestItems">
+      <div class="card-panel hide" id="didAuthItem">
+        <span>
+          Your Decentralized Identifier (DID)
+        </span>
+      </div>
+      <div class="card-panel hide" id="loginDisplayCredential">
+        <span>
+          Your Display Name and Icon
+        </span>
+      </div>
+      <div class="card-panel hide" id="preferencesCredential">
+        <span>
+          Your App Preferences
+        </span>
+      </div>
+      <div class="card-panel hide" id="accessTokenItem">
+        <span>
+          SolidOIDC Access Token (to read from/write to your online storage)
+        </span>
+      </div>
+    </div>
   </div>
 
   <div class="card-panel" id="actionButtons">
@@ -71,13 +86,27 @@
 
     const credRequest = query.find(q => q.type === 'QueryByExample')
     if (credRequest) {
+      const credentialTypes = credRequest.credentialQuery.map(e => e.example.type)
+
+      if (credentialTypes.includes('LoginDisplayCredential')) {
+        document.getElementById('loginDisplayCredential').classList.remove('hide')
+      }
+      if (credentialTypes.includes('UserPreferencesCredential')) {
+        document.getElementById('preferencesCredential').classList.remove('hide')
+      }
+
       const requestItems = document.getElementById('requestItems')
-      for (const cred of credRequest.credentialQuery) {
-        requestItems.append(
-          document.createElement('li').appendChild(
-            document.createTextNode(cred.example.type)
-          )
+      const otherCreds = credentialTypes.filter(e =>
+        ['LoginDisplayCredential', 'UserPreferencesCredential'].includes(e)
+      )
+      for (const credType of otherCreds) {
+        // <div class="card-panel">...</div>
+        const node = document.createElement('div')
+        node.classList.add('card-panel')
+        node.appendChild(
+          document.createTextNode(credType)
         )
+        requestItems.appendChild(node)
       }
     }
 
