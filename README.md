@@ -60,8 +60,7 @@ This phase focuses on exploring some advanced features that may make it into
 Solid spec proposals, as well as integration with external Solid-adjacent
 projects and specs.
 
-* [x] Fix/update Dockerfile (to enable **[Life Server to be hosted on 
-  PermanentCloud](https://permanent.cloud/apps/life-server)**)
+* [x] Fix/update Dockerfile
 * [ ] DID Integration
     * [x] Generate a [`did:web`](https://github.com/w3c-ccg/did-method-web) DID
       and corresponding keys for the Server itself, during installation.
