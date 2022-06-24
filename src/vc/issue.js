@@ -58,8 +58,9 @@ async function _loginDisplayCredential ({ did }) {
     issuer: did,
     credentialSubject: {
       id: did,
-      displayName: '<load from user profile>',
-      displayIcon: '<load from user profile>'
+      // TODO: Load from user profile
+      displayName: 'Dmitri',
+      displayIcon: 'https://material-ui.com/static/images/avatar/1.jpg'
     }
   }
 }

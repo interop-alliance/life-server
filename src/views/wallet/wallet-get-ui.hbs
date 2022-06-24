@@ -84,7 +84,12 @@
       document.getElementById('accessTokenItem').classList.remove('hide')
     }
 
+    console.log('Incoming query:', query)
+
     const credRequest = query.find(q => q.type === 'QueryByExample')
+
+    console.log('credRequest:', credRequest)
+
     if (credRequest) {
       const credentialTypes = credRequest.credentialQuery.map(e => e.example.type)
 
@@ -99,7 +104,7 @@
       const otherCreds = credentialTypes.filter(e =>
         ['LoginDisplayCredential', 'UserPreferencesCredential'].includes(e)
       )
-      for (const credType of otherCreds) {
+      for (const credType of credentialTypes) {
         // <div class="card-panel">...</div>
         const node = document.createElement('div')
         node.classList.add('card-panel')
@@ -114,7 +119,7 @@
     document.getElementById('allowButton').addEventListener('click', async () => {
       // Send to server (/api/presentations/verify), get a signed VP with the requested credentials
       const response = await requestVp({ query, challenge, domain })
-      console.log('CHAPI response:', response)
+      console.log('CHAPI response:', JSON.stringify(response, null, 2))
 
       event.respondWith(Promise.resolve({dataType: 'VerifiablePresentation', data: response}))
     })

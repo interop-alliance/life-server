@@ -43,6 +43,8 @@ class VpRequest extends ApiRequest {
           new Error('Authentication required.'), { statusCode: 401 })
       }
 
+      console.log('in VPRequest.post(), query:', JSON.stringify(query, null, 2))
+
       const verifiableCredential = [] // Assume it's an array for simplicity
       const { did, suite: authSuite, documentLoader } = await accountManager
         .signingKey({ webId, purpose: 'authentication' })
@@ -77,6 +79,8 @@ class VpRequest extends ApiRequest {
 
       const presentation = vcjs.createPresentation({ verifiableCredential })
       let signedPresentation
+
+      console.log('Presentation:', JSON.stringify(presentation, null, 2))
 
       if (didAuth) {
         presentation.holder = did
