@@ -27,15 +27,12 @@
 
     console.log('Polyfill loaded.')
 
-    console.log('Installing wallet worker handler at:', workerUrl)
-
-    const registration = await WebCredentialHandler.installHandler({url: workerUrl})
-
-    await registration.credentialManager.hints.set(
-      'test', {
-        name: 'TestUser',
-        enabledTypes: ['VerifiablePresentation', 'VerifiableCredential']
-      })
+    try {
+      await WebCredentialHandler.installHandler();
+      console.log('Wallet installed.');
+    } catch(e) {
+      console.error('Wallet installation failed', e);
+    }
 
     console.log('Wallet registered.')
   }
