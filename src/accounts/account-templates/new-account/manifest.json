@@ -7,5 +7,9 @@
     }
   ],
   "name": "Life Server Wallet",
-  "short_name": "Life Server Wallet"
+  "short_name": "Life Server Wallet",
+  "credential_handler": {
+    "url": "/api/wallet/worker",
+    "enabledTypes": ["VerifiablePresentation"]
+  }
 }
