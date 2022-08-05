@@ -34,7 +34,6 @@ const AuthCallbackRequest = require('./authentication/handlers/auth-callback-req
 
 function initializeExpressRoutes ({ app, argv, oidc, accountManager, logger }) {
   const { multiuser, host } = argv
-  const useSecureCookies = !!argv.sslKey // use secure cookies when over HTTPS
 
   // Init static routes
   // Serve the public 'common' directory (for shared CSS files, etc)
@@ -53,7 +52,7 @@ function initializeExpressRoutes ({ app, argv, oidc, accountManager, logger }) {
     /**
      * Session / cookie handler
      */
-    _initSessionHandler({ app, useSecureCookies, host })
+    _initSessionHandler({ app, host })
 
     /**
      * Account Management API
@@ -180,7 +179,7 @@ function _addLdpMiddleware ({ corsSettings }) {
   return router
 }
 
-function _initSessionHandler ({ app, useSecureCookies, host, secret = uuidv1() }) {
+function _initSessionHandler ({ app, host, secret = uuidv1() }) {
   const sessionSettings = {
     secret,
     // store: new MemoryStore({
@@ -194,7 +193,10 @@ function _initSessionHandler ({ app, useSecureCookies, host, secret = uuidv1() }
       sameSite: 'None',
       maxAge: 14 * 24 * 60 * 60 * 1000, // 2 weeks in milliseconds
       domain: host.cookieDomain,
-      secure: useSecureCookies // true if https is on
+      // 'secure' used to depend on whether the server was running in HTTPS mode
+      // however, when running behind a TLS-terminating proxy, cookies still
+      // need to be set secure, otherwise login doesn't work
+      secure: true
     }
   }
 

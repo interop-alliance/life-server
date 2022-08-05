@@ -36,6 +36,10 @@ async function createApp (argv = {}) {
   })
 
   const app = express()
+
+  // Tell Express to trust reverse proxies like Nginx for secure cookie setting
+  app.set('trust proxy', 1)
+
   initAppLocals({ app, argv, storage })
   initHeaders(app)
   initViews(app)
