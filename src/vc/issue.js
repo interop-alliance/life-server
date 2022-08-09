@@ -6,7 +6,7 @@ const vcjs = require('@digitalcredentials/vc')
  * @param authSuite {LinkedDataSignature} Authentication suite with private key.
  * @param vp {VerifiablePresentation} VP containing the client app's ephemeral
  *   did:key.
- * @param issuer {string} This server.
+ * @param issuer {string} Issuer (the user's) DID.
  * @param documentLoader {function}
  *
  * @see https://datatracker.ietf.org/doc/html/rfc8037 Ed25519 JWT rfc
@@ -31,12 +31,26 @@ async function issueSolidOidcCredential ({ authSuite, vp, issuer, documentLoader
   return vcjs.issue({ credential, suite: authSuite, documentLoader })
 }
 
-async function issueVcFromExample ({ example, did, vcSuite, documentLoader }) {
+/**
+ * Issues a VC based on a VPR (Verifiable Presentation Request)
+ * "query by example" query.
+ *
+ * @see https://w3c-ccg.github.io/vp-request-spec/
+ *
+ * @param example {object} VPR query for a single credential.
+ * @param did {string}
+ * @param username {string} Account name (the subdomain prefix).
+ * @param vcSuite
+ * @param documentLoader {function}
+ *
+ * @return {Promise<VerifiableCredential>}
+ */
+async function issueVcFromExample ({ example, did, username, vcSuite, documentLoader }) {
   let credential
 
   switch (example.type) {
     case 'LoginDisplayCredential':
-      credential = await _loginDisplayCredential({ did })
+      credential = await _loginDisplayCredential({ did, username })
       break
     case 'UserPreferencesCredential':
       credential = await _userPreferencesCredential({ did })
@@ -48,7 +62,7 @@ async function issueVcFromExample ({ example, did, vcSuite, documentLoader }) {
   return vcjs.issue({ credential, suite: vcSuite, documentLoader })
 }
 
-async function _loginDisplayCredential ({ did }) {
+async function _loginDisplayCredential ({ did, username }) {
   return {
     '@context': [
       'https://www.w3.org/2018/credentials/v1',
@@ -58,8 +72,8 @@ async function _loginDisplayCredential ({ did }) {
     issuer: did,
     credentialSubject: {
       id: did,
+      displayName: username,
       // TODO: Load from user profile
-      displayName: 'Dmitri',
       displayIcon: 'https://material-ui.com/static/images/avatar/1.jpg'
     }
   }

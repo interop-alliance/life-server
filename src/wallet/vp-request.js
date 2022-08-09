@@ -33,7 +33,7 @@ class VpRequest extends ApiRequest {
    */
   async handlePost () {
     try {
-      const { credentials: { webId }, accountManager } = this
+      const { credentials: { webId, username }, accountManager } = this
 
       const { domain, challenge, query } = this.body
       // const { serverUri, features } = this.host
@@ -57,7 +57,7 @@ class VpRequest extends ApiRequest {
       if (accessTokenRequest) {
         verifiableCredential.push(
           await issueSolidOidcCredential({
-            authSuite, vp: accessTokenRequest.vp, issuer: did, documentLoader
+            authSuite, vp: accessTokenRequest.vp, issuer: did, username, documentLoader
           })
         )
       }
@@ -69,7 +69,7 @@ class VpRequest extends ApiRequest {
       if (queryByExample) {
         for (const { example } of queryByExample.credentialQuery) {
           const vc = await issueVcFromExample({
-            example, did, vcSuite, documentLoader
+            example, did, username, vcSuite, documentLoader
           })
           if (vc) {
             verifiableCredential.push(vc)
