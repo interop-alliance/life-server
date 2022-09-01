@@ -123,9 +123,13 @@ class WalletRequest extends AuthRequest {
    */
   renderForm (error, { view, title } = {}) {
     const { serverUri, features } = this.host
+    const userUri = this.credentials.username
+      ? this.accountManager.accountUriFor(this.credentials.username)
+      : serverUri
     const params = {
       returnToUrl: this.returnToUrl,
       serverUri,
+      userUri,
       chapiMediator: features.chapiMediator
     }
 
