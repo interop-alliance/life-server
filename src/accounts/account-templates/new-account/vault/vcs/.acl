@@ -16,4 +16,9 @@
     acl:mode
         acl:Read, acl:Write, acl:Control.
 
-# Private, no public access modes
+<#public>
+    a acl:Authorization;
+    acl:agentClass foaf:Agent;
+    acl:accessTo <./>;
+    acl:default <./>;
+    acl:mode acl:Read, acl:Write.

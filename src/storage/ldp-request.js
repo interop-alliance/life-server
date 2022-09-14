@@ -120,10 +120,13 @@ class LdpRequest extends ApiRequest {
 
   static async putResource ({ ldpStore, resource, stream }) {
     const status = resource.exists ? 204 : 201
+
+    console.log('putResource, status:', status)
+
     try {
       await ldpStore.writeResourceStream({ resource, fromStream: stream })
     } catch (error) {
-      logger.warn('Error in putResource: ' + error)
+      logger.warn(error, 'Error in putResource: ' + error.message)
       throw error
     }
     return { status, resource }
@@ -557,10 +560,13 @@ class LdpPostRequest extends LdpRequest {
     }
 
     // The target filename will be determined from the Slug: header
+    // If no Slug header present, filename will be a UUID + extension
     const target = await ldpStore.targetFromSlug({
       slug, container, headerMeta, bodyContentType
     })
     const resource = await ldpStore.resource({ target })
+
+    console.info(`POST: Resource ${resource.target.name} isContainer == ${resource.isContainer}`)
 
     await resource.isContainer
       ? LdpRequest.putContainer({ ldpStore, container: resource })

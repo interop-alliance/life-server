@@ -55,11 +55,54 @@ async function issueVcFromExample ({ example, did, username, vcSuite, documentLo
     case 'UserPreferencesCredential':
       credential = await _userPreferencesCredential({ did })
       break
+    case 'XRCredential':
+      credential = await _xrVc()
+      break
     default:
       throw new Error(`Unsupported credential type requested: "${example.type}".`)
   }
 
   return vcjs.issue({ credential, suite: vcSuite, documentLoader })
+}
+
+async function _xrVc () {
+  return {
+    '@context': [
+      'https://www.w3.org/2018/credentials/v1',
+      {
+        etherealEvent: 'https://w3id.org/xr/v1#etherealEvent',
+        EnteredVolumeEvent: 'https://w3id.org/xr/v1#EnteredVolumeEvent',
+        CheckpointEvent: 'https://w3id.org/xr/v1#CheckpointEvent',
+        checkpointId: 'https://w3id.org/xr/v1#checkpointId'
+      },
+      'https://w3id.org/security/suites/ed25519-2020/v1'
+    ],
+    type: [
+      'VerifiableCredential',
+      'XRCredential'
+    ],
+    credentialSubject: {
+      id: 'did:example:user:1234',
+      etherealEvent: [
+        {
+          type: [
+            'EnteredVolumeEvent',
+            'CheckpointEvent'
+          ],
+          checkpointId: '12345'
+        }
+      ]
+    },
+    issuer: 'did:key:z6Mkfeco2NSEPeFV3DkjNSabaCza1EoS3CmqLb1eJ5BriiaR',
+    issuanceDate: '2022-08-21T23:03:43Z',
+    proof: {
+      type: 'Ed25519Signature2020',
+      created: '2022-08-21T23:03:43Z',
+      verificationMethod: 'did:key:z6Mkfeco2NSEPeFV3DkjNSabaCza1EoS3CmqLb1eJ5BriiaR#z6Mkfeco2NSEPeFV3DkjNSabaCza1EoS3CmqLb1eJ5BriiaR',
+      proofPurpose: 'assertionMethod',
+      proofValue: 'z3SJEYpiejLLgypxuFbhZrgxCfe38ZH78WiVqPEbwCtsghscvzdGXx2RC8dM36U8rUHhwuUK9ebmN9dPs4XTuQdSx'
+    }
+  }
 }
 
 async function _loginDisplayCredential ({ did, username }) {

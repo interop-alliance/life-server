@@ -53,6 +53,9 @@
     const vc = Array.isArray(vp.verifiableCredential)
       ? vp.verifiableCredential[0]
       : vp.verifiableCredential
+
+    console.log('Incoming vc:', JSON.stringify(vc, null, 2))
+
     document.getElementById('credentialType').innerHTML = vc.type[0]
     document.getElementById('credentialIssuer').innerHTML = vc.issuer
 
@@ -76,9 +79,12 @@
 
   function storeInWallet(vcData) {
     console.log('Storing:', vcData)
-    return fetch('https://dz.uniwallet.local:7070/vault/vcs/', {
+    const filename = `${vcData.id || 'test-vc'}.txt`
+    const url = `{{userUri}}/vault/vcs/`
+    console.log('STORING URL:', url)
+    return fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify(vcData)
     })
   }

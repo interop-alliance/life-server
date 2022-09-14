@@ -612,8 +612,10 @@ describe('HTTP APIs', function () {
         .set('link', '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"')
         .send(postRequest2Body)
         .expect(201)
-        .end(function (err) {
-          if (err) return done(err)
+        .end((err) => {
+          if (err) {
+            return done(err)
+          }
           const stats = fs.statSync(path.join(__dirname, '..', 'resources',
             'post-tests', 'loans'))
           if (!stats.isDirectory()) {
@@ -622,10 +624,16 @@ describe('HTTP APIs', function () {
           done()
         })
     })
+    it('should post new JSON resource to container', (done) => {
+      server.put('/post-tests/test.json')
+        .set('content-type', 'application/json')
+        .send(JSON.stringify({ key: 'value' }))
+        .expect(201, done)
+    })
     it('should be able to access newly container', function (done) {
-      server.get('/post-tests/loans/')
+      server.post('/post-tests/loans/')
         .expect('content-type', /text\/turtle/)
-        .expect(200, done)
+        .expect(201, done)
     })
 
     it('should create a container with a name hex decoded from the slug', (done) => {

@@ -2,6 +2,7 @@
 
 const { dirname } = require('path')
 const fs = require('fs-extra')
+const { pipeline } = require('node:stream/promises')
 const { v1: uuidv1 } = require('uuid')
 const { URL } = require('url')
 const { logger } = require('../../util/logger')
@@ -54,6 +55,8 @@ class LdpFileStore extends LdpStore {
       path,
       contentType
     } = this.mapper.mapUrlToFile({ url: target.url })
+
+    console.log('path', path, 'ct', contentType)
 
     let exists
     let fsStats
@@ -161,6 +164,7 @@ class LdpFileStore extends LdpStore {
     }
 
     if (await this.exists({ target })) {
+      logger.info(`Resource '${target.url}' exists, adding uuid.`)
       target = await this.targetFromSlug({
         slug: `${slug}-${uuidv1().split('-')[0]}`,
         container,
@@ -169,6 +173,7 @@ class LdpFileStore extends LdpStore {
       })
     }
 
+    logger.info(`LDP target from slug "${slug}": ${target.name}`)
     return target
   }
 
@@ -181,7 +186,6 @@ class LdpFileStore extends LdpStore {
    */
   async exists ({ target }) {
     const resource = await this.resource({ target })
-    logger.info(`Checking if path '${resource.path}' exists.`)
     return this.fs.pathExists(resource.path)
   }
 
@@ -212,18 +216,24 @@ class LdpFileStore extends LdpStore {
     // TODO: Change this line to `ensureContainer` using resource.parent
     await this.fs.ensureDir(dirname(resource.path))
 
-    const fileStream = this.createWriteStream({ resource })
+    // const fileStream = this.createWriteStream({ resource })
 
-    return new Promise((resolve, reject) => {
-      const writeStream = fromStream.pipe(fileStream)
+    // const writeStream = fromStream.pipe(fileStream)
+    // console.log('fileStream created:', fileStream)
 
-      writeStream.on('error', (error) => {
-        reject(new Error(`Error creating a write stream: ${error}`))
-      })
-      writeStream.on('finish', () => {
-        resolve(writeStream)
-      })
-    })
+    return pipeline(
+      fromStream, // IncomingRequest body stream
+      this.createWriteStream({ resource })
+    )
+
+    // return new Promise((resolve, reject) => {
+    //   writeStream.on('error', (error) => {
+    //     reject(new Error(`Error creating a write stream: ${error}`))
+    //   })
+    //   writeStream.on('finish', () => {
+    //     resolve(writeStream)
+    //   })
+    // })
   }
 
   /**

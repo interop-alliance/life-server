@@ -18,7 +18,7 @@ const { LdpFileStore } = require('../../src/storage/ldp-backend-fs/ldp-file-stor
 
 const SERVER_URI = 'https://example.com'
 
-describe('LdpFileStore', () => {
+describe.only('LdpFileStore', () => {
   const rootDir = path.join(__dirname, '..', 'resources')
   const host = ServerHost.from({
     serverUri: SERVER_URI,
@@ -26,6 +26,41 @@ describe('LdpFileStore', () => {
   })
   const mapper = LegacyResourceMapper.from({ host })
   const ldpStore = new LdpFileStore({ host, mapper })
+
+  describe('resource', () => {
+    it('should map a non-existent file resource', async () => {
+      const url = SERVER_URI + '/nonexistent.ttl'
+
+      const resource = await ldpStore.resource({ target: { url } })
+
+      expect(resource).to.have.property('exists', false)
+      expect(resource).to.have.property('isContainer', false)
+      expect(resource.path.endsWith('/resources/nonexistent.ttl')).to.equal(true)
+      expect(resource).to.have.property('encoding', 'utf8')
+      expect(resource.parent).to.be.undefined()
+      expect(resource.target)
+        .to.have.property('url', 'https://example.com/nonexistent.ttl')
+      expect(resource.serverMeta).to.have.property('contentType', 'text/turtle')
+      expect(resource.serverMeta).to.have.property('modified')
+      expect(resource.serverMeta).to.have.property('size', undefined)
+    })
+
+    it('should map a non-existent directory resource', async () => {
+      const url = SERVER_URI + '/test-dir/'
+      const resource = await ldpStore.resource({ target: { url } })
+      console.log(resource)
+      expect(resource).to.have.property('exists', false)
+      expect(resource).to.have.property('isContainer', false)
+      expect(resource.path.endsWith('/resources/nonexistent.ttl')).to.equal(true)
+      expect(resource).to.have.property('encoding', 'utf8')
+      expect(resource.parent).to.be.undefined()
+      expect(resource.target)
+        .to.have.property('url', 'https://example.com/nonexistent.ttl')
+      expect(resource.serverMeta).to.have.property('contentType', 'text/turtle')
+      expect(resource.serverMeta).to.have.property('modified')
+      expect(resource.serverMeta).to.have.property('size', undefined)
+    })
+  })
 
   describe('readBlob', () => {
     it('should throw if resource does not exist', async () => {
